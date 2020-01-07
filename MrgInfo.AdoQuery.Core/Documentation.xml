@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<docs>
+  <sqlformat>
+    <remarks>
+      A <paramref name="sql" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+    <exception cref="Sda.Query.QueryDbException">
+        Hibás lekérdezés végrehajtás.
+    </exception>
+  </sqlformat>
+</docs>
