@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
     ///     Lekérdezés paraméter sorosításhoz.
@@ -12,12 +12,12 @@ namespace Sda.Query
         ///     Típus.
         /// </summary>
         [DataMember(Order = 0, EmitDefaultValue = false)]
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
 
         /// <summary>
         ///     Érték.
         /// </summary>
         [DataMember(Order = 1, EmitDefaultValue = false)]
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 }

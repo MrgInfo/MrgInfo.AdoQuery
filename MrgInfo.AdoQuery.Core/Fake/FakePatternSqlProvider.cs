@@ -7,23 +7,22 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using static System.Text.RegularExpressions.RegexOptions;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core.Fake
 {
     /// <summary>
     ///     Reguláris kifejezések segítségével hamisított lekérdezések.
     /// </summary>
     /// <inheritdoc cref="FakeSqlProvider" />
-    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
     public sealed class FakePatternSqlProvider: FakeSqlProvider, IEnumerable
     {
-        [NotNull]
-        ConcurrentDictionary<Regex, object[][]> ByRegexData { get; } = new ConcurrentDictionary<Regex, object[][]>();
+        ConcurrentDictionary<Regex, object[][]?> ByRegexData { get; } = new ConcurrentDictionary<Regex, object[][]?>();
 
         /// <inheritdoc />
-        protected override object[][] FindFakeData(string id, string format, IEnumerable<object> args)
+        protected override object[][] FindFakeData(string? id, string? format, IEnumerable<object>? args)
         {
-            object[] parameters =
+            var parameters =
                 args
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
@@ -50,7 +49,7 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="pattern"/> vagy a <paramref name="data"/> értéke <c>null</c>.
         /// </exception>
-        public void Add([NotNull] Regex pattern, [NotNull] params object[][] data)
+        public void Add(Regex pattern, params object[][] data)
         {
             if (pattern == null) throw new ArgumentNullException(nameof(pattern));
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -70,7 +69,7 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="pattern"/> vagy a <paramref name="data"/> értéke <c>null</c>.
         /// </exception>
-        public void Add([RegexPattern] string pattern, [NotNull] params object[][] data)
+        public void Add(string pattern, params object[][] data)
         {
             if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException(nameof(pattern));
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -88,9 +87,9 @@ namespace Sda.Query
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public object[][] this[[RegexPattern] string pattern]
+        public object[][]? this[string pattern]
         {
-            get => ByRegexData.TryGetValue(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), out object[][] value) ? value : null;
+            get => ByRegexData.TryGetValue(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), out var value) ? value : null;
             set => ByRegexData.TryAdd(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), value);
         }
 

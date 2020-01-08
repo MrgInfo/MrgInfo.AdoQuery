@@ -1,37 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <inheritdoc />
     [Serializable]
     public sealed class QueryDbException: DbException
     {
-        const string _message = "Database error!";
+        const string DefaultMessage = "Database error!";
 
         /// <inheritdoc />
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
         public QueryDbException()
-            : base(_message)
+            : base(DefaultMessage)
         { }
 
         /// <inheritdoc />
         public QueryDbException(string message)
-            : base(message ?? _message)
+            : base(message ?? DefaultMessage)
         { }
 
         /// <inheritdoc />
         public QueryDbException(string message, Exception inner)
-            : base(message ?? _message, inner)
+            : base(message ?? DefaultMessage, inner)
         { }
 
         QueryDbException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
 
-        internal static QueryDbException Create(string? id, string command, IEnumerable<object>? parameters, Exception exp)
+        internal static QueryDbException Create(string? id, string? command, IEnumerable<object>? parameters, Exception exp)
         {
             string message = $@"
 #ID

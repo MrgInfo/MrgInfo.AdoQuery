@@ -34,7 +34,7 @@
         </item>
       </list>
     </remarks>
-    <exception cref="Sda.Query.QueryDbException">
+    <exception cref="MrgInfo.AdoQuery.Core.QueryDbException">
         Hibás lekérdezés végrehajtás.
     </exception>
   </sqlformat>

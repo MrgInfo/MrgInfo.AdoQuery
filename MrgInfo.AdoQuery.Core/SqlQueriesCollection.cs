@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <inheritdoc />
     [CollectionDataContract(Name = "Queries", Namespace = "", ItemName = "Query")]

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using MrgInfo.AdoQuery.Core;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Sql
 {
+    /// <inheritdoc />
     /// <summary>
     ///     MsSQL adatbázis-kiszolgálóhoz kapcsolódás.
     /// </summary>
-    /// <inheritdoc />
     public sealed class SqlDatabaseSettings: DatabaseSettings
     {
         /// <inheritdoc />
@@ -15,13 +16,16 @@ namespace Sda.Query
             : base(connectionString)
         { }
 
+        /// <inheritdoc />
         /// <summary>
         ///     Konstruktor gyártómetódussal.
         /// </summary>
         /// <param name="builder">
         ///     Kapcsolati leíró összeállításához használt gyártómetódus.
         /// </param>
-        /// <inheritdoc />
+        /// <exception cref="ArgumentNullException">
+        ///     A <paramref name="builder"/> értéke null.
+        /// </exception>
         public SqlDatabaseSettings(SqlConnectionStringBuilder builder)
             : base((builder ?? throw new ArgumentNullException(nameof(builder))).ToString())
         { }

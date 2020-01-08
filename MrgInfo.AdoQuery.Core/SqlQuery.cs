@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using static System.Globalization.CultureInfo;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
     ///     Egy <c>SQL</c> lekérdezés futtatási körülményeit leíró osztály.
@@ -17,19 +17,19 @@ namespace Sda.Query
         ///     Lekérdezés egyedi azonosítója.
         /// </summary>
         [DataMember(Order = 0)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         ///     Lekérdezést futtató metódus.
         /// </summary>
         [DataMember(Order = 1)]
-        public string Caller { get; set; }
+        public string? Caller { get; set; }
 
         /// <summary>
         ///     Az <c>SQL</c> lekérdezés.
         /// </summary>
         [DataMember(Order = 2)]
-        public string Command { get; set; }
+        public string? Command { get; set; }
 
         /// <summary>
         ///     Lekérdezés paraméterei.
@@ -51,7 +51,7 @@ namespace Sda.Query
             {
                 var result = new SqlQueryParameter[Parameters.Count];
                 var i = 0;
-                foreach (object par in Parameters)
+                foreach (var par in Parameters)
                 {
                     result[i++] = par == null
                         ? new SqlQueryParameter()
@@ -83,16 +83,13 @@ namespace Sda.Query
         ///     Az delegált segítségével határozhatjuk meg, hogyan cseréljük a fiktív
         ///     adatbázis azonosítókat valós azonosítókra.
         /// </summary>
-        public Func<int, int> IdMapper { get; set; }
+        public Func<int, int>? IdMapper { get; set; }
 
         object[] MapIds(IList<object> parameters)
         {
-            if (parameters == null)
-            {
-                return Array.Empty<object>();
-            }
+            if (parameters == null) return Array.Empty<object>();
             var result = new List<object>();
-            foreach (object parameter in parameters)
+            foreach (var parameter in parameters)
             {
                 if (parameter is int id)
                 {
@@ -118,11 +115,11 @@ namespace Sda.Query
         /// <exception cref="QueryDbException">
         ///     Futás során keletkezett hiba.
         /// </exception>
-        public void Run([NotNull] SqlProvider provider)
+        public void Run(SqlProvider provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            object[] args = MapIds(Parameters.ToArray());
+            var args = MapIds(Parameters.ToArray());
             try
             {
                 provider.Read<string>(Id, Command ?? "", args);
@@ -152,7 +149,7 @@ namespace Sda.Query
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            object[] args = MapIds(Parameters.ToArray());
+            var args = MapIds(Parameters.ToArray());
             try
             {
                 return provider.Query(Id, Command, args, 1).Count();

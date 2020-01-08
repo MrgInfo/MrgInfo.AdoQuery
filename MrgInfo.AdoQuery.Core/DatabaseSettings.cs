@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <inheritdoc />
+    [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
     public abstract class DatabaseSettings: IDatabaseSettings
     {
         /// <summary>
@@ -32,6 +34,9 @@ namespace Sda.Query
         /// <param name="connectionString">
         ///     Adatbázis kapcsolati leíró.
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     A <paramref name="connectionString"/> értéke null.
+        /// </exception>
         protected DatabaseSettings(string connectionString) =>
             ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
 

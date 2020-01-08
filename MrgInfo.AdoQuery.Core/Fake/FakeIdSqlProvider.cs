@@ -5,23 +5,22 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core.Fake
 {
+    /// <inheritdoc cref="FakeSqlProvider" />
     /// <summary>
     ///     Egyedi azonosítók segítségével hamisított lekérdezések.
     /// </summary>
-    /// <inheritdoc cref="FakeSqlProvider" />
-    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix")]
+    [SuppressMessage("Design", "CA1010:Collections should implement generic interface")]
     public sealed class FakeIdSqlProvider: FakeSqlProvider, IEnumerable
     {
-        [NotNull]
-        ConcurrentDictionary<string, object[][]> ByIdData { get; } = new ConcurrentDictionary<string, object[][]>();
+        ConcurrentDictionary<string, object[][]?> ByIdData { get; } = new ConcurrentDictionary<string, object[][]?>();
 
         /// <inheritdoc />
-        protected override object[][] FindFakeData(string id, string sql, IEnumerable<object> args)
+        protected override object[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
         {
-            object[] parameters =
+            var parameters =
                 args
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
@@ -48,7 +47,7 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="id"/> vagy a <paramref name="data"/> értéke <c>null</c>.
         /// </exception>
-        public void Add([NotNull] string id, [NotNull] params object[][] data)
+        public void Add(string id, params object[][] data)
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             if (data == null) throw new ArgumentNullException(nameof(data));
@@ -68,7 +67,7 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="data"/> értéke <c>null</c>.
         /// </exception>
-        public void Add(Guid id, [NotNull] params object[][] data) =>
+        public void Add(Guid id, params object[][] data) =>
             ByIdData.TryAdd($"{id:N}", data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
@@ -86,13 +85,14 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="data"/> vagy a <paramref name="member"/> értéke <c>null</c>.
         /// </exception>
-        public void Add([NotNull] string member, int id, [NotNull] params object[][] data)
+        public void Add(string member, int id, params object[][] data)
         {
             if (string.IsNullOrWhiteSpace(member)) throw new ArgumentNullException(nameof(member));
             if (data == null) throw new ArgumentNullException(nameof(data));
 
             ByIdData.TryAdd($"{member}/{id}", data);
         }
+
 
         /// <summary>
         ///     Hamisított lekérdezések.
@@ -106,13 +106,12 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="id"/> értéke <c>null</c>.
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
         public object[][]? this[string id]
         {
-            get => ByIdData.TryGetValue(id ?? throw new ArgumentNullException(nameof(id)), out object[][] value)
-                        ? value
-                        : null;
+            get => ByIdData.TryGetValue(id, out var value)
+                ? value
+                : null;
             set => ByIdData.TryAdd(id ?? throw new ArgumentNullException(nameof(id)), value);
         }
 
@@ -125,11 +124,11 @@ namespace Sda.Query
         /// <value>
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
-        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public object[][] this[Guid id]
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
+        [SuppressMessage("Design", "CA1043:Use Integral Or String Argument For Indexers")]
+        public object[][]? this[Guid id]
         {
-            get => ByIdData.TryGetValue($"{id:N}", out object[][] value)
+            get => ByIdData.TryGetValue($"{id:N}", out var value)
                         ? value
                         : null;
             set => ByIdData.TryAdd($"{id:N}", value);
@@ -150,12 +149,11 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     A <paramref name="member"/> értéke <c>null</c>.
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1023:IndexersShouldNotBeMultidimensional")]
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public object[][] this[string member, int id]
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
+        public object[][]? this[string member, int id]
         {
-            get => ByIdData.TryGetValue($"{member ?? throw new ArgumentNullException(nameof(member))}/{id}", out object[][] value) ? value : null;
-            set => ByIdData.TryAdd($"{member ?? throw new ArgumentNullException(nameof(member))}/{id}", value);
+            get => ByIdData.TryGetValue($"{member}/{id}", out var value) ? value : null;
+            set => ByIdData.TryAdd($"{member}/{id}", value);
         }
 
         /// <inheritdoc />

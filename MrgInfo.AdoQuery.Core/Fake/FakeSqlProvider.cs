@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using static System.Diagnostics.SourceLevels;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core.Fake
 {
     /// <summary>
     ///     Hamisított adatbázis lekérdezéséket futtató szolgáltatás.
@@ -40,7 +40,7 @@ namespace Sda.Query
             text.AppendLine()
                 .AppendLine(query.Command)
                 .AppendLine();
-            foreach (object parameter in query.Parameters)
+            foreach (var parameter in query.Parameters)
             {
                 text.AppendLine($"\t{parameter}");
             }
@@ -66,12 +66,12 @@ namespace Sda.Query
         /// <param name="args">
         ///     Az <c>SQL</c> lekérdezés paraméterei.
         /// </param>
-        protected void RegisterQuery(string id, string sql, IEnumerable<object> args)
+        protected void RegisterQuery(string? id, string sql, IEnumerable<object>? args)
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
             var i = 2;
-            MethodBase method;
+            MethodBase? method;
             do
             {
                 method = new StackFrame(i++).GetMethod();
@@ -106,34 +106,34 @@ namespace Sda.Query
         /// <returns>
         ///     A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
-        protected abstract object[][] FindFakeData(string id, string sql, IEnumerable<object> args);
+        protected abstract object[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
 
         /// <inheritdoc />
         protected internal override TResult Read<TResult>(string? id, string? format, object[]? args)
         {
-            object[][] fakeData = FindFakeData(id, format, args);
-            return fakeData.Length > 0 && fakeData[0]?.Length > 0
+            var fakeData = FindFakeData(id, format, args);
+            return fakeData != null && fakeData.Length > 0 && fakeData[0]?.Length > 0
                 ? Cast<TResult>(fakeData[0][0])
                 : default;
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected internal override Task<TResult> ReadAsync<TResult>(string id, string format, object[] args, CancellationToken token = default) =>
+        protected override Task<TResult> ReadAsync<TResult>(string? id, string? format, object[]? args, CancellationToken token = default) =>
             Task.Run(() => Read<TResult>(id, format, args), token);
 
         /// <inheritdoc />
         protected internal override IEnumerable<object[]> Query(string? id, string? format, object[]? args, int columns)
         {
-            object[][] fakeData = FindFakeData(id, format, args);
-            foreach (object[] row in fakeData.Where(_ => _ != null))
+            var fakeData = FindFakeData(id, format, args);
+            if (fakeData == null) yield break;
+            foreach (var row in fakeData.Where(_ => _ != null))
             {
                 yield return row;
             }
         }
 
         /// <inheritdoc />
-        protected override Task<IEnumerable<object[]>> QueryAsync(string id, string format, object[] args, int columns, CancellationToken token) =>
+        protected override Task<IEnumerable<object[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
             Task.Run(() => Query(id, format, args, columns), token);
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Sda.Query
                 NewLineOnAttributes = false,
                 OmitXmlDeclaration = false
             };
-            using XmlWriter dictionaryWriter = XmlWriter.Create(writer, settings);
+            using var dictionaryWriter = XmlWriter.Create(writer, settings);
             dictionaryWriter.WriteStartDocument();
             var data = new SqlQueriesCollection(Queries);
             var dcs = new DataContractSerializer(data.GetType());
@@ -186,7 +186,7 @@ namespace Sda.Query
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
 
             if (Queries.IsEmpty) return;
-            using StreamWriter stream = File.CreateText(fileName);
+            using var stream = File.CreateText(fileName);
             SaveAllQueries(stream);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core.FormattableStrings
 {
     sealed class FormattableStringWithId: FormattableString
     {

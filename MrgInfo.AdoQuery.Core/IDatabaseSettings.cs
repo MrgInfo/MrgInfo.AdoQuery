@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
     ///     Adatbázis lekérdezéshez szükséges beállítások.

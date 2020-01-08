@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
-namespace Sda.Query
+namespace MrgInfo.AdoQuery.Core.FormattableStrings
 {
     /// <summary>
     ///     A lekérdezések egyedi beazonosítása.
@@ -67,7 +66,6 @@ namespace Sda.Query
         /// <exception cref="ArgumentNullException">
         ///     Az <paramref name="sql"/> értéke <c>null</c>.
         /// </exception>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
         public static FormattableString Is(this int id, FormattableString sql, [CallerMemberName] string memberName = "") =>
             new FormattableStringWithId(
                 $"{memberName ?? throw new ArgumentNullException(nameof(memberName))}/{id}",
