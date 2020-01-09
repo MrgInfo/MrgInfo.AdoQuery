@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <docs>
-  <sqlformat>
+  <query>
     <remarks>
       A <paramref name="sql" /> paraméterben használható formázások.
       <list type="table">
@@ -34,8 +34,11 @@
         </item>
       </list>
     </remarks>
+    <returns>
+      Result set.
+    </returns>
     <exception cref="MrgInfo.AdoQuery.Core.QueryDbException">
-        Hibás lekérdezés végrehajtás.
+      Error occured during executing the query.
     </exception>
-  </sqlformat>
+  </query>
 </docs>

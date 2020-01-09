@@ -15,10 +15,10 @@ using static System.Diagnostics.SourceLevels;
 
 namespace MrgInfo.AdoQuery.Core.Fake
 {
+    /// <inheritdoc cref="SqlProvider" />
     /// <summary>
     ///     Hamisított adatbázis lekérdezéséket futtató szolgáltatás.
     /// </summary>
-    /// <inheritdoc cref="SqlProvider" />
     public abstract class FakeSqlProvider: SqlProvider
     {
         sealed class FakeDatabaseSettings: IDatabaseSettings
@@ -40,7 +40,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
             text.AppendLine()
                 .AppendLine(query.Command)
                 .AppendLine();
-            foreach (var parameter in query.Parameters)
+            foreach (object parameter in query.Parameters)
             {
                 text.AppendLine($"\t{parameter}");
             }
@@ -106,13 +106,13 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <returns>
         ///     A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
-        protected abstract object?[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
+        protected abstract IList<IList<object?>>? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
 
         /// <inheritdoc />
         protected internal override TResult Read<TResult>(string? id, string? format, object[]? args)
         {
-            var fakeData = FindFakeData(id, format, args);
-            return fakeData != null && fakeData.Length > 0 && fakeData[0]?.Length > 0
+            IList<IList<object?>>? fakeData = FindFakeData(id, format, args);
+            return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
                 ? Cast<TResult>(fakeData[0][0])
                 : default;
         }
@@ -122,18 +122,18 @@ namespace MrgInfo.AdoQuery.Core.Fake
             Task.Run(() => Read<TResult>(id, format, args), token);
 
         /// <inheritdoc />
-        protected internal override IEnumerable<object[]> Query(string? id, string? format, object[]? args, int columns)
+        protected internal override IEnumerable<object?[]> Query(string? id, string? format, object[]? args, int columns)
         {
-            var fakeData = FindFakeData(id, format, args);
+            IList<IList<object?>>? fakeData = FindFakeData(id, format, args);
             if (fakeData == null) yield break;
-            foreach (var row in fakeData.Where(_ => _ != null))
+            foreach (IList<object?> row in fakeData.Where(_ => _ != null))
             {
-                yield return row;
+                yield return row.ToArray();
             }
         }
 
         /// <inheritdoc />
-        protected override Task<IEnumerable<object[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
+        protected override Task<IEnumerable<object?[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
             Task.Run(() => Query(id, format, args, columns), token);
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
 
             if (Queries.IsEmpty) return;
-            using var stream = File.CreateText(fileName);
+            using StreamWriter stream = File.CreateText(fileName);
             SaveAllQueries(stream);
         }
     }

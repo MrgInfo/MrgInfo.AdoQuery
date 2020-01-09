@@ -17,6 +17,9 @@ namespace MrgInfo.AdoQuery.Core
         /// <returns>
         ///     A formázott számozás.
         /// </returns>
+        ///  <exception cref="ArgumentOutOfRangeException">
+        ///     A <paramref name="index" /> értéke érvénytelen.
+        /// </exception>
         protected static string GetParameterNumber(int index)
         {
             if (index < 0 || 98 < index) throw new ArgumentOutOfRangeException(nameof(index), index, "0-98");
@@ -34,11 +37,8 @@ namespace MrgInfo.AdoQuery.Core
         /// <param name="connectionString">
         ///     Adatbázis kapcsolati leíró.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="connectionString"/> értéke null.
-        /// </exception>
         protected DatabaseSettings(string connectionString) =>
-            ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            ConnectionString = connectionString;
 
         /// <inheritdoc />
         public abstract DbConnection CreateConnection();

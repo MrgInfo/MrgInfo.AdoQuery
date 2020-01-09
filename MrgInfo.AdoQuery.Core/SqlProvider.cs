@@ -14,2033 +14,726 @@ using MrgInfo.AdoQuery.Core.FormattableStrings;
 namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
-    ///     Lekérdezések futtatása.
+    ///     Run SQL queries.
     /// </summary>
     [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
     public class SqlProvider
     {
         /// <summary>
-        ///     Lekérdezés 1 oszloppal.
+        ///     Query with 1 column.
         /// </summary>
         /// <typeparam name="T">
-        ///     Az oszlop típusa.
+        ///     Type of column.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<T> Query<T>(FormattableString? sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<T>
+        Query<T>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 1)
             select Cast<T>(v[0]);
 
         /// <summary>
-        ///     Lekérdezés 1 oszloppal.
-        /// </summary>
-        /// <typeparam name="T">
-        ///     Az oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <exception cref="DbException">
-        ///     Adatbázis hiba!
-        /// </exception>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*' />
-        public async Task<IEnumerable<T>> QueryAsync<T>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 1, token).ConfigureAwait(false)
-            select Cast<T>(v[0]);
-
-        /// <summary>
-        ///     Lekérdezés 2 oszloppal.
+        ///     Query with 2 columns.
         /// </summary>
         /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
+        ///     Type of column 1.
         /// </typeparam>
         /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
+        ///     Type of column 2.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public IEnumerable<(T1 Column1, T2 Column2)>
         Query<T1, T2>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 2)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]));
 
         /// <summary>
-        ///     Lekérdezés 2 oszloppal.
+        ///     Query with 3 columns.
         /// </summary>
         /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
+        ///     Type of column 1.
         /// </typeparam>
         /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(T1 Column1, T2 Column2)>>
-        QueryAsync<T1, T2>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 2, token).ConfigureAwait(false)
-            select (Cast<T1>(v[0]), Cast<T2>(v[1]));
-
-        /// <summary>
-        ///     Lekérdezés 3 oszloppal.
-        /// </summary>
-        /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
+        ///     Type of column 2.
         /// </typeparam>
         /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
+        ///     Type of column 3.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3)> 
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3)>
         Query<T1, T2, T3>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 3)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]));
 
         /// <summary>
-        ///     Lekérdezés 3 oszloppal.
+        ///     Query with 4 columns.
         /// </summary>
         /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
+        ///     Type of column 1.
         /// </typeparam>
         /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
+        ///     Type of column 2.
         /// </typeparam>
         /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3)>>
-        QueryAsync<T1, T2, T3>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 3, token).ConfigureAwait(false)
-            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]));
-
-        /// <summary>
-        ///     Lekérdezés 4 oszloppal.
-        /// </summary>
-        /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
+        ///     Type of column 3.
         /// </typeparam>
         /// <typeparam name="T4">
-        ///     Az 4. oszlop típusa.
+        ///     Type of column 4.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4)>
         Query<T1, T2, T3, T4>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 4)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]));
 
         /// <summary>
-        ///     Lekérdezés 4 oszloppal.
+        ///     Query with 5 columns.
         /// </summary>
         /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
+        ///     Type of column 1.
         /// </typeparam>
         /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
+        ///     Type of column 2.
         /// </typeparam>
         /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
+        ///     Type of column 3.
         /// </typeparam>
         /// <typeparam name="T4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4)>>
-        QueryAsync<T1, T2, T3, T4>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 4, token).ConfigureAwait(false)
-            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]));
-
-        /// <summary>
-        ///     Lekérdezés 5 oszloppal.
-        /// </summary>
-        /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T4">
-        ///     Az 4. oszlop típusa.
+        ///     Type of column 4.
         /// </typeparam>
         /// <typeparam name="T5">
-        ///     Az 5. oszlop típusa.
+        ///     Type of column 5.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5)>
         Query<T1, T2, T3, T4, T5>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 5)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]));
 
         /// <summary>
-        ///     Lekérdezés 5 oszloppal.
+        ///     Query with 6 columns.
         /// </summary>
         /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
+        ///     Type of column 1.
         /// </typeparam>
         /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
+        ///     Type of column 2.
         /// </typeparam>
         /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
+        ///     Type of column 3.
         /// </typeparam>
         /// <typeparam name="T4">
-        ///     Az 4. oszlop típusa.
+        ///     Type of column 4.
         /// </typeparam>
         /// <typeparam name="T5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5)>>
-        QueryAsync<T1, T2, T3, T4, T5>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 5, token).ConfigureAwait(false)
-            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]));
-
-        /// <summary>
-        ///     Lekérdezés 6 oszloppal.
-        /// </summary>
-        /// <typeparam name="T1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="T5">
-        ///     Az 5. oszlop típusa.
+        ///     Type of column 5.
         /// </typeparam>
         /// <typeparam name="T6">
-        ///     Az 6. oszlop típusa.
+        ///     Type of column 6.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6)>
         Query<T1, T2, T3, T4, T5, T6>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 6)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]));
 
         /// <summary>
-        ///     Lekérdezés 6 oszloppal.
+        ///     Query with 7 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
+        /// </typeparam>
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(TColumn1 Column1, TColumn2 Column2, TColumn3 Column3, TColumn4 Column4, TColumn5 Column5, TColumn6 Column6)>>
-        QueryAsync<TColumn1, TColumn2, TColumn3, TColumn4, TColumn5, TColumn6>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 6, token).ConfigureAwait(false)
-            select (Cast<TColumn1>(v[0]), Cast<TColumn2>(v[1]), Cast<TColumn3>(v[2]), Cast<TColumn4>(v[3]), Cast<TColumn5>(v[4]), Cast<TColumn6>(v[5]));
-
-        /// <summary>
-        ///     Lekérdezés 7 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<(TColumn1 Column1, TColumn2 Column2, TColumn3 Column3, TColumn4 Column4, TColumn5 Column5, TColumn6 Column6, TColumn7 Column7)>
-        Query<TColumn1, TColumn2, TColumn3, TColumn4, TColumn5, TColumn6, TColumn7>(FormattableString? sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7)>
+        Query<T1, T2, T3, T4, T5, T6, T7>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 7)
-            select (Cast<TColumn1>(v[0]), Cast<TColumn2>(v[1]), Cast<TColumn3>(v[2]), Cast<TColumn4>(v[3]), Cast<TColumn5>(v[4]), Cast<TColumn6>(v[5]), Cast<TColumn7>(v[6]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]));
 
         /// <summary>
-        ///     Lekérdezés 7 oszloppal.
+        ///     Query with 8 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
+        /// </typeparam>
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(TColumn1 Column1, TColumn2 Column2, TColumn3 Column3, TColumn4 Column4, TColumn5 Column5, TColumn6 Column6, TColumn7 Column7)>>
-        QueryAsync<TColumn1, TColumn2, TColumn3, TColumn4, TColumn5, TColumn6, TColumn7>(FormattableString? sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 7, token).ConfigureAwait(false)
-            select (Cast<TColumn1>(v[0]), Cast<TColumn2>(v[1]), Cast<TColumn3>(v[2]), Cast<TColumn4>(v[3]), Cast<TColumn5>(v[4]), Cast<TColumn6>(v[5]), Cast<TColumn7>(v[6]));
-
-        /// <summary>
-        ///     Lekérdezés 8 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<(TColumn1 Column1, TColumn2 Column2, TColumn3 Column3, TColumn4 Column4, TColumn5 Column5, TColumn6 Column6, TColumn7 Column7, TColumn8 Column8)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 8)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]));
 
         /// <summary>
-        ///     Lekérdezés 8 oszloppal.
+        ///     Query with 9 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
+        /// </typeparam>
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 8, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]));
-
-        /// <summary>
-        ///     Lekérdezés 9 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 9)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]));
 
         /// <summary>
-        ///     Lekérdezés 9 oszloppal.
+        ///     Query with 10 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
+        /// </typeparam>
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 9, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]));
-
-        /// <summary>
-        ///     Lekérdezés 10 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 10)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]));
 
         /// <summary>
-        ///     Lekérdezés 10 oszloppal.
+        ///     Query with 11 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
+        /// </typeparam>
+        /// <typeparam name="T11">
+        ///     Type of column 11.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 10, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]));
-
-        /// <summary>
-        ///     Lekérdezés 11 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 11)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]));
 
         /// <summary>
-        ///     Lekérdezés 11 oszloppal.
+        ///     Query with 12 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
+        /// <typeparam name="T11">
+        ///     Type of column 11.
+        /// </typeparam>
+        /// <typeparam name="T12">
+        ///     Type of column 12.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 11, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]));
-
-        /// <summary>
-        ///     Lekérdezés 12 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 12)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]));
 
         /// <summary>
-        ///     Lekérdezés 12 oszloppal.
+        ///     Query with 13 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
+        /// <typeparam name="T11">
+        ///     Type of column 11.
         /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
+        /// <typeparam name="T12">
+        ///     Type of column 12.
+        /// </typeparam>
+        /// <typeparam name="T13">
+        ///     Type of column 13.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 12, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]));
-
-        /// <summary>
-        ///     Lekérdezés 13 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12, T13 Column13)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 13)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]));
 
         /// <summary>
-        ///     Lekérdezés 13 oszloppal.
+        ///     Query with 14 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
+        /// <typeparam name="T11">
+        ///     Type of column 11.
         /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
+        /// <typeparam name="T12">
+        ///     Type of column 12.
         /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
+        /// <typeparam name="T13">
+        ///     Type of column 13.
+        /// </typeparam>
+        /// <typeparam name="T14">
+        ///     Type of column 14.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 13, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]));
-
-        /// <summary>
-        ///     Lekérdezés 14 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12, T13 Column13, T14 Column14)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 14)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]), Cast<T14>(v[13]));
 
         /// <summary>
-        ///     Lekérdezés 14 oszloppal.
+        ///     Query with 15 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
+        /// <typeparam name="T11">
+        ///     Type of column 11.
         /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
+        /// <typeparam name="T12">
+        ///     Type of column 12.
         /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
+        /// <typeparam name="T13">
+        ///     Type of column 13.
         /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
+        /// <typeparam name="T14">
+        ///     Type of column 14.
+        /// </typeparam>
+        /// <typeparam name="T15">
+        ///     Type of column 15.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 14, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]));
-
-        /// <summary>
-        ///     Lekérdezés 15 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn15">
-        ///     Az 15. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14,
-                TColumn15 Column15)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14,
-                TColumn15>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12, T13 Column13, T14 Column14, T15 Column15)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 15)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]),
-                Cast<TColumn15>(v[14]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]), Cast<T14>(v[13]), Cast<T15>(v[14]));
 
         /// <summary>
-        ///     Lekérdezés 15 oszloppal.
+        ///     Query with 16 columns.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
+        /// <typeparam name="T1">
+        ///     Type of column 1.
         /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
+        /// <typeparam name="T2">
+        ///     Type of column 2.
         /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
+        /// <typeparam name="T3">
+        ///     Type of column 3.
         /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
+        /// <typeparam name="T4">
+        ///     Type of column 4.
         /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
+        /// <typeparam name="T5">
+        ///     Type of column 5.
         /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
+        /// <typeparam name="T6">
+        ///     Type of column 6.
         /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
+        /// <typeparam name="T7">
+        ///     Type of column 7.
         /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
+        /// <typeparam name="T8">
+        ///     Type of column 8.
         /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
+        /// <typeparam name="T9">
+        ///     Type of column 9.
         /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
+        /// <typeparam name="T10">
+        ///     Type of column 10.
         /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
+        /// <typeparam name="T11">
+        ///     Type of column 11.
         /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
+        /// <typeparam name="T12">
+        ///     Type of column 12.
         /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
+        /// <typeparam name="T13">
+        ///     Type of column 13.
         /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
+        /// <typeparam name="T14">
+        ///     Type of column 14.
         /// </typeparam>
-        /// <typeparam name="TColumn15">
-        ///     Az 15. oszlop típusa.
+        /// <typeparam name="T15">
+        ///     Type of column 15.
+        /// </typeparam>
+        /// <typeparam name="T16">
+        ///     Type of column 16.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
-        /// <param name="token">
-        ///     Megszakítás kezdeményezése.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14,
-                TColumn15 Column15)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14,
-                TColumn15>
-            (FormattableString sql, CancellationToken token = default) =>
-            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 15, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]),
-                Cast<TColumn15>(v[14]));
-
-        /// <summary>
-        ///     Lekérdezés 16 oszloppal.
-        /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn15">
-        ///     Az 15. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn16">
-        ///     Az 16. oszlop típusa.
-        /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14,
-                TColumn15 Column15,
-                TColumn16 Column16)>
-            Query<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14,
-                TColumn15,
-                TColumn16>
-            (FormattableString sql) =>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12, T13 Column13, T14 Column14, T15 Column15, T16 Column16)>
+        Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(FormattableString? sql) =>
             from v in SafeQuery(FindId(sql), sql?.Format, sql?.GetArguments(), 16)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]),
-                Cast<TColumn15>(v[14]),
-                Cast<TColumn16>(v[15]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]), Cast<T14>(v[13]), Cast<T15>(v[14]), Cast<T16>(v[15]));
+
+
+
+
+
 
         /// <summary>
-        ///     Lekérdezés 16 oszloppal.
+        ///     Query with 1 column.
         /// </summary>
-        /// <typeparam name="TColumn1">
-        ///     Az 1. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn2">
-        ///     Az 2. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn3">
-        ///     Az 3. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn4">
-        ///     Az 4. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn5">
-        ///     Az 5. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn6">
-        ///     Az 6. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn7">
-        ///     Az 7. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn8">
-        ///     Az 8. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn9">
-        ///     Az 9. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn10">
-        ///     Az 10. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn11">
-        ///     Az 11. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn12">
-        ///     Az 12. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn13">
-        ///     Az 13. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn14">
-        ///     Az 14. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn15">
-        ///     Az 15. oszlop típusa.
-        /// </typeparam>
-        /// <typeparam name="TColumn16">
-        ///     Az 16. oszlop típusa.
+        /// <typeparam name="T">
+        ///     Type of column.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The SQL query.
         /// </param>
         /// <param name="token">
-        ///     Megszakítás kezdeményezése.
+        ///     The cancellation token that will be checked for stop reading.
         /// </param>
-        /// <returns>
-        ///     Találati lista.
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public async Task<IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8,
-                TColumn9 Column9,
-                TColumn10 Column10,
-                TColumn11 Column11,
-                TColumn12 Column12,
-                TColumn13 Column13,
-                TColumn14 Column14,
-                TColumn15 Column15,
-                TColumn16 Column16)>>
-            QueryAsync<
-                TColumn1,
-                TColumn2,
-                TColumn3,
-                TColumn4,
-                TColumn5,
-                TColumn6,
-                TColumn7,
-                TColumn8,
-                TColumn9,
-                TColumn10,
-                TColumn11,
-                TColumn12,
-                TColumn13,
-                TColumn14,
-                TColumn15,
-                TColumn16>
-            (FormattableString sql, CancellationToken token = default) =>
+        /// <include file='Documentation.xml' path='docs/query/*' />
+        public async Task<IEnumerable<T>>
+        QueryAsync<T>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 1, token).ConfigureAwait(false)
+            select Cast<T>(v[0]);
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2)>>
+        QueryAsync<T1, T2>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 2, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]));
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3)>>
+        QueryAsync<T1, T2, T3>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 3, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]));
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4)>>
+        QueryAsync<T1, T2, T3, T4>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 4, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]));
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5)>>
+        QueryAsync<T1, T2, T3, T4, T5>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 5, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]));
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6)>>
+        QueryAsync<T1, T2, T3, T4, T5, T6>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 6, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]));
+
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7)>>
+        QueryAsync<T1, T2, T3, T4, T5, T6, T7>(FormattableString? sql, CancellationToken token = default) =>
+            from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 7, token).ConfigureAwait(false)
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]));
+
+        /// <summary>
+        ///     Query with 16 columns.
+        /// </summary>
+        /// <typeparam name="T1">
+        ///     Type of column 1.
+        /// </typeparam>
+        /// <typeparam name="T2">
+        ///     Type of column 2.
+        /// </typeparam>
+        /// <typeparam name="T3">
+        ///     Type of column 3.
+        /// </typeparam>
+        /// <typeparam name="T4">
+        ///     Type of column 4.
+        /// </typeparam>
+        /// <typeparam name="T5">
+        ///     Type of column 5.
+        /// </typeparam>
+        /// <typeparam name="T6">
+        ///     Type of column 6.
+        /// </typeparam>
+        /// <typeparam name="T7">
+        ///     Type of column 7.
+        /// </typeparam>
+        /// <typeparam name="T8">
+        ///     Type of column 8.
+        /// </typeparam>
+        /// <typeparam name="T9">
+        ///     Type of column 9.
+        /// </typeparam>
+        /// <typeparam name="T10">
+        ///     Type of column 10.
+        /// </typeparam>
+        /// <typeparam name="T11">
+        ///     Type of column 11.
+        /// </typeparam>
+        /// <typeparam name="T12">
+        ///     Type of column 12.
+        /// </typeparam>
+        /// <typeparam name="T13">
+        ///     Type of column 13.
+        /// </typeparam>
+        /// <typeparam name="T14">
+        ///     Type of column 14.
+        /// </typeparam>
+        /// <typeparam name="T15">
+        ///     Type of column 15.
+        /// </typeparam>
+        /// <typeparam name="T16">
+        ///     Type of column 16.
+        /// </typeparam>
+        /// <param name="sql">
+        ///     The SQL query.
+        /// </param>
+        /// <param name="token">
+        ///     The cancellation token that will be checked for stop reading.
+        /// </param>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
+        public async Task<IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10, T11 Column11, T12 Column12, T13 Column13, T14 Column14, T15 Column15, T16 Column16)>>
+        QueryAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(FormattableString? sql, CancellationToken token = default) =>
             from v in await SafeQueryAsync(FindId(sql), sql?.Format, sql?.GetArguments(), 16, token).ConfigureAwait(false)
-            select (
-                Cast<TColumn1>(v[0]),
-                Cast<TColumn2>(v[1]),
-                Cast<TColumn3>(v[2]),
-                Cast<TColumn4>(v[3]),
-                Cast<TColumn5>(v[4]),
-                Cast<TColumn6>(v[5]),
-                Cast<TColumn7>(v[6]),
-                Cast<TColumn8>(v[7]),
-                Cast<TColumn9>(v[8]),
-                Cast<TColumn10>(v[9]),
-                Cast<TColumn11>(v[10]),
-                Cast<TColumn12>(v[11]),
-                Cast<TColumn13>(v[12]),
-                Cast<TColumn14>(v[13]),
-                Cast<TColumn15>(v[14]),
-                Cast<TColumn16>(v[15]));
+            select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]), Cast<T14>(v[13]), Cast<T15>(v[14]), Cast<T16>(v[15]));
 
         /// <summary>
         ///     Lekérdezés paraméter.
@@ -2199,7 +892,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Törli a behúzást a | karakterig minden sorban.
         /// </summary>
         /// <param name="query">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     Az SQL lekérdezés.
         /// </param>
         /// <returns>
         ///     Az átformázott lekérdezés.
@@ -2224,14 +917,11 @@ namespace MrgInfo.AdoQuery.Core
 
         static void Print(IDbCommand command)
         {
-            if (command == null) throw new ArgumentNullException(nameof(command));
-            if (command.Parameters == null) throw new ArgumentNullException(nameof(command));
-
             var text = new StringBuilder();
             text.AppendLine()
                 .AppendLine(command.CommandText)
                 .AppendLine();
-            foreach (var parameter in command.Parameters.OfType<IDbDataParameter>())
+            foreach (IDbDataParameter parameter in command.Parameters.OfType<IDbDataParameter>())
             {
                 text.Append(parameter.ParameterName)
                     .Append(" = ")
@@ -2261,7 +951,7 @@ namespace MrgInfo.AdoQuery.Core
         [return: MaybeNull]
         protected static TResult Cast<TResult>(object? value)
         {
-            var type = typeof(TResult);
+            Type type = typeof(TResult);
             if (type.IsGenericType
                 && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
@@ -2294,22 +984,18 @@ namespace MrgInfo.AdoQuery.Core
         readonly IDatabaseSettings _settings;
 
         /// <summary>
-        ///     Konstruktor.
+        ///     Initializes a new instance of <see cref="SqlProvider"/>.
         /// </summary>
         /// <param name="settings">
-        ///     Adatbázis beállítások.
+        ///     Database settings.
         /// </param>
         public SqlProvider(IDatabaseSettings settings) =>
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _settings = settings;
 
         [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
         DbCommand CreateCommand(DbConnection conncetion, string format, object[] args)
         {
-            if (conncetion == null) throw new ArgumentNullException(nameof(conncetion));
-            if (format == null) throw new ArgumentNullException(nameof(format));
-            if (args == null) throw new ArgumentNullException(nameof(args));
-
-            var command = conncetion.CreateCommand();
+            DbCommand command = conncetion.CreateCommand();
             try
             {
                 var placeholders = new object[args.Length];
@@ -2361,7 +1047,7 @@ namespace MrgInfo.AdoQuery.Core
                 for (int i = placeholders.Length - 1; i >= 0 ; --i)
                 {
                     var placeholder = (Parameter)placeholders[i];
-                    var parameter = command.Parameters[i];
+                    DbParameter parameter = command.Parameters[i];
                     parameter.Value = placeholder.Value ?? DBNull.Value;
                     if (! placeholder.Present) command.Parameters.Remove(parameter);
                 }
@@ -2379,10 +1065,10 @@ namespace MrgInfo.AdoQuery.Core
         ///     Lekérdezés.
         /// </summary>
         /// <param name="id">
-        ///      Az <c>SQL</c> lekérdezés azonosítója.
+        ///      Az SQL lekérdezés azonosítója.
         /// </param>
         /// <param name="format">
-        ///     Az <c>SQL</c> lekérdezés helyőrzőkkel.
+        ///     Az SQL lekérdezés helyőrzőkkel.
         /// </param>
         /// <param name="args">
         ///     Paraméterek.
@@ -2399,15 +1085,15 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="ArgumentOutOfRangeException">
         ///     A <paramref name="columns"/> értéke nem pozitív.
         /// </exception>
-        protected internal virtual IEnumerable<object[]> Query(string? id, string? format, object[]? args, int columns)
+        protected internal virtual IEnumerable<object?[]> Query(string? id, string? format, object[]? args, int columns)
         {
             if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
 
             if (string.IsNullOrEmpty(format)) yield break;
-            using var connection = _settings.CreateConnection();
+            using DbConnection connection = _settings.CreateConnection();
             connection.Open();
-            using var command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
-            using var reader = command.ExecuteReader();
+            using DbCommand command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
+            using DbDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 var values = new object[columns];
@@ -2416,7 +1102,7 @@ namespace MrgInfo.AdoQuery.Core
             }
         }
 
-        IEnumerable<object[]> SafeQuery(string? id, string? format, object[]? args, int columns) =>
+        IEnumerable<object?[]> SafeQuery(string? id, string? format, object[]? args, int columns) =>
             WrapException(id, format, args, () => Query(id, format, args, columns))
             ?? Enumerable.Empty<object[]>();
 
@@ -2424,10 +1110,10 @@ namespace MrgInfo.AdoQuery.Core
         ///     Lekérdezés.
         /// </summary>
         /// <param name="id">
-        ///      Az <c>SQL</c> lekérdezés azonosítója.
+        ///      Az SQL lekérdezés azonosítója.
         /// </param>
         /// <param name="format">
-        ///     Az <c>SQL</c> lekérdezés helyőrzőkkel.
+        ///     Az SQL lekérdezés helyőrzőkkel.
         /// </param>
         /// <param name="args">
         ///     Paraméterek.
@@ -2447,16 +1133,16 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="ArgumentOutOfRangeException">
         ///     A <paramref name="columns"/> értéke nem pozitív.
         /// </exception>
-        protected virtual async Task<IEnumerable<object[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token)
+        protected virtual async Task<IEnumerable<object?[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token)
         {
             if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
 
             var results = new LinkedList<object[]>();
             if (string.IsNullOrEmpty(format)) return results;
-            await using var connection = _settings.CreateConnection();
+            await using DbConnection connection = _settings.CreateConnection();
             await (connection.OpenAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            await using var command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
-            await using var reader = await (command.ExecuteReaderAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
+            await using DbCommand command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
+            await using DbDataReader reader = await (command.ExecuteReaderAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
             while (await (reader?.ReadAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false))
             {
                 if (token.IsCancellationRequested) break;
@@ -2467,7 +1153,7 @@ namespace MrgInfo.AdoQuery.Core
             return results;
         }
 
-        Task<IEnumerable<object[]>> SafeQueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
+        Task<IEnumerable<object?[]>> SafeQueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
             WrapExceptionAsync(id, format, args, async () => await QueryAsync(id, format, args, columns, token).ConfigureAwait(false));
 
         /// <summary>
@@ -2477,10 +1163,10 @@ namespace MrgInfo.AdoQuery.Core
         ///     Az adat típusa.
         /// </typeparam>
         /// <param name="id">
-        ///      Az <c>SQL</c> lekérdezés azonosítója.
+        ///      Az SQL lekérdezés azonosítója.
         /// </param>
         /// <param name="format">
-        ///     Az <c>SQL</c> lekérdezés helyőrzőkkel.
+        ///     Az SQL lekérdezés helyőrzőkkel.
         /// </param>
         /// <param name="args">
         ///     Paraméterek.
@@ -2495,10 +1181,10 @@ namespace MrgInfo.AdoQuery.Core
         protected internal virtual TResult Read<TResult>(string? id, string? format, object[]? args)
         {
             if (string.IsNullOrEmpty(format)) return default!;
-            using var connection = _settings.CreateConnection();
+            using DbConnection connection = _settings.CreateConnection();
             connection.Open();
             using IDbCommand command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
-            var result = command.ExecuteScalar();
+            object result = command.ExecuteScalar();
             if (result is null || result is DBNull) return default!;
             return (TResult)Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
         }
@@ -2513,7 +1199,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Az adat típusa.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     Az SQL lekérdezés.
         /// </param>
         /// <returns>
         ///     Az adat értéke.
@@ -2521,7 +1207,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="DbException">
         ///     Adatbázis hiba!
         /// </exception>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public TResult Read<TResult>(FormattableString? sql) =>
             SafeRead<TResult>(FindId(sql), sql?.Format, sql?.GetArguments());
 
@@ -2531,41 +1217,11 @@ namespace MrgInfo.AdoQuery.Core
         /// <typeparam name="TResult">
         ///     Az adat típusa.
         /// </typeparam>
-        /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
-        /// </param>
-        /// <param name="result">
-        ///     Az adat értéke.
-        /// </param>
-        /// <returns>
-        ///     Sikeres volt-e a lekérdezés?
-        /// </returns>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        public bool TryRead<TResult>(FormattableString sql, [MaybeNull] out TResult result)
-        {
-            try
-            {
-                result = Read<TResult>(FindId(sql), sql?.Format, sql?.GetArguments());
-                return true;
-            }
-            catch(DbException)
-            {
-                result = default!;
-                return false;
-            }
-        }
-
-        /// <summary>
-        ///     Egy konkrét adat lekérdezése.
-        /// </summary>
-        /// <typeparam name="TResult">
-        ///     Az adat típusa.
-        /// </typeparam>
         /// <param name="id">
-        ///      Az <c>SQL</c> lekérdezés azonosítója.
+        ///      Az SQL lekérdezés azonosítója.
         /// </param>
         /// <param name="format">
-        ///     Az <c>SQL</c> lekérdezés helyőrzőkkel.
+        ///     Az SQL lekérdezés helyőrzőkkel.
         /// </param>
         /// <param name="args">
         ///     Paraméterek.
@@ -2582,10 +1238,10 @@ namespace MrgInfo.AdoQuery.Core
         protected virtual async Task<TResult> ReadAsync<TResult>(string? id, string? format, object[]? args, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(format)) return default!;
-            await using var connection = _settings.CreateConnection();
+            await using DbConnection connection = _settings.CreateConnection();
             await (connection.OpenAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            await using var command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
-            var result = await (command.ExecuteScalarAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
+            await using DbCommand command = CreateCommand(connection, RemoveTrailing(format), args ?? Array.Empty<object>());
+            object result = await (command.ExecuteScalarAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
             if (result is null || result is DBNull) return default!;
             return (TResult)Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
         }
@@ -2600,7 +1256,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Az adat típusa.
         /// </typeparam>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     Az SQL lekérdezés.
         /// </param>
         /// <param name="token">
         ///     Megszakítás kezdeményezése.
@@ -2611,7 +1267,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="DbException">
         ///     Adatbázis hiba!
         /// </exception>
-        /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
+        /// <include file='Documentation.xml' path='docs/query/*'/>
         public Task<TResult> ReadAsync<TResult>(FormattableString? sql, CancellationToken token = default) =>
             SafeReadAsync<TResult>(FindId(sql), sql?.Format, sql?.GetArguments(), token);
 

@@ -15,12 +15,12 @@ namespace MrgInfo.AdoQuery.Core.Fake
     [SuppressMessage("Design", "CA1010:Collections should implement generic interface")]
     public sealed class FakeIdSqlProvider: FakeSqlProvider, IEnumerable
     {
-        ConcurrentDictionary<string, object?[][]?> ByIdData { get; } = new ConcurrentDictionary<string, object?[][]?>();
+        ConcurrentDictionary<string, IList<IList<object?>>?> ByIdData { get; } = new ConcurrentDictionary<string, IList<IList<object?>>?>();
 
         /// <inheritdoc />
-        protected override object?[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
+        protected override IList<IList<object?>>? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
         {
-            var parameters =
+            object[] parameters =
                 args
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
@@ -28,11 +28,11 @@ namespace MrgInfo.AdoQuery.Core.Fake
             string command = string.Format(null, sql ?? "", parameters);
             RegisterQuery(id, command, from Parameter p in parameters where p != null select p.Value);
             if (! string.IsNullOrWhiteSpace(id)
-                && ByIdData.TryGetValue(id, out var data))
+                && ByIdData.TryGetValue(id, out IList<IList<object?>>? data))
             {
                 return data;
             }
-            return Array.Empty<object[]>();
+            return Array.Empty<IList<object?>>();
         }
 
         /// <summary>
@@ -44,16 +44,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="data">
         ///     A találati adathalmazt reprezentáló objektumok.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="id"/> vagy a <paramref name="data"/> értéke <c>null</c>.
-        /// </exception>
-        public void Add(string id, params object[][] data)
-        {
-            if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public void Add(string id, params object?[][]? data) =>
             ByIdData.TryAdd(id, data);
-        }
 
         /// <summary>
         ///     Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
@@ -64,11 +57,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="data">
         ///     A találati adathalmazt reprezentáló objektumok.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="data"/> értéke <c>null</c>.
-        /// </exception>
-        public void Add(Guid id, params object[][] data) =>
-            ByIdData.TryAdd($"{id:N}", data ?? throw new ArgumentNullException(nameof(data)));
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public void Add(Guid id, params object?[][]? data) =>
+            ByIdData.TryAdd($"{id:N}", data);
 
         /// <summary>
         ///     Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
@@ -82,16 +73,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="data">
         ///     A találati adathalmazt reprezentáló objektumok.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="data"/> vagy a <paramref name="member"/> értéke <c>null</c>.
-        /// </exception>
-        public void Add(string member, int id, params object[][] data)
-        {
-            if (string.IsNullOrWhiteSpace(member)) throw new ArgumentNullException(nameof(member));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public void Add(string member, int id, params object?[][]? data) =>
             ByIdData.TryAdd($"{member}/{id}", data);
-        }
 
         /// <summary>
         ///     Hamisított lekérdezések.
@@ -102,16 +86,12 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <value>
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="id"/> értéke <c>null</c>.
-        /// </exception>
-        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
-        public object?[][]? this[string id]
+        public IList<IList<object?>>? this[string id]
         {
-            get => ByIdData.TryGetValue(id, out var value)
+            get => ByIdData.TryGetValue(id, out IList<IList<object?>>? value)
                 ? value
                 : null;
-            set => ByIdData.TryAdd(id ?? throw new ArgumentNullException(nameof(id)), value);
+            set => ByIdData.TryAdd(id, value);
         }
 
         /// <summary>
@@ -123,13 +103,12 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <value>
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
-        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
         [SuppressMessage("Design", "CA1043:Use Integral Or String Argument For Indexers")]
-        public object?[][]? this[Guid id]
+        public IList<IList<object?>>? this[Guid id]
         {
-            get => ByIdData.TryGetValue($"{id:N}", out var value)
-                        ? value
-                        : null;
+            get => ByIdData.TryGetValue($"{id:N}", out IList<IList<object?>>? value)
+                ? value
+                : null;
             set => ByIdData.TryAdd($"{id:N}", value);
         }
 
@@ -145,13 +124,11 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <value>
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="member"/> értéke <c>null</c>.
-        /// </exception>
-        [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
-        public object?[][]? this[string member, int id]
+        public IList<IList<object?>>? this[string member, int id]
         {
-            get => ByIdData.TryGetValue($"{member}/{id}", out var value) ? value : null;
+            get => ByIdData.TryGetValue($"{member}/{id}", out IList<IList<object?>>? value)
+                ? value
+                : null;
             set => ByIdData.TryAdd($"{member}/{id}", value);
         }
 

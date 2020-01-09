@@ -17,12 +17,12 @@ namespace MrgInfo.AdoQuery.Core.Fake
     [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
     public sealed class FakePatternSqlProvider: FakeSqlProvider, IEnumerable
     {
-        ConcurrentDictionary<Regex, object[][]?> ByRegexData { get; } = new ConcurrentDictionary<Regex, object[][]?>();
+        ConcurrentDictionary<Regex, IList<IList<object?>>?> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IList<object?>>?>();
 
         /// <inheritdoc />
-        protected override object[][] FindFakeData(string? id, string? format, IEnumerable<object>? args)
+        protected override IList<IList<object?>>? FindFakeData(string? id, string? format, IEnumerable<object>? args)
         {
-            var parameters =
+            object[] parameters =
                 args
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
@@ -34,7 +34,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
                 where re.Key != null && re.Value != null && re.Key.IsMatch(command)
                 select re.Value)
                 .FirstOrDefault()
-                ?? Array.Empty<object[]>();
+                ?? Array.Empty<IList<object?>>();
         }
 
         /// <summary>
@@ -46,16 +46,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="data">
         ///     A találati adathalmazt reprezentáló objektumok.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="pattern"/> vagy a <paramref name="data"/> értéke <c>null</c>.
-        /// </exception>
-        public void Add(Regex pattern, params object[][] data)
-        {
-            if (pattern == null) throw new ArgumentNullException(nameof(pattern));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public void Add(Regex pattern, params object?[][]? data) =>
             ByRegexData.TryAdd(pattern, data);
-        }
 
         /// <summary>
         ///     Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
@@ -66,16 +59,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="data">
         ///     A találati adathalmazt reprezentáló objektumok.
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="pattern"/> vagy a <paramref name="data"/> értéke <c>null</c>.
-        /// </exception>
-        public void Add(string pattern, params object[][] data)
-        {
-            if (string.IsNullOrWhiteSpace(pattern)) throw new ArgumentNullException(nameof(pattern));
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public void Add(string pattern, params object?[][]? data) =>
             ByRegexData.TryAdd(new Regex(pattern, Compiled | IgnoreCase | Singleline | CultureInvariant), data);
-        }
 
         /// <summary>
         ///     Hamisított lekérdezések.
@@ -86,10 +72,11 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <value>
         ///     A lekérdezés eredményének hamisított helyettesítője.
         /// </value>
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public object[][]? this[string pattern]
+        public IList<IList<object?>>? this[string pattern]
         {
-            get => ByRegexData.TryGetValue(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), out var value) ? value : null;
+            get => ByRegexData.TryGetValue(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), out IList<IList<object?>>? value)
+                ? value
+                : null;
             set => ByRegexData.TryAdd(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), value);
         }
 
