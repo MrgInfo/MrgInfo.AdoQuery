@@ -39,8 +39,10 @@ namespace MrgInfo.AdoQuery.Test
         {
             get
             {
-                yield return new object[] { new SqlDatabaseSettings("Data Source=testmssql;User Id=poszeidon_teszt;Password=Passw0rd;Initial Catalog=Poszeidon_teszt_uj;") };
-                yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=innerora)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=innerora)));User Id=MEDIATOR_4;Password=POSZEIDON;") };
+                yield return new object[] { new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;") };
+                yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=innerora)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=innerora)));User Id=adoquery;Password=adoquery;") };
+                //yield return new object[] { new SqlDatabaseSettings("Data Source=.;Integrated Security=True;Initial Catalog=AdoQuery;") };
+                //yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)));User Id=/;Password=;Integrated Security=True") };
             }
         }
 
@@ -59,12 +61,12 @@ namespace MrgInfo.AdoQuery.Test
 
             var cnt = provider.Read<int>(1.Is($@"
                 |select count(*)
-                |  from t_irat
-                | where c_keletkezes > {DateTime.Today.AddDays(-40)}"));
+                |  from product
+                | where unitprice > {500}"));
             
             watch.Stop();
 
-            Assert.InRange(cnt, 0, 100_000);
+            Assert.Equal(3, cnt);
 
             Output.WriteLine($"{watch.Elapsed:g}");
         }
@@ -83,20 +85,23 @@ namespace MrgInfo.AdoQuery.Test
 
             var watch = Stopwatch.StartNew();
 
-            (int Id, string Iktatoszam, int? Nullable, double Float)[] result =
+            (int ProductId, string Code, int? Nullable, double Float)[] result =
                 provider.Query<int, string, int?, double>($@"
-                    |select id,
-                    |       c_szovegesisz
-                    |  from t_irat
-                    | where c_keletkezes > {DateTime.Today.AddDays(-40)}")
+                    |  select productid,
+                    |         code
+                    |    from product
+                    |   where unitprice > {500}
+                    |order by id")
                 .ToArray();
 
             watch.Stop();
 
             Assert.All(result, row =>
             {
+                Assert.Equal(10, row.ProductId);
+                Assert.Equal("AB123", row.Code);
                 Assert.Null(row.Nullable);
-                Assert.Equal(0.0, row.Float);
+                Assert.Equal(default, row.Float);
             });
 
             Output.WriteLine($"{watch.Elapsed:g}");
@@ -117,14 +122,14 @@ namespace MrgInfo.AdoQuery.Test
 
             Assert.All(
                 provider.Query<int?, string>($@"
-                    |select id,
-                    |       c_szovegesisz
-                    |  from t_irat
-                    | where c_szovegesisz is null
-                    |   and c_keletkezes > {DateTime.Today.AddDays(-40)}"),
+                    |select productid,
+                    |       name
+                    |  from product
+                    | where name is null
+                    |   and code {"PQ":=*}"),
                 row =>
                 {
-                    (var column1, string column2) = row;
+                    (int? column1, string column2) = row;
                     Assert.NotNull(column1);
                     Assert.Null(column2);
                 });

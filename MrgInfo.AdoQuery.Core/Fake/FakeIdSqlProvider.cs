@@ -15,10 +15,10 @@ namespace MrgInfo.AdoQuery.Core.Fake
     [SuppressMessage("Design", "CA1010:Collections should implement generic interface")]
     public sealed class FakeIdSqlProvider: FakeSqlProvider, IEnumerable
     {
-        ConcurrentDictionary<string, object[][]?> ByIdData { get; } = new ConcurrentDictionary<string, object[][]?>();
+        ConcurrentDictionary<string, object?[][]?> ByIdData { get; } = new ConcurrentDictionary<string, object?[][]?>();
 
         /// <inheritdoc />
-        protected override object[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
+        protected override object?[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
         {
             var parameters =
                 args
@@ -93,7 +93,6 @@ namespace MrgInfo.AdoQuery.Core.Fake
             ByIdData.TryAdd($"{member}/{id}", data);
         }
 
-
         /// <summary>
         ///     Hamisított lekérdezések.
         /// </summary>
@@ -107,7 +106,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         ///     A <paramref name="id"/> értéke <c>null</c>.
         /// </exception>
         [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
-        public object[][]? this[string id]
+        public object?[][]? this[string id]
         {
             get => ByIdData.TryGetValue(id, out var value)
                 ? value
@@ -126,7 +125,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// </value>
         [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
         [SuppressMessage("Design", "CA1043:Use Integral Or String Argument For Indexers")]
-        public object[][]? this[Guid id]
+        public object?[][]? this[Guid id]
         {
             get => ByIdData.TryGetValue($"{id:N}", out var value)
                         ? value
@@ -150,7 +149,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         ///     A <paramref name="member"/> értéke <c>null</c>.
         /// </exception>
         [SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
-        public object[][]? this[string member, int id]
+        public object?[][]? this[string member, int id]
         {
             get => ByIdData.TryGetValue($"{member}/{id}", out var value) ? value : null;
             set => ByIdData.TryAdd($"{member}/{id}", value);

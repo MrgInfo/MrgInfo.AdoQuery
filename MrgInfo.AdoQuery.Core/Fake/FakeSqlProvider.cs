@@ -106,7 +106,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <returns>
         ///     A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
-        protected abstract object[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
+        protected abstract object?[][]? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
 
         /// <inheritdoc />
         protected internal override TResult Read<TResult>(string? id, string? format, object[]? args)

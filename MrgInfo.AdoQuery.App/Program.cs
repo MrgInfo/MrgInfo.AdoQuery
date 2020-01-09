@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,66 +15,49 @@ namespace MrgInfo.AdoQuery.App
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     static class Program
     {
-        static readonly RowConf _header = RowConf.Create("Id", "Login", "User", "Medical number", "Outsider?").PresetTH();
+        static int Count(SqlProvider provider, string? prefix) =>
+            provider.Read<int>(1.Is($@"
+                |select count(productid)
+                |  from product
+                | where code {prefix:=*}"));
 
-        static int Count(SqlProvider provider, string? prefix)
-        {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-
-            return provider.Read<int>(1.Is($@"
-                |select count(id)
-                |  from t_user
-                | where c_loginname {prefix:=*}"));
-        }
-
-        static async Task<int> CountAsync(SqlProvider provider, string? prefix)
-        {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-
-            return await
-                provider.ReadAsync<int>(1.Is($@"
-                    |select count(id)
-                    |  from t_user
-                    | where c_loginname {prefix:=*}"))
+        static async Task<int> CountAsync(SqlProvider provider, string? prefix) =>
+            await provider.ReadAsync<int>(1.Is($@"
+                |select count(productid)
+                |  from product
+                | where code {prefix:=*}"))
                 .ConfigureAwait(false);
-        }
 
         static RowCollection? Load(SqlProvider provider, string? prefix)
         {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-
             var table = new List<string[]>();
             foreach ((int id, string login, string name, string taj, bool outsider) in
-                provider.Query<int, string, string, string, bool>("Users".Is($@"
-                   |select id,
-                   |       c_loginname,
-                   |       c_searchname,
-                   |       c_tajnumber,
-                   |       c_outsider
-                   |  from t_user
-                   | where c_loginname {prefix:=*}")))
+                provider.Query<int, string, string, string, bool>("Product".Is($@"
+                    |select productid,
+                    |       code,
+                    |       name,
+                    |       unitprice
+                    |  from product
+                    | where code {prefix:=*}")))
             {
                 table.Add(new[] { $"{id}", $"{login}", $"{name}", $"{taj}", $"{outsider}" });
             }
             var result = RowCollection.Create(table);
-            result?.Import(0, _header);
+            result?.Import(0, RowConf.Create("Id", "Code", "Name", "Unit price").PresetTH());
             return result;
         }
 
         static async Task<RowCollection?> LoadAsync(SqlProvider provider, string prefix, CancellationToken token = default)
         {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-
             var table = new List<string[]>();
             foreach ((int id, string login, string name, string taj, bool outsider) in
-                await provider.QueryAsync<int, string, string, string, bool>("Users".Is($@"
-                    |select id,
-                    |       c_loginname,
-                    |       c_searchname,
-                    |       c_tajnumber,
-                    |       c_outsider
-                    |  from t_user
-                    | where c_loginname {prefix:=*}"),
+                await provider.QueryAsync<int, string, string, string, bool>("Product".Is($@"
+                    |select productid,
+                    |       code,
+                    |       name,
+                    |       unitprice
+                    |  from product
+                    | where code {prefix:=*}"),
                     token)
                 .ConfigureAwait(false))
             {
@@ -83,7 +65,7 @@ namespace MrgInfo.AdoQuery.App
                 table.Add(new[] { $"{id}", login ?? "", name ?? "", taj ?? "", $"{outsider}" });
             }
             var result = RowCollection.Create(table);
-            result?.Import(0, _header);
+            result?.Import(0, RowConf.Create("Id", "Code", "Name", "Unit price").PresetTH());
             return result;
         }
 
@@ -97,9 +79,9 @@ namespace MrgInfo.AdoQuery.App
             indicator.Stop();
             WriteTable(table);
             PressAnyKey();
-            WriteLine($"Count: {await CountAsync(provider, "BE").ConfigureAwait(false)}");
+            WriteLine($"Count: {await CountAsync(provider, "PQ").ConfigureAwait(false)}");
             indicator.Start();
-            table = await LoadAsync(provider, "BE").ConfigureAwait(false);
+            table = await LoadAsync(provider, "PQ").ConfigureAwait(false);
             indicator.Stop();
             WriteTable(table);
             PressAnyKey();
@@ -107,16 +89,21 @@ namespace MrgInfo.AdoQuery.App
 
         static FakeSqlProvider CreateFake()
         {
-            var users = new[]
+            var product = new[]
             {
-                new object[] { 42, "joe", "John Doe", "76543579", false },
-                new object[] { 43, "wavezone", "Groma István", "87856567", true },
+                new object?[] { 10, "AB123", "Leather Sofa", 1000 },
+                new object?[] { 20, "AB456", "Baby Chair", 200.25 },
+                new object?[] { 30, "AB789", "Sport Shoes", 250.60 },
+                new object?[] { 40, "PQ123", "Sony Digital Camera", 399 },
+                new object?[] { 50, "PQ456", "Hitachi HandyCam", 1050 },
+                new object?[] { 60, "PQ789", "GM Saturn", 2250.99 },
+                new object?[] { 70, "PQ945", null, 150.15 },
             };
             return new FakeIdSqlProvider
             {
-                ["Users"] = users,
-                [nameof(Count), 1] = users.Length.ToData(),
-                [nameof(CountAsync), 1] = users.Length.ToData(),
+                ["Product"] = product,
+                [nameof(Count), 1] = product.Length.ToData(),
+                [nameof(CountAsync), 1] = product.Length.ToData(),
             };
         }
 
@@ -127,16 +114,13 @@ namespace MrgInfo.AdoQuery.App
             BufferWidth = WindowWidth = WindowWidthMax - 6;
             CursorVisible = false;
             RowCollection.DefaultSettings.Border.Enabled = true;
-
-            await RunAsync(new SqlProvider(new SqlDatabaseSettings("Data Source=testmssql;User Id=poszeidon_teszt;Password=Passw0rd;Initial Catalog=Poszeidon_teszt_uj;"))).ConfigureAwait(false);
-            await RunAsync(new SqlProvider(new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=innerora)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=innerora)));User Id=MEDIATOR_4;Password=POSZEIDON;"))).ConfigureAwait(false);
+            await RunAsync(new SqlProvider(new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;"))).ConfigureAwait(false);
+            await RunAsync(new SqlProvider(new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;"))).ConfigureAwait(false);
             var provider = CreateFake();
             await RunAsync(provider).ConfigureAwait(false);
             provider.SaveAllQueries("queries.xml");
-
             WriteHl("Program finished.");
             Confirm("Exit?");
         }
     }
-
 }

@@ -15,16 +15,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		LICENSE = LICENSE
+		microsoft.sql = microsoft.sql
+		oracle.sql = oracle.sql
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrgInfo.AdoQuery.App", "MrgInfo.AdoQuery.App\MrgInfo.AdoQuery.App.csproj", "{240C2A40-55A0-4CE6-AAB8-47FC4CA88C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MrgInfo.AdoQuery.App", "MrgInfo.AdoQuery.App\MrgInfo.AdoQuery.App.csproj", "{240C2A40-55A0-4CE6-AAB8-47FC4CA88C8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-		Description = Run safe ADO .NET SQL queries
+		Description = Run safe and effective ADO .NET SQL queries.
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{57D09E45-6B27-4769-8128-D4188D06BC60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

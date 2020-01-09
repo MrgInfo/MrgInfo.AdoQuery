@@ -453,16 +453,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Találati lista.
         /// </returns>
         /// <include file='Documentation.xml' path='docs/sqlformat/*'/>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IEnumerable<(
-                TColumn1 Column1,
-                TColumn2 Column2,
-                TColumn3 Column3,
-                TColumn4 Column4,
-                TColumn5 Column5,
-                TColumn6 Column6,
-                TColumn7 Column7,
-                TColumn8 Column8)>
+        public IEnumerable<(TColumn1 Column1, TColumn2 Column2, TColumn3 Column3, TColumn4 Column4, TColumn5 Column5, TColumn6 Column6, TColumn7 Column7, TColumn8 Column8)>
             Query<
                 TColumn1,
                 TColumn2,
