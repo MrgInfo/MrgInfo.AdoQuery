@@ -33,14 +33,14 @@ namespace MrgInfo.AdoQuery.Core
             : base(info, context)
         { }
 
-        internal static QueryDbException Create(string? id, string? command, IEnumerable<object>? parameters, Exception exp)
+        internal static QueryDbException Create(string? id, string? query, IEnumerable<object>? parameters, Exception exp)
         {
             string message = $@"
 #ID
 {id}
 
 #QUERY
-{command}
+{query}
 
 #PARAMETERS
 {string.Join(",", parameters?.Where(_ => _ != null).Select(_ => _.ToString()) ?? Enumerable.Empty<string>())}

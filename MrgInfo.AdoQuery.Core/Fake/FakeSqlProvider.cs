@@ -109,9 +109,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         protected abstract IList<IList<object?>>? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
 
         /// <inheritdoc />
-        protected internal override TResult Read<TResult>(string? id, string? format, object[]? args)
+        protected internal override TResult Read<TResult>(string? id, string? query, object[]? parameters)
         {
-            IList<IList<object?>>? fakeData = FindFakeData(id, format, args);
+            IList<IList<object?>>? fakeData = FindFakeData(id, query, parameters);
             return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
                 ? Cast<TResult>(fakeData[0][0])
                 : default;
@@ -133,8 +133,8 @@ namespace MrgInfo.AdoQuery.Core.Fake
         }
 
         /// <inheritdoc />
-        protected override Task<IEnumerable<object?[]>> QueryAsync(string? id, string? format, object[]? args, int columns, CancellationToken token) =>
-            Task.Run(() => Query(id, format, args, columns), token);
+        protected override Task<IEnumerable<object?[]>> QueryAsync(string? id, string? query, object[]? parameters, int columns, CancellationToken token) =>
+            Task.Run(() => Query(id, query, parameters, columns), token);
 
         /// <summary>
         ///     Összegyűjtött lekérdezése mentése.
