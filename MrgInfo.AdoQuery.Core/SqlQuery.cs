@@ -35,7 +35,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Lekérdezés paraméterei.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-        public List<object> Parameters { get; private set; } = new List<object>();
+        public List<object?> Parameters { get; private set; } = new List<object?>();
 
         /// <summary>
         ///     Lekérdezési paraméterek sorosítása.
@@ -51,7 +51,7 @@ namespace MrgInfo.AdoQuery.Core
             {
                 var result = new SqlQueryParameter[Parameters.Count];
                 var i = 0;
-                foreach (var par in Parameters)
+                foreach (object? par in Parameters)
                 {
                     result[i++] = par == null
                         ? new SqlQueryParameter()
@@ -85,11 +85,11 @@ namespace MrgInfo.AdoQuery.Core
         /// </summary>
         public Func<int, int>? IdMapper { get; set; }
 
-        object[] MapIds(IList<object> parameters)
+        object[] MapIds(IReadOnlyList<object?> parameters)
         {
             if (parameters == null) return Array.Empty<object>();
-            var result = new List<object>();
-            foreach (var parameter in parameters)
+            var result = new List<object?>();
+            foreach (object? parameter in parameters)
             {
                 if (parameter is int id)
                 {
@@ -119,7 +119,7 @@ namespace MrgInfo.AdoQuery.Core
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var args = MapIds(Parameters.ToArray());
+            object[] args = MapIds(Parameters.ToArray());
             try
             {
                 provider.Read<string>(Id, Command ?? "", args);
@@ -149,7 +149,7 @@ namespace MrgInfo.AdoQuery.Core
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var args = MapIds(Parameters.ToArray());
+            object[] args = MapIds(Parameters.ToArray());
             try
             {
                 return provider.Query(Id, Command, args, 1).Count();

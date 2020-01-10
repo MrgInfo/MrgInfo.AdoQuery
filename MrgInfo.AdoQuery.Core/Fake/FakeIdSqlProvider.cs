@@ -18,14 +18,14 @@ namespace MrgInfo.AdoQuery.Core.Fake
         ConcurrentDictionary<string, IList<IList<object?>>?> ByIdData { get; } = new ConcurrentDictionary<string, IList<IList<object?>>?>();
 
         /// <inheritdoc />
-        protected override IList<IList<object?>>? FindFakeData(string? id, string? sql, IEnumerable<object>? args)
+        protected override IList<IList<object?>>? FindFakeData(string? id, string? query, IEnumerable<object?>? args)
         {
             object[] parameters =
                 args
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
                 ?? Array.Empty<object>();
-            string command = string.Format(null, sql ?? "", parameters);
+            string command = string.Format(null, query ?? "", parameters);
             RegisterQuery(id, command, from Parameter p in parameters where p != null select p.Value);
             if (! string.IsNullOrWhiteSpace(id)
                 && ByIdData.TryGetValue(id, out IList<IList<object?>>? data))

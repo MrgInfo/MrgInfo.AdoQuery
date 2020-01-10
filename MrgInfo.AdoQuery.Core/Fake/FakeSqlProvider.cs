@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -66,7 +67,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="args">
         ///     Az <c>SQL</c> lekérdezés paraméterei.
         /// </param>
-        protected void RegisterQuery(string? id, string sql, IEnumerable<object>? args)
+        protected void RegisterQuery(string? id, string sql, IEnumerable<object?>? args)
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
@@ -76,8 +77,8 @@ namespace MrgInfo.AdoQuery.Core.Fake
             {
                 method = new StackFrame(i++).GetMethod();
             }
-            while (method?.DeclaringType?.Namespace == "Sda.Query");
-            var query = new SqlQuery
+            while (method?.DeclaringType?.Namespace == "MrgInfo.AdoQuery.Core");
+            var sqlQuery = new SqlQuery
             {
                 Id = id,
                 Caller = $"{method?.DeclaringType?.FullName}.{method?.Name}",
@@ -85,10 +86,10 @@ namespace MrgInfo.AdoQuery.Core.Fake
             };
             if (args != null)
             {
-                query.Parameters.AddRange(args);
+                sqlQuery.Parameters.AddRange(args);
             }
-            Queries.Push(query);
-            Print(query);
+            Queries.Push(sqlQuery);
+            Print(sqlQuery);
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <param name="id">
         ///     Az <c>SQL</c> lekérdezés egyedi azonosítója.
         /// </param>
-        /// <param name="sql">
+        /// <param name="query">
         ///     Az <c>SQL</c> lekérdezés.
         /// </param>
         /// <param name="args">
@@ -106,10 +107,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <returns>
         ///     A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
-        protected abstract IList<IList<object?>>? FindFakeData(string? id, string? sql, IEnumerable<object>? args);
+        protected abstract IList<IList<object?>>? FindFakeData(string? id, string? query, IEnumerable<object?>? args);
 
-        /// <inheritdoc />
-        protected internal override TResult Read<TResult>(string? id, string? query, object[]? parameters)
+        internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
             IList<IList<object?>>? fakeData = FindFakeData(id, query, parameters);
             return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
@@ -117,14 +117,12 @@ namespace MrgInfo.AdoQuery.Core.Fake
                 : default;
         }
 
-        /// <inheritdoc />
-        protected override Task<TResult> ReadAsync<TResult>(string? id, string? format, object[]? args, CancellationToken token = default) =>
+        private protected override Task<TResult> ReadAsync<TResult>(string? id, string? format, IReadOnlyList<object?>? args, CancellationToken token = default) =>
             Task.Run(() => Read<TResult>(id, format, args), token);
 
-        /// <inheritdoc />
-        protected internal override IEnumerable<object?[]> Query(string? id, string? format, object[]? args, int columns)
+        internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
-            IList<IList<object?>>? fakeData = FindFakeData(id, format, args);
+            IList<IList<object?>>? fakeData = FindFakeData(id, query, parameters);
             if (fakeData == null) yield break;
             foreach (IList<object?> row in fakeData.Where(_ => _ != null))
             {
@@ -132,9 +130,15 @@ namespace MrgInfo.AdoQuery.Core.Fake
             }
         }
 
-        /// <inheritdoc />
-        protected override Task<IEnumerable<object?[]>> QueryAsync(string? id, string? query, object[]? parameters, int columns, CancellationToken token) =>
-            Task.Run(() => Query(id, query, parameters, columns), token);
+        private protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
+        {
+            await Task.Yield(); // TODO
+            foreach (object?[] row in Query(id, query, parameters, columns))
+            {
+                if (token.IsCancellationRequested) yield break;
+                yield return row;
+            }
+        }
 
         /// <summary>
         ///     Összegyűjtött lekérdezése mentése.

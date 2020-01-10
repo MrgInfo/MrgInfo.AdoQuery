@@ -20,15 +20,15 @@ namespace MrgInfo.AdoQuery.Core.Fake
         ConcurrentDictionary<Regex, IList<IList<object?>>?> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IList<object?>>?>();
 
         /// <inheritdoc />
-        protected override IList<IList<object?>>? FindFakeData(string? id, string? format, IEnumerable<object>? args)
+        protected override IList<IList<object?>>? FindFakeData(string? id, string? query, IEnumerable<object?>? args)
         {
-            object[] parameters =
+            Parameter[] formatParameters =
                 args
-                ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
+                ?.Select((a, i) => new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
-                ?? Array.Empty<object>();
-            string command = string.Format(null, format ?? "", parameters);
-            RegisterQuery(id, command, from Parameter p in parameters where p != null select p.Value);
+                ?? Array.Empty<Parameter>();
+            string command = string.Format(null, query ?? "", formatParameters);
+            RegisterQuery(id, command, from p in formatParameters where p != null select p.Value);
             return (
                 from re in ByRegexData
                 where re.Key != null && re.Value != null && re.Key.IsMatch(command)

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <docs>
-  <query>
+  <format>
     <remarks>
-      A <paramref name="sql" /> paraméterben használható formázások.
+      A <paramref name="query" /> paraméterben használható formázások.
       <list type="table">
         <listheader>
           <term>Formázó szöveg</term>
@@ -34,11 +34,92 @@
         </item>
       </list>
     </remarks>
+  </format>
+  <query>
+    <summary>
+      Run SQL query synchronously.
+    </summary>
+    <param name="query">
+      The SQL query command.
+    </param>
     <returns>
       Result set.
     </returns>
+    <exception cref="System.ArgumentNullException">
+      Argument <paramref name="query"/> is <c>null</c>.
+    </exception>
     <exception cref="MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
   </query>
+  <queryasync>
+    <summary>
+      Run SQL query asynchronously.
+    </summary>
+    <param name="query">
+      The SQL query command.
+    </param>
+    <param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param>
+    <returns>
+      Result set.
+    </returns>
+    <exception cref="System.ArgumentNullException">
+      Parameter <paramref name="query"/> is <c>null</c>.
+    </exception>
+    <exception cref="MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+  </queryasync>
+  <columns>
+    <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+    <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+    <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+    <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+    <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+    <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+    <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+    <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+    <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+    <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+    <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+    <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+    <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+    <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+    <typeparam name="T15">
+      Type of column 15.
+    </typeparam>
+    <typeparam name="T16">
+      Type of column 16.
+    </typeparam>
+  </columns>
 </docs>

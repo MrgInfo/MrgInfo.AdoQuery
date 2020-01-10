@@ -50,8 +50,8 @@ namespace MrgInfo.AdoQuery.App
         static async Task<RowCollection?> LoadAsync(SqlProvider provider, string prefix, CancellationToken token = default)
         {
             var table = new List<string[]>();
-            foreach ((int id, string login, string name, string taj, bool outsider) in
-                await provider.QueryAsync<int, string, string, string, bool>("Product".Is($@"
+            await foreach ((int id, string login, string name, string taj, bool outsider) in 
+                provider.QueryAsync<int, string, string, string, bool>("Product".Is($@"
                     |select productid,
                     |       code,
                     |       name,
@@ -116,7 +116,7 @@ namespace MrgInfo.AdoQuery.App
             RowCollection.DefaultSettings.Border.Enabled = true;
             await RunAsync(new SqlProvider(new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;"))).ConfigureAwait(false);
             await RunAsync(new SqlProvider(new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;"))).ConfigureAwait(false);
-            var provider = CreateFake();
+            FakeSqlProvider provider = CreateFake();
             await RunAsync(provider).ConfigureAwait(false);
             provider.SaveAllQueries("queries.xml");
             WriteHl("Program finished.");
