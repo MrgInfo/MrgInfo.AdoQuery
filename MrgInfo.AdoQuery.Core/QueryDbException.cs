@@ -43,7 +43,7 @@ namespace MrgInfo.AdoQuery.Core
 {query}
 
 #PARAMETERS
-{string.Join(",", parameters?.Where(_ => _ != null).Select(_ => _.ToString()) ?? Enumerable.Empty<string>())}
+{string.Join(",", parameters?.Select(_ => _?.ToString()) ?? Enumerable.Empty<string>())}
 
 #ERROR
 {exp}

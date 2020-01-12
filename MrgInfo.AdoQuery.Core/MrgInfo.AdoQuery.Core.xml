@@ -1,0 +1,2734 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MrgInfo.AdoQuery.Core</name>
+    </assembly>
+    <members>
+        <member name="T:MrgInfo.AdoQuery.Core.DatabaseSettings">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DatabaseSettings.GetParameterNumber(System.Int32)">
+            <summary>
+                Paraméterek számozása.
+            </summary>
+            <param name="index">
+                Paraméter pozíciója.
+            </param>
+            <returns>
+                A formázott számozás.
+            </returns>
+             <exception cref="T:System.ArgumentOutOfRangeException">
+                A <paramref name="index" /> értéke érvénytelen.
+            </exception>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.DatabaseSettings.ConnectionString">
+            <summary>
+                Adatbázis kapcsolati leíró.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DatabaseSettings.#ctor(System.String)">
+            <summary>
+                Konstruktor.
+            </summary>
+            <param name="connectionString">
+                Adatbázis kapcsolati leíró.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DatabaseSettings.CreateConnection">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DatabaseSettings.CreateParameterName(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DatabaseSettings.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider">
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider" />
+            <summary>
+                Egyedi azonosítók segítségével hamisított lekérdezések.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Add(System.String,System.Object[][])">
+            <summary>
+                Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <param name="data">
+                A találati adathalmazt reprezentáló objektumok.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Add(System.Guid,System.Object[][])">
+            <summary>
+                Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <param name="data">
+                A találati adathalmazt reprezentáló objektumok.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Add(System.String,System.Int32,System.Object[][])">
+            <summary>
+                Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+            </summary>
+            <param name="member">
+                Az <c>SQL</c> lekérdezés azonosítójának hívó metódus tagja.
+            </param>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés függvényen belüli azonosítója.
+            </param>
+            <param name="data">
+                A találati adathalmazt reprezentáló objektumok.
+            </param>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Item(System.String)">
+            <summary>
+                Hamisított lekérdezések.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <value>
+                A lekérdezés eredményének hamisított helyettesítője.
+            </value>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Item(System.Guid)">
+            <summary>
+                Hamisított lekérdezések.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <value>
+                A lekérdezés eredményének hamisított helyettesítője.
+            </value>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Item(System.String,System.Int32)">
+            <summary>
+                Hamisított lekérdezések.
+            </summary>
+            <param name="member">
+                Az <c>SQL</c> lekérdezés azonosítójának hívó metódus tagja.
+            </param>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés függvényen belüli azonosítója.
+            </param>
+            <value>
+                A lekérdezés eredményének hamisított helyettesítője.
+            </value>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeIdSqlProvider.Clear">
+            <summary>
+                A hamisított lekérdezési eredmények törlése.
+            </summary>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider">
+            <summary>
+                Reguláris kifejezések segítségével hamisított lekérdezések.
+            </summary>
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider" />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.Add(System.Text.RegularExpressions.Regex,System.Object[][])">
+            <summary>
+                Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+            </summary>
+            <param name="pattern">
+                Az <c>SQL</c> kifejezés mintaillesztése.
+            </param>
+            <param name="data">
+                A találati adathalmazt reprezentáló objektumok.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.Add(System.String,System.Object[][])">
+            <summary>
+                Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+            </summary>
+            <param name="pattern">
+                Az <c>SQL</c> kifejezés mintaillesztése.
+            </param>
+            <param name="data">
+                A találati adathalmazt reprezentáló objektumok.
+            </param>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.Item(System.String)">
+            <summary>
+                Hamisított lekérdezések.
+            </summary>
+            <param name="pattern">
+                Az <c>SQL</c> lekérdezés mintaillesztése.
+            </param>
+            <value>
+                A lekérdezés eredményének hamisított helyettesítője.
+            </value>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakePatternSqlProvider.Clear">
+            <summary>
+                A hamisított lekérdezési eredmények törlése.
+            </summary>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider">
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.SqlProvider" />
+            <summary>
+                Hamisított adatbázis lekérdezéséket futtató szolgáltatás.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider.RegisterQuery(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+                Lekérdezés hamisítás regisztrációja.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <param name="sql">
+                Az <c>SQL</c> lekérdezés.
+            </param>
+            <param name="args">
+                Az <c>SQL</c> lekérdezés paraméterei.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+                A hamisított eredmény kikeresése.
+            </summary>
+            <param name="id">
+                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+            </param>
+            <param name="query">
+                Az <c>SQL</c> lekérdezés.
+            </param>
+            <param name="args">
+                Az <c>SQL</c> lekérdezés paraméterei.
+            </param>
+            <returns>
+                A hamisított adatok sor-oszlop indexeléssel.
+            </returns>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider.SaveAllQueries(System.IO.TextWriter)">
+            <summary>
+                Összegyűjtött lekérdezése mentése.
+            </summary>
+            <param name="writer">
+                A kiírt adatfolyam.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                A <paramref name="writer"/> értéke <c>null</c>.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Fake.FakeSqlProvider.SaveAllQueries(System.String)">
+            <summary>
+                Összegyűjtött lekérdezése mentése.
+            </summary>
+            <param name="fileName">
+                A fájl neve.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                A <paramref name="fileName"/> értéke <c>null</c>.
+            </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.FormattableStrings.FormattableStringExtensions">
+            <summary>
+                A lekérdezések egyedi beazonosítása.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.FormattableStrings.FormattableStringExtensions.Is(System.String,System.FormattableString)">
+            <summary>
+                Egyedi azonosító összerendelése egy lekérdezéssel.
+            </summary>
+            <param name="id">
+                Az egyedi azonosító.
+            </param>
+            <param name="sql">
+                A lekérdezése.
+            </param>
+            <returns>
+                A lekérdezés.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Az <paramref name="sql"/> vagy <paramref name="id"/> értéke <c>null</c>.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.FormattableStrings.FormattableStringExtensions.Is(System.Guid,System.FormattableString)">
+            <summary>
+                Egyedi azonosító összerendelése egy lekérdezéssel.
+            </summary>
+            <param name="id">
+                Az egyedi azonosító.
+            </param>
+            <param name="sql">
+                A lekérdezése.
+            </param>
+            <returns>
+                A lekérdezés.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Az <paramref name="sql"/> értéke <c>null</c>.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.FormattableStrings.FormattableStringExtensions.Is(System.Int32,System.FormattableString,System.String)">
+            <summary>
+                Egyedi azonosító összerendelése egy lekérdezéssel.
+            </summary>
+            <param name="id">
+                Az egyedi azonosító.
+            </param>
+            <param name="sql">
+                A lekérdezése.
+            </param>
+            <param name="memberName">
+                A hívó metódus.
+            </param>
+            <returns>
+                A lekérdezés.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Az <paramref name="sql"/> értéke <c>null</c>.
+            </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.IDatabaseSettings">
+            <summary>
+                Adatbázis lekérdezéshez szükséges beállítások.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.IDatabaseSettings.CreateConnection">
+            <summary>
+                Új adatbázis kapcsolat létrehozása.
+            </summary>
+            <returns>
+                Elérhető adatbázis kapcsolat.
+            </returns>
+            <exception cref="T:System.Data.Common.DbException">
+                Adatbázis kapcsolat nem hozható létre.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.IDatabaseSettings.CreateParameterName(System.Int32)">
+            <summary>
+                Egy nevet generál az adott sorszámú <c>SQL</c> paraméternek.
+            </summary>
+            <param name="index">
+                Az <c>SQL</c> paraméter sorszám.
+            </param>
+            <returns>
+                Az <c>SQL</c> paraméter neve.
+            </returns>
+             <exception cref="T:System.ArgumentOutOfRangeException">
+                A <paramref name="index" /> értéke érvénytelen.
+            </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.QueryDbException">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.QueryDbException.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.QueryDbException.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.QueryDbException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.SqlProvider">
+            <summary>
+                Run SQL queries.
+            </summary>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.SqlProvider.Parameter">
+            <inheritdoc />
+            <summary>
+                Query parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlProvider.Parameter.Name">
+            <summary>
+                Name of parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlProvider.Parameter.Value">
+            <summary>
+                Value of parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlProvider.Parameter.Present">
+            <summary>
+                Present in query?
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Parameter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Parameter.ToString(System.String,System.IFormatProvider)">
+            <inheritdoc />
+            <exception cref="T:System.FormatException">
+                Invalid format!
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.RemoveTrailing(System.String)">
+            <summary>
+                Törli a behúzást a | karakterig minden sorban.
+            </summary>
+            <param name="query">
+                Az SQL lekérdezés.
+            </param>
+            <returns>
+                Az átformázott lekérdezés.
+            </returns>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Cast``1(System.Object)">
+            <summary>
+                Objektum típuskényszerítése, amennyiben lehetséges.
+            </summary>
+            <typeparam name="TResult">
+                A kényszerített típus.
+            </typeparam>
+            <param name="value">
+                Az objektum.
+            </param>
+            <returns>
+                Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
+                típus alapértelmezett értéke.
+            </returns>
+            <exception cref="T:System.InvalidCastException">
+                Ha nem lehetséges az adott erős típuskényszerítés.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.#ctor(MrgInfo.AdoQuery.Core.IDatabaseSettings)">
+            <summary>
+                Initializes a new instance of <see cref="T:MrgInfo.AdoQuery.Core.SqlProvider"/>.
+            </summary>
+            <param name="settings">
+                Database settings.
+            </param>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``1(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``2(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``3(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``4(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``5(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``6(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``7(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``8(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``9(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``10(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``11(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``12(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``13(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``14(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``15(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <typeparam name="T15">
+      Type of column 15.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Query``16(System.FormattableString)">
+            <summary>
+      Run SQL query synchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Argument <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <typeparam name="T15">
+      Type of column 15.
+    </typeparam>
+            <typeparam name="T16">
+      Type of column 16.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``1(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``2(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``3(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``4(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``5(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``9(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``10(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``11(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``12(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``13(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``14(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``15(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <typeparam name="T15">
+      Type of column 15.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.QueryAsync``16(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+      Run SQL query asynchronously.
+    </summary><param name="query">
+      The SQL query command.
+    </param><param name="token">
+      The cancellation token that will be checked for stop reading.
+    </param><returns>
+      Result set.
+    </returns><exception cref="T:System.ArgumentNullException">
+      Parameter <paramref name="query" /> is <c>null</c>.
+    </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+      Error occured during executing the query.
+    </exception>
+            <typeparam name="T1">
+      Type of column 1.
+    </typeparam>
+            <typeparam name="T2">
+      Type of column 2.
+    </typeparam>
+            <typeparam name="T3">
+      Type of column 3.
+    </typeparam>
+            <typeparam name="T4">
+      Type of column 4.
+    </typeparam>
+            <typeparam name="T5">
+      Type of column 5.
+    </typeparam>
+            <typeparam name="T6">
+      Type of column 6.
+    </typeparam>
+            <typeparam name="T7">
+      Type of column 7.
+    </typeparam>
+            <typeparam name="T8">
+      Type of column 8.
+    </typeparam>
+            <typeparam name="T9">
+      Type of column 9.
+    </typeparam>
+            <typeparam name="T10">
+      Type of column 10.
+    </typeparam>
+            <typeparam name="T11">
+      Type of column 11.
+    </typeparam>
+            <typeparam name="T12">
+      Type of column 12.
+    </typeparam>
+            <typeparam name="T13">
+      Type of column 13.
+    </typeparam>
+            <typeparam name="T14">
+      Type of column 14.
+    </typeparam>
+            <typeparam name="T15">
+      Type of column 15.
+    </typeparam>
+            <typeparam name="T16">
+      Type of column 16.
+    </typeparam>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.Read``1(System.FormattableString)">
+            <summary>
+                Egy konkrét adat lekérdezése.
+            </summary>
+            <typeparam name="TResult">
+                Az adat típusa.
+            </typeparam>
+            <param name="query">
+                Az SQL lekérdezés.
+            </param>
+            <returns>
+                Az adat értéke.
+            </returns>
+            <exception cref="T:System.Data.Common.DbException">
+                Adatbázis hiba!
+            </exception>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.ReadAsync``1(System.FormattableString,System.Threading.CancellationToken)">
+            <summary>
+                Egy konkrét adat lekérdezése.
+            </summary>
+            <typeparam name="TResult">
+                Az adat típusa.
+            </typeparam>
+            <param name="query">
+                Az SQL lekérdezés.
+            </param>
+            <param name="token">
+                Megszakítás kezdeményezése.
+            </param>
+            <returns>
+                Az adat értéke.
+            </returns>
+            <exception cref="T:System.Data.Common.DbException">
+                Adatbázis hiba!
+            </exception>
+            <remarks>
+      A <paramref name="query" /> paraméterben használható formázások.
+      <list type="table">
+        <listheader>
+          <term>Formázó szöveg</term>
+          <description>Formázás jelentése</description>
+        </listheader>
+        <item>
+          <term>==</term>
+          <description>
+            Azonosság, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>!=</term>
+          <description>
+            Különbözőség, <c>NULL</c> esetén is működik.
+          </description>
+        </item>
+        <item>
+          <term>=*</term>
+          <description>Elejére illesztés.</description>
+        </item>
+        <item>
+          <term>*=</term>
+          <description>Végére illesztés.</description>
+        </item>
+        <item>
+          <term>*=*</term>
+          <description>Illesztés.</description>
+        </item>
+      </list>
+    </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlProvider.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.SqlQueriesCollection">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlQueriesCollection.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlQueriesCollection.#ctor(System.Collections.Generic.IEnumerable{MrgInfo.AdoQuery.Core.SqlQuery})">
+            <inheritdoc />
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.SqlQuery">
+            <summary>
+                Egy <c>SQL</c> lekérdezés futtatási körülményeit leíró osztály.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.Id">
+            <summary>
+                Lekérdezés egyedi azonosítója.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.Caller">
+            <summary>
+                Lekérdezést futtató metódus.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.Command">
+            <summary>
+                Az <c>SQL</c> lekérdezés.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.Parameters">
+            <summary>
+                Lekérdezés paraméterei.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.QueryParameters">
+            <summary>
+                Lekérdezési paraméterek sorosítása.
+            </summary>
+            <exception cref="T:System.FormatException">
+                Hibás formátum.
+            </exception>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQuery.IdMapper">
+            <summary>
+                Az delegált segítségével határozhatjuk meg, hogyan cseréljük a fiktív
+                adatbázis azonosítókat valós azonosítókra.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlQuery.Run(MrgInfo.AdoQuery.Core.SqlProvider)">
+            <summary>
+                Lekérdezés futtatása.
+            </summary>
+            <param name="provider">
+                A lekérdezést végrehajtó szolgáltatás.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="provider"/> értéke <c>null</c>.
+            </exception>
+            <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+                Futás során keletkezett hiba.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.SqlQuery.RunCount(MrgInfo.AdoQuery.Core.SqlProvider)">
+            <summary>
+                Lekérdezés futtatása és rekordok megszámlálása.
+            </summary>
+            <param name="provider">
+                A lekérdezést végrehajtó szolgáltatás.
+            </param>
+            <returns>
+                Rekordok száma.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="provider"/> értéke <c>null</c>.
+            </exception>
+            <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+                Futás során keletkezett hiba.
+            </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.SqlQueryParameter">
+            <summary>
+                Lekérdezés paraméter sorosításhoz.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQueryParameter.TypeName">
+            <summary>
+                Típus.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.SqlQueryParameter.Value">
+            <summary>
+                Érték.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -85,7 +85,7 @@ namespace MrgInfo.AdoQuery.Core
         /// </summary>
         public Func<int, int>? IdMapper { get; set; }
 
-        object[] MapIds(IReadOnlyList<object?> parameters)
+        object?[] MapIds(IReadOnlyList<object?> parameters)
         {
             if (parameters == null) return Array.Empty<object>();
             var result = new List<object?>();
@@ -119,7 +119,7 @@ namespace MrgInfo.AdoQuery.Core
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            object[] args = MapIds(Parameters.ToArray());
+            object?[] args = MapIds(Parameters.ToArray());
             try
             {
                 provider.Read<string>(Id, Command ?? "", args);

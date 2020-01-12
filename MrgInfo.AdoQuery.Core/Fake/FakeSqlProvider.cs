@@ -41,9 +41,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
             text.AppendLine()
                 .AppendLine(query.Command)
                 .AppendLine();
-            foreach (object parameter in query.Parameters)
+            foreach (object? parameter in query.Parameters)
             {
-                text.AppendLine($"\t{parameter}");
+                text.AppendLine($"\t{parameter ?? "NULL"}");
             }
             TraceSource.TraceInformation(text.ToString());
         }
@@ -132,7 +132,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
 
         private protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
-            await Task.Yield(); // TODO
+            await Task.Yield();
             foreach (object?[] row in Query(id, query, parameters, columns))
             {
                 if (token.IsCancellationRequested) yield break;
