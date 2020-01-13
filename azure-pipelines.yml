@@ -35,7 +35,6 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj'
-    includesymbols: true
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '$(major)'
     minorVersion: '$(minor)'
