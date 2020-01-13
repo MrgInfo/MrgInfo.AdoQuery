@@ -17,17 +17,6 @@ namespace MrgInfo.AdoQuery.Test
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     public sealed class SqlProviderTests
     {
-        ITestOutputHelper Output { get; }
-
-        /// <summary>
-        ///     Konstruktor.
-        /// </summary>
-        /// <param name="output">
-        ///     Kimenetkezelő.
-        /// </param>
-        public SqlProviderTests(ITestOutputHelper output) =>
-            Output = output ?? throw new ArgumentNullException(nameof(output));
-
         /// <summary>
         ///     Adatbázis-kiszolgálók.
         /// </summary>
@@ -39,11 +28,22 @@ namespace MrgInfo.AdoQuery.Test
             get
             {
                 yield return new object[] { new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;") };
-                yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=innerora)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=innerora)));User Id=adoquery;Password=adoquery;") };
+                yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;") };
                 //yield return new object[] { new SqlDatabaseSettings("Data Source=.;Integrated Security=True;Initial Catalog=AdoQuery;") };
-                //yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)));User Id=/;Password=;Integrated Security=True") };
+                //yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)));User Id=/;Password=;Integrated Security=True") };
             }
         }
+
+        ITestOutputHelper Output { get; }
+
+        /// <summary>
+        ///     Konstruktor.
+        /// </summary>
+        /// <param name="output">
+        ///     Kimenetkezelő.
+        /// </param>
+        public SqlProviderTests(ITestOutputHelper output) =>
+            Output = output ?? throw new ArgumentNullException(nameof(output));
 
         /// <summary>
         ///     Adatbázis elérések tesztelése.
@@ -58,7 +58,7 @@ namespace MrgInfo.AdoQuery.Test
 
             var watch = Stopwatch.StartNew();
 
-            var cnt = provider.Read<int>(1.Is($@"
+            var cnt = provider.Read<int>(1.IdFor($@"
                 |select count(*)
                 |  from product
                 | where unitprice > {500}"));
@@ -90,15 +90,13 @@ namespace MrgInfo.AdoQuery.Test
                     |         code
                     |    from product
                     |   where unitprice > {500}
-                    |order by id")
+                    |order by productid")
                 .ToArray();
 
             watch.Stop();
 
             Assert.All(result, row =>
             {
-                Assert.Equal(10, row.ProductId);
-                Assert.Equal("AB123", row.Code);
                 Assert.Null(row.Nullable);
                 Assert.Equal(default, row.Float);
             });
