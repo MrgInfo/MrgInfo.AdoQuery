@@ -5,6 +5,16 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <Authors>Groma István</Authors>
+    <Company>MRG-Infó Bt.</Company>
+    <Product>MrgInfo.AdoQuery</Product>
+    <Description>Run safe and effective ADO .NET SQL queries.</Description>
+    <Copyright>MRG-Info © 2020</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SQL</PackageTags>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +25,13 @@
     <ProjectReference Include="..\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.csproj" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Oracle\MrgInfo.AdoQuery.Oracle.csproj" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Sql\MrgInfo.AdoQuery.Sql.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
