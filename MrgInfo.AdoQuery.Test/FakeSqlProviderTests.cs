@@ -9,7 +9,6 @@ using System.Text;
 using System.Xml;
 using MrgInfo.AdoQuery.Core;
 using MrgInfo.AdoQuery.Core.Fake;
-using MrgInfo.AdoQuery.Core.FormattableStrings;
 using Xunit;
 using Xunit.Abstractions;
 

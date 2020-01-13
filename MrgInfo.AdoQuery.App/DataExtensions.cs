@@ -1,7 +1,9 @@
-﻿namespace  MrgInfo.AdoQuery.App
+﻿using System.Collections.Generic;
+
+namespace  MrgInfo.AdoQuery.App
 {
     public static class DataExtensions
     {
-        public static object?[][]? ToData<TValue>(this TValue value) => new[] { new[] { (object?)value } };
+        public static IList<IList<object?>>? ToData<TValue>(this TValue value) => new IList<object?>[] { new object?[] { value } };
     }
 }

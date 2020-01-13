@@ -24,7 +24,7 @@ namespace MrgInfo.AdoQuery.Oracle
         ///     Kapcsolati leíró összeállításához használt gyártómetódus.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="builder"/> értéke null.
+        ///     The <paramref name="builder"/> argument has <c>null</c> value.
         /// </exception>
         public OracleDatabaseSettings(OracleConnectionStringBuilder builder)
             : base((builder ?? throw new ArgumentNullException(nameof(builder))).ToString())

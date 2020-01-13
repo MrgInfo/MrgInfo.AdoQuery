@@ -1,90 +1,104 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using static System.Text.RegularExpressions.RegexOptions;
 
 namespace MrgInfo.AdoQuery.Core.Fake
 {
-    /// <summary>
-    ///     Reguláris kifejezések segítségével hamisított lekérdezések.
-    /// </summary>
     /// <inheritdoc cref="FakeSqlProvider" />
-    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    [SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface")]
-    public sealed class FakePatternSqlProvider: FakeSqlProvider, IEnumerable
+    /// <summary>
+    ///     Fake data provider by regular expression query matching.
+    /// </summary>
+    public sealed class FakePatternSqlProvider: FakeSqlProvider
     {
-        ConcurrentDictionary<Regex, IList<IList<object?>>?> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IList<object?>>?>();
+        ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>>();
 
         /// <inheritdoc />
-        protected override IList<IList<object?>>? FindFakeData(string? id, string? query, IEnumerable<object?>? args)
+        protected override IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args)
         {
-            Parameter[] formatParameters =
+            object[] formatParameters =
                 args
-                ?.Select((a, i) => new Parameter { Name = $"{{{i}}}", Value = a })
+                ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
-                ?? Array.Empty<Parameter>();
+                ?? Array.Empty<object>();
             string command = string.Format(null, query ?? "", formatParameters);
-            RegisterQuery(id, command, from p in formatParameters where p != null select p.Value);
+            RegisterQuery(id, command, from Parameter p in formatParameters select p.Value);
             return (
                 from re in ByRegexData
                 where re.Key != null && re.Value != null && re.Key.IsMatch(command)
                 select re.Value)
                 .FirstOrDefault()
-                ?? Array.Empty<IList<object?>>();
+                ?? Array.Empty<IReadOnlyList<object?>>();
         }
 
         /// <summary>
-        ///     Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+        ///     Register fake data for a query.
         /// </summary>
         /// <param name="pattern">
-        ///     Az <c>SQL</c> kifejezés mintaillesztése.
+        ///     Regular expression for selecting query.
         /// </param>
         /// <param name="data">
-        ///     A találati adathalmazt reprezentáló objektumok.
+        ///     Fake result set.
         /// </param>
-        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-        public void Add(Regex pattern, params object?[][]? data) =>
-            ByRegexData.TryAdd(pattern, data);
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
+        /// </exception>
+        public void Register(Regex pattern, params IReadOnlyList<object?>[] data) =>
+            ByRegexData.TryAdd(
+                pattern ?? throw new ArgumentNullException(nameof(pattern)),
+                data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Egy hamisított lekérdezés eredmény hozzáadása a rendszerhez.
+        ///     Register fake data for a query.
         /// </summary>
         /// <param name="pattern">
-        ///     Az <c>SQL</c> kifejezés mintaillesztése.
+        ///     Regular expression for selecting query.
         /// </param>
         /// <param name="data">
-        ///     A találati adathalmazt reprezentáló objektumok.
+        ///     Fake result set.
         /// </param>
-        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-        public void Add(string pattern, params object?[][]? data) =>
-            ByRegexData.TryAdd(new Regex(pattern, Compiled | IgnoreCase | Singleline | CultureInvariant), data);
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     A regular expression parsing error occurred.
+        /// </exception>
+        public void Register(string pattern, params IReadOnlyList<object?>[] data) =>
+            ByRegexData.TryAdd(
+                new Regex(pattern ?? throw new ArgumentNullException(nameof(pattern)), Compiled | IgnoreCase | Singleline | CultureInvariant),
+                data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Hamisított lekérdezések.
+        ///     Register fake data for a given query.
         /// </summary>
         /// <param name="pattern">
-        ///     Az <c>SQL</c> lekérdezés mintaillesztése.
+        ///     Unique identifier of the query.
         /// </param>
         /// <value>
-        ///     A lekérdezés eredményének hamisított helyettesítője.
+        ///     Fake result set.
         /// </value>
-        public IList<IList<object?>>? this[string pattern]
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="pattern"/> or <paramref name="value"/> argument has <c>null</c> value.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     A regular expression parsing error occurred.
+        /// </exception>
+        public IList<IReadOnlyList<object?>> this[string pattern]
         {
-            get => ByRegexData.TryGetValue(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), out IList<IList<object?>>? value)
-                ? value
-                : null;
-            set => ByRegexData.TryAdd(new Regex(pattern ?? "^$", Compiled | IgnoreCase | Singleline | CultureInvariant), value);
+            get => ByRegexData.TryGetValue(
+                new Regex(pattern ?? throw new ArgumentNullException(nameof(pattern)), Compiled | IgnoreCase | Singleline | CultureInvariant),
+                out IList<IReadOnlyList<object?>> value)
+                    ? value
+                    : Array.Empty<IReadOnlyList<object?>>();
+            set => ByRegexData.TryAdd(
+                new Regex(pattern ?? throw new ArgumentNullException(nameof(pattern)), Compiled | IgnoreCase | Singleline | CultureInvariant),
+                value ?? throw new ArgumentNullException(nameof(value)));
         }
 
-        /// <inheritdoc />
-        public IEnumerator GetEnumerator() => ByRegexData.GetEnumerator();
-
         /// <summary>
-        ///     A hamisított lekérdezési eredmények törlése.
+        ///     Clear registered data.
         /// </summary>
         public void Clear() => ByRegexData.Clear();
     }

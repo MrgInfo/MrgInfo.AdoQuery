@@ -2,35 +2,35 @@
 <docs>
   <format>
     <remarks>
-      A <paramref name="query" /> paraméterben használható formázások.
+      The following format strings can be used in <paramref name="query" />:
       <list type="table">
         <listheader>
-          <term>Formázó szöveg</term>
-          <description>Formázás jelentése</description>
+          <term>Format specifier</term>
+          <description>Description</description>
         </listheader>
         <item>
           <term>==</term>
           <description>
-            Azonosság, <c>NULL</c> esetén is működik.
+            Equals (works for NULLs).
           </description>
         </item>
         <item>
           <term>!=</term>
           <description>
-            Különbözőség, <c>NULL</c> esetén is működik.
+            Not equals (works for NULLs).
           </description>
         </item>
         <item>
           <term>=*</term>
-          <description>Elejére illesztés.</description>
+          Match start of string.
         </item>
         <item>
           <term>*=</term>
-          <description>Végére illesztés.</description>
+          Match end of string.
         </item>
         <item>
           <term>*=*</term>
-          <description>Illesztés.</description>
+          Match containing in string.
         </item>
       </list>
     </remarks>
@@ -46,7 +46,7 @@
       Result set.
     </returns>
     <exception cref="System.ArgumentNullException">
-      Argument <paramref name="query"/> is <c>null</c>.
+      The <paramref name="query"/> argument has <c>null</c> value.
     </exception>
     <exception cref="MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.

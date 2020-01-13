@@ -18,7 +18,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
 {
     /// <inheritdoc cref="SqlProvider" />
     /// <summary>
-    ///     Hamisított adatbázis lekérdezéséket futtató szolgáltatás.
+    ///     Fake data query provider.
     /// </summary>
     public abstract class FakeSqlProvider: SqlProvider
     {
@@ -39,7 +39,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
 
             var text = new StringBuilder();
             text.AppendLine()
-                .AppendLine(query.Command)
+                .AppendLine(RemoveTrailing(query.Command))
                 .AppendLine();
             foreach (object? parameter in query.Parameters)
             {
@@ -71,18 +71,20 @@ namespace MrgInfo.AdoQuery.Core.Fake
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
+            string @namespace = typeof(SqlProvider).Namespace ?? "@";
             var i = 2;
             MethodBase? method;
             do
             {
                 method = new StackFrame(i++).GetMethod();
             }
-            while (method?.DeclaringType?.Namespace == "MrgInfo.AdoQuery.Core");
+            while (method.DeclaringType?.Namespace != null 
+                   && method.DeclaringType.Namespace.StartsWith(@namespace, StringComparison.Ordinal));
             var sqlQuery = new SqlQuery
             {
                 Id = id,
-                Caller = $"{method?.DeclaringType?.FullName}.{method?.Name}",
-                Command = "\n" + RemoveTrailing(sql) + "\n"
+                Caller = $"{method.DeclaringType?.FullName}.{method.Name}",
+                Command = $"\n{RemoveTrailing(sql)}\n"
             };
             if (args != null)
             {
@@ -107,11 +109,11 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// <returns>
         ///     A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
-        protected abstract IList<IList<object?>>? FindFakeData(string? id, string? query, IEnumerable<object?>? args);
+        protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args);
 
         internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
-            IList<IList<object?>>? fakeData = FindFakeData(id, query, parameters);
+            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
             return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
                 ? Cast<TResult>(fakeData[0][0])
                 : default;
@@ -122,9 +124,9 @@ namespace MrgInfo.AdoQuery.Core.Fake
 
         internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
-            IList<IList<object?>>? fakeData = FindFakeData(id, query, parameters);
+            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
             if (fakeData == null) yield break;
-            foreach (IList<object?> row in fakeData.Where(_ => _ != null))
+            foreach (IReadOnlyList<object?> row in fakeData)
             {
                 yield return row.ToArray();
             }

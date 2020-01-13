@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MrgInfo.AdoQuery.Core;
-using MrgInfo.AdoQuery.Core.FormattableStrings;
 using MrgInfo.AdoQuery.Oracle;
 using MrgInfo.AdoQuery.Sql;
 using Xunit;

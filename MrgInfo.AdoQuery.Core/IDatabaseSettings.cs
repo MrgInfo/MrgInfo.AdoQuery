@@ -4,32 +4,32 @@ using System.Data.Common;
 namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
-    ///     Adatbázis lekérdezéshez szükséges beállítások.
+    ///     Database vendor specific logic.
     /// </summary>
     public interface IDatabaseSettings
     {
         /// <summary>
-        ///     Új adatbázis kapcsolat létrehozása.
+        ///     Create nem database connection.
         /// </summary>
         /// <returns>
-        ///     Elérhető adatbázis kapcsolat.
+        ///     New connection.
         /// </returns>
         /// <exception cref="DbException">
-        ///     Adatbázis kapcsolat nem hozható létre.
+        ///     Cannot connect to database.
         /// </exception>
         DbConnection CreateConnection();
 
         /// <summary>
-        ///     Egy nevet generál az adott sorszámú <c>SQL</c> paraméternek.
+        ///     Unique name for query parameter.
         /// </summary>
         /// <param name="index">
-        ///     Az <c>SQL</c> paraméter sorszám.
+        ///     Index of parameter.
         /// </param>
         /// <returns>
-        ///     Az <c>SQL</c> paraméter neve.
+        ///     Unique name of parameter.
         /// </returns>
         ///  <exception cref="ArgumentOutOfRangeException">
-        ///     A <paramref name="index" /> értéke érvénytelen.
+        ///     The <paramref name="index" /> is invalid.
         /// </exception>
         string CreateParameterName(int index);
     }

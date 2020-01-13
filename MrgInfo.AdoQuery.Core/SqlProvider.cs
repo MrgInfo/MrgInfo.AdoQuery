@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MrgInfo.AdoQuery.Core.FormattableStrings;
 using static System.StringComparison;
 
 namespace MrgInfo.AdoQuery.Core

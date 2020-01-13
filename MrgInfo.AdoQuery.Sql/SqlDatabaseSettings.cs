@@ -24,7 +24,7 @@ namespace MrgInfo.AdoQuery.Sql
         ///     Kapcsolati leíró összeállításához használt gyártómetódus.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="builder"/> értéke null.
+        ///     The <paramref name="builder"/> argument has <c>null</c> value.
         /// </exception>
         public SqlDatabaseSettings(SqlConnectionStringBuilder builder)
             : base((builder ?? throw new ArgumentNullException(nameof(builder))).ToString())

@@ -9,16 +9,16 @@ namespace MrgInfo.AdoQuery.Core
     public abstract class DatabaseSettings: IDatabaseSettings
     {
         /// <summary>
-        ///     Paraméterek számozása.
+        ///     Format parameter indexing.
         /// </summary>
         /// <param name="index">
-        ///     Paraméter pozíciója.
+        ///     Index of parameter.
         /// </param>
         /// <returns>
-        ///     A formázott számozás.
+        ///     Formatted parameter index.
         /// </returns>
         ///  <exception cref="ArgumentOutOfRangeException">
-        ///     A <paramref name="index" /> értéke érvénytelen.
+        ///     The <paramref name="index" /> is invalid.
         /// </exception>
         protected static string GetParameterNumber(int index)
         {
@@ -27,18 +27,17 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Adatbázis kapcsolati leíró.
+        ///     Connection string.
         /// </summary>
         protected string ConnectionString { get; }
 
         /// <summary>
-        ///     Konstruktor.
+        ///     Initializes a new instance of <see cref="DatabaseSettings"/>.
         /// </summary>
         /// <param name="connectionString">
-        ///     Adatbázis kapcsolati leíró.
+        ///     Connection string.
         /// </param>
-        protected DatabaseSettings(string connectionString) =>
-            ConnectionString = connectionString;
+        protected DatabaseSettings(string connectionString) => ConnectionString = connectionString;
 
         /// <inheritdoc />
         public abstract DbConnection CreateConnection();

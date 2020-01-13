@@ -149,7 +149,7 @@ namespace MrgInfo.AdoQuery.Core
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            object[] args = MapIds(Parameters.ToArray());
+            object?[] args = MapIds(Parameters.ToArray());
             try
             {
                 return provider.Query(Id, Command, args, 1).Count();
