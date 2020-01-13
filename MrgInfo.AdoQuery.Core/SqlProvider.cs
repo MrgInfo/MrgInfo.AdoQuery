@@ -291,7 +291,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (DbException exp)
             {
-                throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
             }
         }
 
@@ -573,7 +573,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (DbException exp)
             {
-                throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
             }
 
         }
@@ -606,7 +606,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (DbException exp)
             {
-                throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
             }
 
             try
@@ -620,7 +620,7 @@ namespace MrgInfo.AdoQuery.Core
                     }
                     catch (DbException exp)
                     {
-                        throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                        throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
                     }
 
                     if (!hasValue) yield break;
@@ -926,7 +926,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (DbException exp)
             {
-                throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
             }
         }
 
@@ -968,7 +968,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (DbException exp)
             {
-                throw QueryDbException.Create(id, RemoveTrailing(query), parameters, exp);
+                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
             }
         }
 

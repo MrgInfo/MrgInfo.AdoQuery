@@ -126,7 +126,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (Exception exp)
             {
-                throw QueryDbException.Create(Id, Command, Parameters, exp);
+                throw new QueryDbException(Id, Command, Parameters, exp);
             }
         }
 
@@ -156,7 +156,7 @@ namespace MrgInfo.AdoQuery.Core
             }
             catch (Exception exp)
             {
-                throw QueryDbException.Create(Id, Command, Parameters, exp);
+                throw new QueryDbException(Id, Command, Parameters, exp);
             }
         }
     }

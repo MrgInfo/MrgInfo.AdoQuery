@@ -49,7 +49,7 @@ namespace MrgInfo.AdoQuery.Test
             var provider = new FakeIdSqlProvider
             {
                 [$"{query1}"] = Product,
-                [$"{query1}"] = Product,
+                [$"{query2}"] = Product,
             };
 
             var watch = Stopwatch.StartNew();
@@ -59,17 +59,17 @@ namespace MrgInfo.AdoQuery.Test
                     |select productid,
                     |       code
                     |  from product"))
-                .FirstOrDefault();
+                .First();
             (int id1, string code1) = provider
                 .Query<int, string>(query2.IdFor($"select productid, code from product"))
-                .LastOrDefault();
+                .Last();
 
             watch.Stop();
 
             Assert.Equal(Product[0][0], id0);
             Assert.Equal(Product[0][1], code0);
-            Assert.Equal(Product[1][0], id1);
-            Assert.Equal(Product[1][1], code1);
+            Assert.Equal(Product[^1][0], id1);
+            Assert.Equal(Product[^1][1], code1);
 
             Output.WriteLine($"{watch.Elapsed:g}");
         }
@@ -89,21 +89,21 @@ namespace MrgInfo.AdoQuery.Test
             var watch = Stopwatch.StartNew();
 
             (int id0, string code0) = provider
-                .Query<int, string>(1.IdFor($@"
+                .Query<int, string>(1.LocalIdFor($@"
                     |select productid,
                     |       code
                     |  from product"))
-                .FirstOrDefault();
+                .First();
             (int id1, string code1) = provider
-                .Query<int, string>(2.IdFor($"select productid, code from product"))
-                .LastOrDefault();
+                .Query<int, string>(2.LocalIdFor($"select productid, code from product"))
+                .Last();
 
             watch.Stop();
 
-            Assert.Equal(Product[0]?[0], id0);
-            Assert.Equal(Product[0]?[1], code0);
-            Assert.Equal(Product[1]?[0], id1);
-            Assert.Equal(Product[1]?[1], code1);
+            Assert.Equal(Product[0][0], id0);
+            Assert.Equal(Product[0][1], code0);
+            Assert.Equal(Product[^1][0], id1);
+            Assert.Equal(Product[^1][1], code1);
 
             Output.WriteLine($"{watch.Elapsed:g}");
         }
@@ -116,7 +116,7 @@ namespace MrgInfo.AdoQuery.Test
         {
             var provider = new FakePatternSqlProvider
             {
-                [@"productid.+code.+product"] = Product
+                ["productid.+code.+product"] = Product
             };
 
             var watch = Stopwatch.StartNew();
@@ -126,17 +126,17 @@ namespace MrgInfo.AdoQuery.Test
                     |select productid,
                     |       code
                     |  from product")
-                .FirstOrDefault();
+                .First();
             (int id1, string code1) = provider
                 .Query<int, string>($"select productid, code from product")
-                .LastOrDefault();
+                .Last();
 
             watch.Stop();
 
-            Assert.Equal(Product[0]?[0], id0);
-            Assert.Equal(Product[0]?[1], code0);
-            Assert.Equal(Product[1]?[0], id1);
-            Assert.Equal(Product[1]?[1], code1);
+            Assert.Equal(Product[0][0], id0);
+            Assert.Equal(Product[0][1], code0);
+            Assert.Equal(Product[^1][0], id1);
+            Assert.Equal(Product[^1][1], code1);
 
             Output.WriteLine($"{watch.Elapsed:g}");
         }
