@@ -19,7 +19,7 @@ steps:
   inputs:
     command: 'test'
     projects: '**/*.Test.csproj'
-    arguments: '--filter FullyQualifiedName!~SqlProviderTests'
+    arguments: '--filter ClassName=SqlProviderTests'
     testRunTitle: 'Uni test'
 
 - task: PublishTestResults@2
