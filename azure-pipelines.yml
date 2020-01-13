@@ -12,6 +12,9 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  major: '1'
+  minor: '0'
+  patch: '0'  
 
 steps:
 
@@ -28,3 +31,26 @@ steps:
     testResultsFiles: '**/*.trx'
     mergeTestResults: true
     buildConfiguration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj'
+    nobuild: true
+    includesymbols: true
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '$(major)'
+    minorVersion: '$(minor)'
+    patchVersion: '$(patch)'
+
+- task: NuGetAuthenticate@0
+  inputs:
+    nuGetServiceConnections: 'NuGet'
+    forceReinstallCredentialProvider: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'NuGet'
