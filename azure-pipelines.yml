@@ -17,22 +17,21 @@ variables:
   patch: '0'
 
 steps:
-
 - task: DotNetCoreCLI@2
+  displayName: 'Run unit tests'
   inputs:
     command: 'test'
     projects: '**/*.Test.csproj'
     arguments: '--filter DisplayName~FakeSqlProviderTests'
-    testRunTitle: 'Uni test'
-
 - task: PublishTestResults@2
+  displayName: 'Publish test results'
   inputs:
     testResultsFormat: 'XUnit'
     testResultsFiles: '**/*.trx'
     mergeTestResults: true
     buildConfiguration: '$(buildConfiguration)'
-
 - task: DotNetCoreCLI@2
+  displayName: 'Create package'
   inputs:
     command: 'pack'
     packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj'
@@ -41,15 +40,10 @@ steps:
     majorVersion: '$(major)'
     minorVersion: '$(minor)'
     patchVersion: '$(patch)'
-
-- task: NuGetAuthenticate@0
-  inputs:
-    nuGetServiceConnections: 'NuGet'
-    forceReinstallCredentialProvider: true
-
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
+  displayName: 'Push to nuGet.org'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'NuGet (MrgInfo)'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
