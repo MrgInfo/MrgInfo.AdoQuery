@@ -14,7 +14,7 @@ variables:
   buildConfiguration: 'Release'
   major: '1'
   minor: '0'
-  patch: '0'  
+  patch: '0'
 
 steps:
 
@@ -36,7 +36,6 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj'
-    nobuild: true
     includesymbols: true
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '$(major)'
