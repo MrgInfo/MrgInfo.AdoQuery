@@ -3,14 +3,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MrgInfo.AdoQuery.Core.Fake
+namespace MrgInfo.AdoQuery.Core
 {
-    /// <inheritdoc cref="FakeSqlProvider" />
+    /// <inheritdoc cref="FakeQueryProvider" />
     /// <summary>
     ///     Fake data provider by unique identifier.
     /// </summary>
-    
-    public sealed class FakeIdSqlProvider: FakeSqlProvider
+    public sealed class ByIdFakeQueryProvider: FakeQueryProvider
     {
         ConcurrentDictionary<string, IList<IReadOnlyList<object?>>> ByIdData { get; } = new ConcurrentDictionary<string, IList<IReadOnlyList<object?>>>();
 

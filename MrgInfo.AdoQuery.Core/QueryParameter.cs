@@ -6,7 +6,7 @@ namespace MrgInfo.AdoQuery.Core
     ///     Serializing query parameters.
     /// </summary>
     [DataContract(Name = "Parameter", Namespace = "")]
-    public sealed class SqlQueryParameter
+    public sealed class QueryParameter
     {
         /// <summary>
         ///     Type of parameter.

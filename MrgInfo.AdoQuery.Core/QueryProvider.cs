@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -17,8 +15,7 @@ namespace MrgInfo.AdoQuery.Core
     /// <summary>
     ///     Run SQL queries.
     /// </summary>
-    [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
-    public class SqlProvider
+    public abstract class QueryProvider
     {
         /// <inheritdoc />
         /// <summary>
@@ -93,7 +90,10 @@ namespace MrgInfo.AdoQuery.Core
             }
         }
 
-        static TraceSource TraceSource { get; } = new TraceSource(nameof(SqlProvider), SourceLevels.Information);
+        static string? FindId(FormattableString? formattableString) =>
+            formattableString is FormattableStringWithId withInt
+                ? withInt.Id
+                : null;
 
         /// <summary>
         ///     Törli a behúzást a | karakterig minden sorban.
@@ -120,22 +120,6 @@ namespace MrgInfo.AdoQuery.Core
                     : shortLine);
             }
             return result.ToString();
-        }
-
-        static void Print(IDbCommand command)
-        {
-            var text = new StringBuilder();
-            text.AppendLine()
-                .AppendLine(command.CommandText)
-                .AppendLine();
-            foreach (IDbDataParameter parameter in command.Parameters.OfType<IDbDataParameter>())
-            {
-                text.Append(parameter.ParameterName)
-                    .Append(" = ")
-                    .Append(parameter.Value)
-                    .AppendLine();
-            }
-            TraceSource.TraceInformation(text.ToString());
         }
 
         /// <summary>
@@ -182,106 +166,28 @@ namespace MrgInfo.AdoQuery.Core
             return (TResult)Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
         }
 
-        static string? FindId(FormattableString? formattableString) =>
-            formattableString is FormattableStringWithId withInt
-                ? withInt.Id
-                : null;
-
-        readonly IDatabaseSettings _settings;
-
         /// <summary>
-        ///     Initializes a new instance of <see cref="SqlProvider"/>.
+        ///     Run query synchronously.
         /// </summary>
-        /// <param name="settings">
-        ///     Database settings.
+        /// <param name="id">
+        ///     The unique indentifier of query.
         /// </param>
-        public SqlProvider(IDatabaseSettings settings) => _settings = settings;
-
-        [SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        DbCommand CreateCommand(DbConnection conncetion, string query, IReadOnlyList<object?> parameters)
-        {
-            DbCommand command = conncetion.CreateCommand();
-            try
-            {
-                var placeholders = new object[parameters.Count];
-                for (var i = 0; i < parameters.Count; ++i)
-                {
-                    var item = new Parameter
-                    {
-                        Name = _settings.CreateParameterName(i),
-                        Value = parameters[i]
-                    };
-                    IDbDataParameter parameter = command.CreateParameter();
-                    parameter.ParameterName = item.Name;
-                    parameter.Direction = ParameterDirection.Input;
-                    switch (item.Value)
-                    {
-                        case bool _:
-                            parameter.DbType = DbType.Boolean;
-                            break;
-                        case char _:
-                            parameter.DbType = DbType.StringFixedLength;
-                            parameter.Size = 1;
-                            break;
-                        case int _:
-                            parameter.DbType = DbType.Int32;
-                            break;
-                        case long _:
-                            parameter.DbType = DbType.Int64;
-                            break;
-                        case float _:
-                            parameter.DbType = DbType.Single;
-                            break;
-                        case double _:
-                            parameter.DbType = DbType.Double;
-                            break;
-                        case DateTime _:
-                            parameter.DbType = DbType.DateTime;
-                            break;
-                        case Guid _:
-                            parameter.DbType = DbType.Guid;
-                            break;
-                        case string _:
-                            parameter.DbType = DbType.String;
-                            break;
-                    }
-                    command.Parameters.Add(parameter);
-                    placeholders[i] = item;
-                }
-                command.CommandText = string.Format(null, query, placeholders);
-                for (int i = placeholders.Length - 1; i >= 0; --i)
-                {
-                    var placeholder = (Parameter) placeholders[i];
-                    DbParameter parameter = command.Parameters[i];
-                    parameter.Value = placeholder.Value ?? DBNull.Value;
-                    if (!placeholder.Present) command.Parameters.Remove(parameter);
-                }
-                Print(command);
-                return command;
-            }
-            catch
-            {
-                command.Dispose();
-                throw;
-            }
-        }
-
-        internal virtual IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
-        {
-            if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
-
-            if (string.IsNullOrEmpty(query)) yield break;
-            using DbConnection connection = _settings.CreateConnection();
-            connection.Open();
-            using DbCommand command = CreateCommand(connection, RemoveTrailing(query), parameters ?? Array.Empty<object?>());
-            using DbDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                var values = new object[columns];
-                if (reader.GetValues(values) == 0) continue;
-                yield return values;
-            }
-        }
+        /// <param name="query">
+        ///     The query command.
+        /// </param>
+        /// <param name="parameters">
+        ///     Query parameters.
+        /// </param>
+        /// <param name="columns">
+        ///     Number of column is result set.
+        /// </param>
+        /// <returns>
+        ///     Result set.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Invalid number of columns in <paramref name="columns"/>.
+        /// </exception>
+        protected internal abstract IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns);
 
         IEnumerable<object?[]> SafeQuery(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
@@ -544,58 +450,31 @@ namespace MrgInfo.AdoQuery.Core
             from v in SafeQuery(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments(), 16)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]), Cast<T11>(v[10]), Cast<T12>(v[11]), Cast<T13>(v[12]), Cast<T14>(v[13]), Cast<T15>(v[14]), Cast<T16>(v[15]));
 
-        async Task<IEnumerable<object?[]>> OldQueryAsync(string? query, IReadOnlyList<object?>? parameters, int columns, CancellationToken token = default)
-        {
-            if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
-
-            var results = new LinkedList<object[]>();
-            if (string.IsNullOrEmpty(query)) return results;
-            await using DbConnection connection = _settings.CreateConnection();
-            await (connection.OpenAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            await using DbCommand command = CreateCommand(connection, RemoveTrailing(query), parameters ?? Array.Empty<object>());
-            await using DbDataReader reader = await (command.ExecuteReaderAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            while (await (reader?.ReadAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false))
-            {
-                if (token.IsCancellationRequested) break;
-                var values = new object[columns];
-                if (reader.GetValues(values) == 0) continue;
-                results.AddLast(values);
-            }
-            return results;
-        }
-
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        async Task<IEnumerable<object?[]>> OldSafeQueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, CancellationToken token = default)
-        {
-            try
-            {
-                return await OldQueryAsync(query, parameters, columns, token).ConfigureAwait(false);
-            }
-            catch (DbException exp)
-            {
-                throw new QueryDbException(id, RemoveTrailing(query), parameters, exp);
-            }
-
-        }
-
-        private protected virtual async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
-        {
-            if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
-
-            if (string.IsNullOrEmpty(query)) yield break;
-            if (token.IsCancellationRequested) yield break;
-            await using DbConnection connection = _settings.CreateConnection();
-            await (connection.OpenAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            await using DbCommand command = CreateCommand(connection, RemoveTrailing(query), parameters ?? Array.Empty<object>());
-            await using DbDataReader reader = await (command.ExecuteReaderAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            while (await (reader?.ReadAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false))
-            {
-                if (token.IsCancellationRequested) break;
-                var values = new object[columns];
-                if (reader.GetValues(values) == 0) continue;
-                yield return values;
-            }
-        }
+        /// <summary>
+        ///     Run query asynchronously.
+        /// </summary>
+        /// <param name="id">
+        ///     The unique indentifier of query.
+        /// </param>
+        /// <param name="query">
+        ///     The query command.
+        /// </param>
+        /// <param name="parameters">
+        ///     Query parameters.
+        /// </param>
+        /// <param name="columns">
+        ///     Number of column is result set.
+        /// </param>
+        /// <param name="token">
+        ///     The cancellation token that will be checked for stop reading.
+        /// </param>
+        /// <returns>
+        ///     Result set.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Invalid number of columns in <paramref name="columns"/>.
+        /// </exception>
+        protected abstract IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, CancellationToken token = default);
 
         async IAsyncEnumerable<object?[]> SafeQueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
@@ -905,18 +784,26 @@ namespace MrgInfo.AdoQuery.Core
             }
         }
 
+        /// <summary>
+        ///     Run query syncronously with scalar result.
+        /// </summary>
+        /// <typeparam name="TResult">
+        ///     Type of result.
+        /// </typeparam>
+        /// <param name="id">
+        ///     The unique indentifier of query.
+        /// </param>
+        /// <param name="query">
+        ///     The query command.
+        /// </param>
+        /// <param name="parameters">
+        ///     Query parameters.
+        /// </param>
+        /// <returns>
+        ///     Scalar value.
+        /// </returns>
         [return: MaybeNull]
-        internal virtual TResult Read<TResult>(string? id, string? query,  IReadOnlyList<object?>? parameters)
-        {
-            if (string.IsNullOrEmpty(query)) return default!;
-            using DbConnection connection = _settings.CreateConnection();
-            connection.Open();
-            using IDbCommand command =
-                CreateCommand(connection, RemoveTrailing(query), parameters ?? Array.Empty<object>());
-            object result = command.ExecuteScalar();
-            if (result is null || result is DBNull) return default!;
-            return (TResult) Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
-        }
+        protected internal abstract TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters);
 
         TResult SafeRead<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
@@ -931,34 +818,46 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Egy konkrét adat lekérdezése.
+        ///     Run query syncronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
-        ///     Az adat típusa.
+        ///     Type of result.
         /// </typeparam>
         /// <param name="query">
-        ///     Az SQL lekérdezés.
+        ///     The query command.
         /// </param>
         /// <returns>
-        ///     Az adat értéke.
+        ///     Scalar value.
         /// </returns>
-        /// <exception cref="DbException">
-        ///     Adatbázis hiba!
+        /// <exception cref="QueryDbException">
+        ///     Error occured during executing the query.
         /// </exception>
         /// <include file='Documentation.xml' path='docs/format/*'/>
         public TResult Read<TResult>(FormattableString query) =>
             SafeRead<TResult>(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments());
 
-        private protected virtual async Task<TResult> ReadAsync<TResult>(string? id, string? format, IReadOnlyList<object?>? parameters, CancellationToken token = default)
-        {
-            if (string.IsNullOrEmpty(format)) return default!;
-            await using DbConnection connection = _settings.CreateConnection();
-            await (connection.OpenAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            await using DbCommand command = CreateCommand(connection, RemoveTrailing(format), parameters ?? Array.Empty<object>());
-            object result = await (command.ExecuteScalarAsync(token) ?? throw new InvalidOperationException()).ConfigureAwait(false);
-            if (result is null || result is DBNull) return default!;
-            return (TResult)Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
-        }
+        /// <summary>
+        ///     Run query asyncronously with scalar result.
+        /// </summary>
+        /// <typeparam name="TResult">
+        ///     Type of result.
+        /// </typeparam>
+        /// <param name="id">
+        ///     The unique indentifier of query.
+        /// </param>
+        /// <param name="query">
+        ///     The query command.
+        /// </param>
+        /// <param name="parameters">
+        ///     Query parameters.
+        /// </param>
+        /// <param name="token">
+        ///     The cancellation token that will be checked for stop reading.
+        /// </param>
+        /// <returns>
+        ///     Scalar value.
+        /// </returns>
+        protected abstract Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default);
 
         async Task<TResult> SafeReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default)
         {
@@ -973,30 +872,25 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Egy konkrét adat lekérdezése.
+        ///     Run query asyncronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
-        ///     Az adat típusa.
+        ///     Type of result.
         /// </typeparam>
         /// <param name="query">
-        ///     Az SQL lekérdezés.
+        ///     The query command.
         /// </param>
         /// <param name="token">
-        ///     Megszakítás kezdeményezése.
+        ///    The cancellation token that will be checked for stop reading.
         /// </param>
         /// <returns>
-        ///     Az adat értéke.
+        ///     Scalar value.
         /// </returns>
-        /// <exception cref="DbException">
-        ///     Adatbázis hiba!
+        /// <exception cref="QueryDbException">
+        ///     Error occured during executing the query.
         /// </exception>
         /// <include file='Documentation.xml' path='docs/format/*'/>
         public Task<TResult> ReadAsync<TResult>(FormattableString query, CancellationToken token = default) =>
             SafeReadAsync<TResult>(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments(), token);
-
-
-
-        /// <inheritdoc />
-        public override string ToString() => _settings.ToString();
     }
 }

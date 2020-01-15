@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using static System.Text.RegularExpressions.RegexOptions;
 
-namespace MrgInfo.AdoQuery.Core.Fake
+namespace MrgInfo.AdoQuery.Core
 {
-    /// <inheritdoc cref="FakeSqlProvider" />
+    /// <inheritdoc cref="FakeQueryProvider" />
     /// <summary>
     ///     Fake data provider by regular expression query matching.
     /// </summary>
-    public sealed class FakePatternSqlProvider: FakeSqlProvider
+    public sealed class ByPatternFakeQueryProvider: FakeQueryProvider
     {
         ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>>();
 

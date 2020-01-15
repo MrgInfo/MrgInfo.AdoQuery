@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <StartupObject>MrgInfo.AdoQuery.App.Examples</StartupObject>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Groma István</Authors>
@@ -19,9 +20,6 @@
 
   <ItemGroup>
     <PackageReference Include="PerrysNetConsole" Version="2.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.csproj" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Oracle\MrgInfo.AdoQuery.Oracle.csproj" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Sql\MrgInfo.AdoQuery.Sql.csproj" />

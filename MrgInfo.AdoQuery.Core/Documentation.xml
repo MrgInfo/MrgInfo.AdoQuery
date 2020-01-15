@@ -37,10 +37,10 @@
   </format>
   <query>
     <summary>
-      Run SQL query synchronously.
+      Run query synchronously.
     </summary>
     <param name="query">
-      The SQL query command.
+      The query command.
     </param>
     <returns>
       Result set.
@@ -54,10 +54,10 @@
   </query>
   <queryasync>
     <summary>
-      Run SQL query asynchronously.
+      Run query asynchronously.
     </summary>
     <param name="query">
-      The SQL query command.
+      The query command.
     </param>
     <param name="token">
       The cancellation token that will be checked for stop reading.

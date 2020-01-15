@@ -11,8 +11,32 @@ namespace MrgInfo.AdoQuery.Core
     ///     Egy <c>SQL</c> lekérdezés futtatási körülményeit leíró osztály.
     /// </summary>
     [DataContract(Name = "Query", Namespace = "")]
-    public sealed class SqlQuery
+    public sealed class Query
     {
+        /// <summary>
+        ///     Az delegált segítségével határozhatjuk meg, hogyan cseréljük a fiktív
+        ///     adatbázis azonosítókat valós azonosítókra.
+        /// </summary>
+        public static Func<int, int>? IdMapper { get; set; }
+
+        static object?[] MapIds(IReadOnlyList<object?> parameters)
+        {
+            if (parameters == null) return Array.Empty<object>();
+            var result = new List<object?>();
+            foreach (object? parameter in parameters)
+            {
+                if (parameter is int id)
+                {
+                    result.Add(IdMapper?.Invoke(id) ?? id);
+                }
+                else
+                {
+                    result.Add(parameter);
+                }
+            }
+            return result.ToArray();
+        }
+
         /// <summary>
         ///     Lekérdezés egyedi azonosítója.
         /// </summary>
@@ -45,17 +69,17 @@ namespace MrgInfo.AdoQuery.Core
         /// </exception>
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         [DataMember(Order = 3, Name =nameof(Parameters))]
-        public SqlQueryParameter[] QueryParameters
+        public QueryParameter[] QueryParameters
         {
             get
             {
-                var result = new SqlQueryParameter[Parameters.Count];
+                var result = new QueryParameter[Parameters.Count];
                 var i = 0;
                 foreach (object? par in Parameters)
                 {
                     result[i++] = par == null
-                        ? new SqlQueryParameter()
-                        : new SqlQueryParameter
+                        ? new QueryParameter()
+                        : new QueryParameter
                         {
                             TypeName = par.GetType().FullName,
                             Value = string.Format(InvariantCulture, "{0}", par)
@@ -80,30 +104,6 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Az delegált segítségével határozhatjuk meg, hogyan cseréljük a fiktív
-        ///     adatbázis azonosítókat valós azonosítókra.
-        /// </summary>
-        public Func<int, int>? IdMapper { get; set; }
-
-        object?[] MapIds(IReadOnlyList<object?> parameters)
-        {
-            if (parameters == null) return Array.Empty<object>();
-            var result = new List<object?>();
-            foreach (object? parameter in parameters)
-            {
-                if (parameter is int id)
-                {
-                    result.Add(IdMapper?.Invoke(id) ?? id);
-                }
-                else
-                {
-                    result.Add(parameter);
-                }
-            }
-            return result.ToArray();
-        }
-
-        /// <summary>
         ///     Lekérdezés futtatása.
         /// </summary>
         /// <param name="provider">
@@ -115,7 +115,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="QueryDbException">
         ///     Futás során keletkezett hiba.
         /// </exception>
-        public void Run(SqlProvider provider)
+        public void Run(DbQueryProvider provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
@@ -145,7 +145,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="QueryDbException">
         ///     Futás során keletkezett hiba.
         /// </exception>
-        public int? RunCount(SqlProvider provider)
+        public int? RunCount(DbQueryProvider provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 

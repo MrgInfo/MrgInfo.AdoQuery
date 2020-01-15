@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MrgInfo.AdoQuery.Core;
-using MrgInfo.AdoQuery.Core.Fake;
 using MrgInfo.AdoQuery.Oracle;
 using MrgInfo.AdoQuery.Sql;
 using PerrysNetConsole;
@@ -12,22 +11,23 @@ using static PerrysNetConsole.CoEx;
 namespace MrgInfo.AdoQuery.App
 {
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
+    [SuppressMessage("ReSharper", "UnusedType.Global")]
     static class Program
     {
-        static int Count(SqlProvider provider, string? prefix) =>
+        static int Count(QueryProvider provider, string? prefix) =>
             provider.Read<int>(1.LocalIdFor($@"
                 |select count(productid)
                 |  from product
                 | where code {prefix:=*}"));
 
-        static async Task<int> CountAsync(SqlProvider provider, string? prefix) =>
+        static async Task<int> CountAsync(QueryProvider provider, string? prefix) =>
             await provider.ReadAsync<int>(1.LocalIdFor($@"
                 |select count(productid)
                 |  from product
                 | where code {prefix:=*}"))
                 .ConfigureAwait(false);
 
-        static RowCollection? Load(SqlProvider provider, string? prefix)
+        static RowCollection? Load(QueryProvider provider, string? prefix)
         {
             var table = new List<string[]>();
             foreach ((int id, string code, string name, double unitprice) in
@@ -44,7 +44,7 @@ namespace MrgInfo.AdoQuery.App
             return RowCollection.Create(table).Import(0, RowConf.Create("Id", "Code", "Name", "Unit price").PresetTH());
         }
 
-        static async Task<RowCollection?> LoadAsync(SqlProvider provider, string prefix, CancellationToken token = default)
+        static async Task<RowCollection?> LoadAsync(QueryProvider provider, string prefix, CancellationToken token = default)
         {
             var table = new List<string[]>();
             await foreach ((int id, string code, string name, double unitprice) in
@@ -64,7 +64,7 @@ namespace MrgInfo.AdoQuery.App
             return RowCollection.Create(table).Import(0, RowConf.Create("Id", "Code", "Name", "Unit price").PresetTH());
         }
 
-        static async Task RunAsync(SqlProvider provider)
+        static async Task RunAsync(QueryProvider provider)
         {
             WriteTitle(provider.ToString());
             WriteLine($"Count AB: {Count(provider, "AB")}");
@@ -82,7 +82,7 @@ namespace MrgInfo.AdoQuery.App
             PressAnyKey();
         }
 
-        static FakeSqlProvider CreateFake()
+        static FakeQueryProvider CreateFake()
         {
             IReadOnlyList<object?>[] product =
             {
@@ -94,7 +94,7 @@ namespace MrgInfo.AdoQuery.App
                 new object?[] { 60, "PQ789", "GM Saturn", 2250.99 },
                 new object?[] { 70, "PQ945", null, 150.15 },
             };
-            var fakeData = new FakeIdSqlProvider
+            var fakeData = new ByIdFakeQueryProvider
             {
                 [nameof(Count), "1"] = new IReadOnlyList<object?>[] { new object?[] { product.Length } },
                 [nameof(CountAsync), "1"] = new IReadOnlyList<object?>[] { new object?[] { product.Length } },
@@ -107,20 +107,33 @@ namespace MrgInfo.AdoQuery.App
             return fakeData;
         }
 
+        static void PlayFakeOnDb(FakeQueryProvider fake, DbQueryProvider db)
+        {
+            const string fileName = "queries.xml";
+            fake.SaveAllQueries(fileName);
+            QueriesCollection? queries = QueriesCollection.Load(fileName);
+            Query.IdMapper = i => i;
+            foreach (Query query in queries)
+            {
+                WriteLine($"Record count of {query.Id} is {query.RunCount(db)}");
+            }
+        }
+
         [SuppressMessage("Style", "IDE1006:Naming Styles")]
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         static async Task Main()
         {
             BufferHeight = WindowHeight = WindowHeightMax - 6;
             BufferWidth = WindowWidth = WindowWidthMax - 6;
             CursorVisible = false;
             RowCollection.DefaultSettings.Border.Enabled = true;
-            var microsoft = new SqlProvider(new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;"));
-            var oracle = new SqlProvider(new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;"));
-            FakeSqlProvider fake = CreateFake();
+            var microsoft = new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
+            var oracle = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;");
+            FakeQueryProvider fake = CreateFake();
             await RunAsync(microsoft).ConfigureAwait(false);
             await RunAsync(oracle).ConfigureAwait(false);
             await RunAsync(fake).ConfigureAwait(false);
-            fake.SaveAllQueries("queries.xml");
+            PlayFakeOnDb(fake, microsoft);
             WriteHl("Program finished.");
         }
     }

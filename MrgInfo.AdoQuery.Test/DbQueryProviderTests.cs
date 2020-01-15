@@ -15,7 +15,7 @@ namespace MrgInfo.AdoQuery.Test
     ///     Adatbázis lekérdezéséket futtató szolgáltatás tesztesetek.
     /// </summary>
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
-    public sealed class SqlProviderTests
+    public sealed class DbQueryProviderTests
     {
         /// <summary>
         ///     Adatbázis-kiszolgálók.
@@ -27,10 +27,10 @@ namespace MrgInfo.AdoQuery.Test
         {
             get
             {
-                yield return new object[] { new SqlDatabaseSettings("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;") };
-                yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;") };
-                //yield return new object[] { new SqlDatabaseSettings("Data Source=.;Integrated Security=True;Initial Catalog=AdoQuery;") };
-                //yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)));User Id=/;Password=;Integrated Security=True") };
+                yield return new object[] { new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;") };
+                // yield return new object[] { new SqlQueryProvider("Data Source=.;Integrated Security=True;Initial Catalog=AdoQuery;") };
+                yield return new object[] { new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;") };
+                // yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)));User Id=/;Password=;Integrated Security=True") };
             }
         }
 
@@ -42,19 +42,19 @@ namespace MrgInfo.AdoQuery.Test
         /// <param name="output">
         ///     Kimenetkezelő.
         /// </param>
-        public SqlProviderTests(ITestOutputHelper output) =>
+        public DbQueryProviderTests(ITestOutputHelper output) =>
             Output = output ?? throw new ArgumentNullException(nameof(output));
 
         /// <summary>
         ///     Adatbázis elérések tesztelése.
         /// </summary>
-        /// <param name="settings">
-        ///     Adatbázis beállítások.
+        /// <param name="provider">
+        ///     Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
-        public void TestConnection(IDatabaseSettings settings)
+        public void TestConnection(QueryProvider provider)
         {
-            var provider = new SqlProvider(settings ?? throw new ArgumentNullException(nameof(settings)));
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
 
             var watch = Stopwatch.StartNew();
 
@@ -73,14 +73,14 @@ namespace MrgInfo.AdoQuery.Test
         /// <summary>
         ///     A projekcióból kimaradó oszlopok alapértelmezett értékkel töltődnek.
         /// </summary>
-        /// <param name="settings">
-        ///     Adatbázis beállítások.
+        /// <param name="provider">
+        ///     Query provider.
         /// </param>
         [SuppressMessage("ReSharper", "UseDeconstructionOnParameter")]
         [Theory, MemberData(nameof(Vendors))]
-        public void TestExtraColumns(IDatabaseSettings settings)
+        public void TestExtraColumns(QueryProvider provider)
         {
-            var provider = new SqlProvider(settings ?? throw new ArgumentNullException(nameof(settings)));
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
 
             var watch = Stopwatch.StartNew();
 
@@ -107,13 +107,13 @@ namespace MrgInfo.AdoQuery.Test
         /// <summary>
         ///     Adatbázis <c>NULL</c> tesztelése.
         /// </summary>
-        /// <param name="settings">
-        ///     Adatbázis beállítások.
+        /// <param name="provider">
+        ///     Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
-        public void TestNull(IDatabaseSettings settings)
+        public void TestNull(QueryProvider provider)
         {
-            var provider = new SqlProvider(settings ?? throw new ArgumentNullException(nameof(settings)));
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
 
             var watch = Stopwatch.StartNew();
 

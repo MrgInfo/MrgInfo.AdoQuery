@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,26 +13,17 @@ using System.Threading.Tasks;
 using System.Xml;
 using static System.Diagnostics.SourceLevels;
 
-namespace MrgInfo.AdoQuery.Core.Fake
+namespace MrgInfo.AdoQuery.Core
 {
-    /// <inheritdoc cref="SqlProvider" />
+    /// <inheritdoc cref="QueryProvider" />
     /// <summary>
     ///     Fake data query provider.
     /// </summary>
-    public abstract class FakeSqlProvider: SqlProvider
+    public abstract class FakeQueryProvider: QueryProvider
     {
-        sealed class FakeDatabaseSettings: IDatabaseSettings
-        {
-            public DbConnection CreateConnection() => throw new NotSupportedException();
+        static TraceSource TraceSource { get; } = new TraceSource(nameof(FakeQueryProvider), Information);
 
-            public string CreateParameterName(int index) => throw new NotSupportedException();
-
-            public override string ToString() => "Fake database";
-        }
-
-        static TraceSource TraceSource { get; } = new TraceSource(nameof(FakeSqlProvider), Information);
-
-        static void Print(SqlQuery query)
+        static void Print(Query query)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
@@ -48,12 +38,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
             TraceSource.TraceInformation(text.ToString());
         }
 
-        ConcurrentStack<SqlQuery> Queries { get; } = new ConcurrentStack<SqlQuery>();
-
-        /// <inheritdoc />
-        protected FakeSqlProvider()
-            : base(new FakeDatabaseSettings())
-        { }
+        ConcurrentStack<Query> Queries { get; } = new ConcurrentStack<Query>();
 
         /// <summary>
         ///     Lekérdezés hamisítás regisztrációja.
@@ -71,7 +56,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
         {
             if (sql == null) throw new ArgumentNullException(nameof(sql));
 
-            string @namespace = typeof(SqlProvider).Namespace ?? "@";
+            string @namespace = typeof(QueryProvider).Namespace ?? "@";
             var i = 2;
             MethodBase? method;
             do
@@ -80,7 +65,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
             }
             while (method.DeclaringType?.Namespace != null 
                    && method.DeclaringType.Namespace.StartsWith(@namespace, StringComparison.Ordinal));
-            var sqlQuery = new SqlQuery
+            var sqlQuery = new Query
             {
                 Id = id,
                 Caller = $"{method.DeclaringType?.FullName}.{method.Name}",
@@ -111,18 +96,8 @@ namespace MrgInfo.AdoQuery.Core.Fake
         /// </returns>
         protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args);
 
-        internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
-        {
-            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
-            return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
-                ? Cast<TResult>(fakeData[0][0])
-                : default;
-        }
-
-        private protected override Task<TResult> ReadAsync<TResult>(string? id, string? format, IReadOnlyList<object?>? args, CancellationToken token = default) =>
-            Task.Run(() => Read<TResult>(id, format, args), token);
-
-        internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
+        /// <inheritdoc />
+        protected internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
             IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
             if (fakeData == null) yield break;
@@ -132,7 +107,11 @@ namespace MrgInfo.AdoQuery.Core.Fake
             }
         }
 
-        private protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
+        /// <inheritdoc />
+        /// <remarks>
+        ///     No real async.
+        /// </remarks>
+        protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
             await Task.Yield();
             foreach (object?[] row in Query(id, query, parameters, columns))
@@ -141,6 +120,22 @@ namespace MrgInfo.AdoQuery.Core.Fake
                 yield return row;
             }
         }
+
+        /// <inheritdoc />
+        protected internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
+        {
+            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
+            return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
+                ? Cast<TResult>(fakeData[0][0])
+                : default;
+        }
+
+        /// <inheritdoc />
+        /// <remarks>
+        ///     No real async.
+        /// </remarks>
+        protected  override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default) =>
+            await Task.FromResult(Read<TResult>(id, query, args)).ConfigureAwait(false);
 
         /// <summary>
         ///     Összegyűjtött lekérdezése mentése.
@@ -173,7 +168,7 @@ namespace MrgInfo.AdoQuery.Core.Fake
             };
             using var dictionaryWriter = XmlWriter.Create(writer, settings);
             dictionaryWriter.WriteStartDocument();
-            var data = new SqlQueriesCollection(Queries);
+            var data = new QueriesCollection(Queries);
             var dcs = new DataContractSerializer(data.GetType());
             dcs.WriteObject(dictionaryWriter, data);
         }
@@ -195,5 +190,8 @@ namespace MrgInfo.AdoQuery.Core.Fake
             using StreamWriter stream = File.CreateText(fileName);
             SaveAllQueries(stream);
         }
+
+        /// <inheritdoc />
+        public override string ToString() => "Fake database";
     }
 }

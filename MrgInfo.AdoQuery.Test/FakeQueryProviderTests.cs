@@ -8,14 +8,13 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using MrgInfo.AdoQuery.Core;
-using MrgInfo.AdoQuery.Core.Fake;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace MrgInfo.AdoQuery.Test
 {
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
-    public sealed class FakeSqlProviderTests
+    public sealed class FakeQueryProviderTests
     {
         ITestOutputHelper Output { get; }
 
@@ -25,7 +24,7 @@ namespace MrgInfo.AdoQuery.Test
         /// <param name="output">
         ///     Kimenetkezelő.
         /// </param>
-        public FakeSqlProviderTests(ITestOutputHelper output) =>
+        public FakeQueryProviderTests(ITestOutputHelper output) =>
             Output = output ?? throw new ArgumentNullException(nameof(output));
 
         static IList<IReadOnlyList<object?>> Product { get; } = new IReadOnlyList<object?>[]
@@ -46,7 +45,7 @@ namespace MrgInfo.AdoQuery.Test
         public void TestFakeWithGuid()
         {
             Guid query1 = Guid.NewGuid(), query2 = Guid.NewGuid();
-            var provider = new FakeIdSqlProvider
+            var provider = new ByIdFakeQueryProvider
             {
                 [$"{query1}"] = Product,
                 [$"{query2}"] = Product,
@@ -80,7 +79,7 @@ namespace MrgInfo.AdoQuery.Test
         [Fact]
         public void TestFakeWithInt()
         {
-            var provider = new FakeIdSqlProvider
+            var provider = new ByIdFakeQueryProvider
             {
                 [nameof(TestFakeWithInt), "1"] = Product,
                 [nameof(TestFakeWithInt), "2"] = Product,
@@ -114,7 +113,7 @@ namespace MrgInfo.AdoQuery.Test
         [Fact]
         public void TestFakeWithRegex()
         {
-            var provider = new FakePatternSqlProvider
+            var provider = new ByPatternFakeQueryProvider
             {
                 ["productid.+code.+product"] = Product
             };
@@ -150,7 +149,7 @@ namespace MrgInfo.AdoQuery.Test
             const int numb = 100000;
             const string str = "x";
 
-            var fakeProvider = new FakePatternSqlProvider();
+            var fakeProvider = new ByPatternFakeQueryProvider();
             var watch = new Stopwatch();
             string xml;
             using (var writer = new StringWriter())
@@ -175,9 +174,9 @@ namespace MrgInfo.AdoQuery.Test
 
             using var stream = new MemoryStream(Encoding.Unicode.GetBytes(xml));
             using var reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
-            var serializer = new DataContractSerializer(typeof(SqlQueriesCollection));
-            var queries = serializer.ReadObject(reader, false) as SqlQueriesCollection;
-            
+            var serializer = new DataContractSerializer(typeof(QueriesCollection));
+            var queries = serializer.ReadObject(reader, false) as QueriesCollection;
+
             Assert.NotNull(queries);
             Assert.NotEmpty(queries);
             Assert.NotNull(queries![0]);
