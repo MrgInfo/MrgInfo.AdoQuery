@@ -3,6 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Groma István</Authors>
+    <Company>MRG-Infó Bt.</Company>
+    <Product>MrgInfo.AdoQuery</Product>
+    <Description>Run safe and effective ADO .NET SQL queries on Microsoft SQL Server.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
+    <PackageTags>Microsoft SQL Server</PackageTags>
+    <Copyright>MRG-Info © 2020</Copyright>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

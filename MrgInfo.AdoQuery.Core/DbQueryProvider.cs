@@ -170,7 +170,7 @@ namespace MrgInfo.AdoQuery.Core
 
         /// <inheritdoc />
         [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
-        protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
+        protected internal override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
             if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");
 
@@ -203,7 +203,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <inheritdoc />
-        protected override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default)
+        protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default)
         {
             if (string.IsNullOrEmpty(query)) return default!;
             await using DbConnection connection = CreateConnection();

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using static System.Globalization.CultureInfo;
 
 namespace MrgInfo.AdoQuery.Core
@@ -38,34 +40,37 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Lekérdezés egyedi azonosítója.
+        ///     Unique identifier.
         /// </summary>
         [DataMember(Order = 0)]
         public string? Id { get; set; }
 
         /// <summary>
-        ///     Lekérdezést futtató metódus.
+        ///     Caller method.
         /// </summary>
         [DataMember(Order = 1)]
         public string? Caller { get; set; }
 
         /// <summary>
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     The query command.
         /// </summary>
         [DataMember(Order = 2)]
         public string? Command { get; set; }
 
         /// <summary>
-        ///     Lekérdezés paraméterei.
+        ///     Query parameters.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
         public List<object?> Parameters { get; private set; } = new List<object?>();
 
         /// <summary>
-        ///     Lekérdezési paraméterek sorosítása.
+        ///     Serializing query parameters.
         /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="value"/> has <c>null</c> value.
+        /// </exception>
         /// <exception cref="FormatException">
-        ///     Hibás formátum.
+        ///     Invalid format.
         /// </exception>
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         [DataMember(Order = 3, Name =nameof(Parameters))]
@@ -104,16 +109,16 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Lekérdezés futtatása.
+        ///     Run query.
         /// </summary>
         /// <param name="provider">
-        ///     A lekérdezést végrehajtó szolgáltatás.
+        ///     Query provider.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     <paramref name="provider"/> értéke <c>null</c>.
+        ///     The <paramref name="provider"/> argument has <c>null</c> value.
         /// </exception>
         /// <exception cref="QueryDbException">
-        ///     Futás során keletkezett hiba.
+        ///     Error occured during executing the query.
         /// </exception>
         public void Run(DbQueryProvider provider)
         {
@@ -131,19 +136,49 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Lekérdezés futtatása és rekordok megszámlálása.
+        ///     Run query asynchronously.
         /// </summary>
         /// <param name="provider">
-        ///     A lekérdezést végrehajtó szolgáltatás.
+        ///     Query provider.
         /// </param>
-        /// <returns>
-        ///     Rekordok száma.
-        /// </returns>
+        /// <param name="token">
+        ///     The cancellation token that will be checked for stop reading.
+        /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     <paramref name="provider"/> értéke <c>null</c>.
+        ///     The <paramref name="provider"/> argument has <c>null</c> value.
         /// </exception>
         /// <exception cref="QueryDbException">
-        ///     Futás során keletkezett hiba.
+        ///     Error occured during executing the query.
+        /// </exception>
+        public async Task RunAsync(DbQueryProvider provider, CancellationToken token = default)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+
+            object?[] args = MapIds(Parameters.ToArray());
+            try
+            {
+                await provider.ReadAsync<string>(Id, Command ?? "", args, token).ConfigureAwait(false);
+            }
+            catch (Exception exp)
+            {
+                throw new QueryDbException(Id, Command, Parameters, exp);
+            }
+        }
+
+        /// <summary>
+        ///     Run query and count records.
+        /// </summary>
+        /// <param name="provider">
+        ///     Query provider.
+        /// </param>
+        /// <returns>
+        ///     Record count.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="provider"/> argument has <c>null</c> value.
+        /// </exception>
+        /// <exception cref="QueryDbException">
+        ///     Error occured during executing the query.
         /// </exception>
         public int? RunCount(DbQueryProvider provider)
         {
@@ -153,6 +188,41 @@ namespace MrgInfo.AdoQuery.Core
             try
             {
                 return provider.Query(Id, Command, args, 1).Count();
+            }
+            catch (Exception exp)
+            {
+                throw new QueryDbException(Id, Command, Parameters, exp);
+            }
+        }
+
+        /// <summary>
+        ///     Run query asynchronously.
+        /// </summary>
+        /// <param name="provider">
+        ///     Query provider.
+        /// </param>
+        /// <param name="token">
+        ///     The cancellation token that will be checked for stop reading.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="provider"/> argument has <c>null</c> value.
+        /// </exception>
+        /// <exception cref="QueryDbException">
+        ///     Error occured during executing the query.
+        /// </exception>
+        public async Task<int?> RunCountAsync(DbQueryProvider provider, CancellationToken token = default)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+
+            object?[] args = MapIds(Parameters.ToArray());
+            try
+            {
+                var i = 0;
+                await foreach (object?[] _ in provider.QueryAsync(Id, Command ?? "", args, 1, token))
+                {
+                    ++i;
+                }
+                return i;
             }
             catch (Exception exp)
             {

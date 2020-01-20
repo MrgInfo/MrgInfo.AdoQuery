@@ -41,16 +41,16 @@ namespace MrgInfo.AdoQuery.Core
         ConcurrentStack<Query> Queries { get; } = new ConcurrentStack<Query>();
 
         /// <summary>
-        ///     Lekérdezés hamisítás regisztrációja.
+        ///     TODO Lekérdezés hamisítás regisztrációja.
         /// </summary>
         /// <param name="id">
-        ///     Az <c>SQL</c> lekérdezés egyedi azonosítója.
+        ///     TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
         /// </param>
         /// <param name="sql">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     TODO Az <c>SQL</c> lekérdezés.
         /// </param>
         /// <param name="args">
-        ///     Az <c>SQL</c> lekérdezés paraméterei.
+        ///     TODO Az <c>SQL</c> lekérdezés paraméterei.
         /// </param>
         protected void RegisterQuery(string? id, string sql, IEnumerable<object?>? args)
         {
@@ -80,19 +80,19 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     A hamisított eredmény kikeresése.
+        ///     TODO A hamisított eredmény kikeresése.
         /// </summary>
         /// <param name="id">
-        ///     Az <c>SQL</c> lekérdezés egyedi azonosítója.
+        ///     TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
         /// </param>
         /// <param name="query">
-        ///     Az <c>SQL</c> lekérdezés.
+        ///     TODO Az <c>SQL</c> lekérdezés.
         /// </param>
         /// <param name="args">
-        ///     Az <c>SQL</c> lekérdezés paraméterei.
+        ///     TODO Az <c>SQL</c> lekérdezés paraméterei.
         /// </param>
         /// <returns>
-        ///     A hamisított adatok sor-oszlop indexeléssel.
+        ///     TODO A hamisított adatok sor-oszlop indexeléssel.
         /// </returns>
         protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args);
 
@@ -111,7 +111,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <remarks>
         ///     No real async.
         /// </remarks>
-        protected override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
+        protected internal override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
             await Task.Yield();
             foreach (object?[] row in Query(id, query, parameters, columns))
@@ -134,17 +134,17 @@ namespace MrgInfo.AdoQuery.Core
         /// <remarks>
         ///     No real async.
         /// </remarks>
-        protected  override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default) =>
+        protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default) =>
             await Task.FromResult(Read<TResult>(id, query, args)).ConfigureAwait(false);
 
         /// <summary>
-        ///     Összegyűjtött lekérdezése mentése.
+        ///     TODO Összegyűjtött lekérdezése mentése.
         /// </summary>
         /// <param name="writer">
-        ///     A kiírt adatfolyam.
+        ///     TODO A kiírt adatfolyam.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="writer"/> értéke <c>null</c>.
+        ///     TODO A <paramref name="writer"/> értéke <c>null</c>.
         /// </exception>
         public void SaveAllQueries(TextWriter writer)
         {
@@ -174,13 +174,13 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Összegyűjtött lekérdezése mentése.
+        ///     TODO Összegyűjtött lekérdezése mentése.
         /// </summary>
         /// <param name="fileName">
-        ///     A fájl neve.
+        ///     TODO A fájl neve.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     A <paramref name="fileName"/> értéke <c>null</c>.
+        ///     TODO A <paramref name="fileName"/> értéke <c>null</c>.
         /// </exception>
         public void SaveAllQueries(string fileName)
         {

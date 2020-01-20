@@ -3,6 +3,20 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Groma István</Authors>
+    <Company>GMRG-Infó Bt.</Company>
+    <Product>MrgInfo.AdoQuery</Product>
+    <Description>Run safe and effective ADO .NET SQL queries on Oracle Database.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Oracle Database</PackageTags>
+    <Copyright>MRG-Info © 2020</Copyright>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +29,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

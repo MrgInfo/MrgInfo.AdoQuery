@@ -11,7 +11,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
-    <PackageTags>SQL</PackageTags>
+    <PackageTags>SQL ADO</PackageTags>
     <Copyright>MRG-Info © 2020</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>

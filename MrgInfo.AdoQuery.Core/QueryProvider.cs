@@ -96,13 +96,13 @@ namespace MrgInfo.AdoQuery.Core
                 : null;
 
         /// <summary>
-        ///     Törli a behúzást a | karakterig minden sorban.
+        ///     TODO Törli a behúzást a | karakterig minden sorban.
         /// </summary>
         /// <param name="query">
-        ///     Az SQL lekérdezés.
+        ///     TODO Az SQL lekérdezés.
         /// </param>
         /// <returns>
-        ///     Az átformázott lekérdezés.
+        ///     TODO Az átformázott lekérdezés.
         /// </returns>
         protected static string RemoveTrailing(string? query)
         {
@@ -123,20 +123,20 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Objektum típuskényszerítése, amennyiben lehetséges.
+        ///     TODO Objektum típuskényszerítése, amennyiben lehetséges.
         /// </summary>
         /// <typeparam name="TResult">
-        ///     A kényszerített típus.
+        ///     TODO A kényszerített típus.
         /// </typeparam>
         /// <param name="value">
-        ///     Az objektum.
+        ///     TODO Az objektum.
         /// </param>
         /// <returns>
-        ///     Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
+        ///     TODO Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
         ///     típus alapértelmezett értéke.
         /// </returns>
         /// <exception cref="InvalidCastException">
-        ///     Ha nem lehetséges az adott erős típuskényszerítés.
+        ///     TODO Ha nem lehetséges az adott erős típuskényszerítés.
         /// </exception>
         [SuppressMessage("ReSharper", "InvertIf")]
         [return: MaybeNull]
@@ -170,7 +170,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Run query synchronously.
         /// </summary>
         /// <param name="id">
-        ///     The unique indentifier of query.
+        ///     The unique identifier of query.
         /// </param>
         /// <param name="query">
         ///     The query command.
@@ -454,7 +454,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Run query asynchronously.
         /// </summary>
         /// <param name="id">
-        ///     The unique indentifier of query.
+        ///     The unique identifier of query.
         /// </param>
         /// <param name="query">
         ///     The query command.
@@ -474,7 +474,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Invalid number of columns in <paramref name="columns"/>.
         /// </exception>
-        protected abstract IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, CancellationToken token = default);
+        protected internal abstract IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, CancellationToken token = default);
 
         async IAsyncEnumerable<object?[]> SafeQueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
@@ -785,13 +785,13 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Run query syncronously with scalar result.
+        ///     Run query synchronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
         ///     Type of result.
         /// </typeparam>
         /// <param name="id">
-        ///     The unique indentifier of query.
+        ///     The unique identifier of query.
         /// </param>
         /// <param name="query">
         ///     The query command.
@@ -818,7 +818,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Run query syncronously with scalar result.
+        ///     Run query synchronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
         ///     Type of result.
@@ -837,13 +837,13 @@ namespace MrgInfo.AdoQuery.Core
             SafeRead<TResult>(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments());
 
         /// <summary>
-        ///     Run query asyncronously with scalar result.
+        ///     Run query asynchronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
         ///     Type of result.
         /// </typeparam>
         /// <param name="id">
-        ///     The unique indentifier of query.
+        ///     The unique identifier of query.
         /// </param>
         /// <param name="query">
         ///     The query command.
@@ -857,7 +857,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <returns>
         ///     Scalar value.
         /// </returns>
-        protected abstract Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default);
+        protected internal abstract Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default);
 
         async Task<TResult> SafeReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters, CancellationToken token = default)
         {
@@ -872,7 +872,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Run query asyncronously with scalar result.
+        ///     Run query asynchronously with scalar result.
         /// </summary>
         /// <typeparam name="TResult">
         ///     Type of result.
