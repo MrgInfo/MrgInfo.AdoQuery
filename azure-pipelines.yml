@@ -34,7 +34,7 @@ steps:
   displayName: 'Create package'
   inputs:
     command: 'pack'
-    packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj'
+    packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj'
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '$(major)'
     minorVersion: '$(minor)'
