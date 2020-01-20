@@ -141,12 +141,12 @@ namespace MrgInfo.AdoQuery.Core
         ///     TODO Összegyűjtött lekérdezése mentése.
         /// </summary>
         /// <param name="writer">
-        ///     TODO A kiírt adatfolyam.
+        ///     File stream.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     TODO A <paramref name="writer"/> értéke <c>null</c>.
+        ///     The <paramref name="writer" /> argument has <c>null</c> value.
         /// </exception>
-        public void SaveAllQueries(TextWriter writer)
+        public void SaveQueries(TextWriter writer)
         {
             if (writer == null) throw new ArgumentNullException(nameof(writer));
 
@@ -174,21 +174,21 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     TODO Összegyűjtött lekérdezése mentése.
+        ///     Save registered queries.
         /// </summary>
         /// <param name="fileName">
-        ///     TODO A fájl neve.
+        ///     Export file's name.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        ///     TODO A <paramref name="fileName"/> értéke <c>null</c>.
+        ///     The <paramref name="fileName" /> argument has <c>null</c> value.
         /// </exception>
-        public void SaveAllQueries(string fileName)
+        public void SaveQueries(string fileName)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
 
             if (Queries.IsEmpty) return;
             using StreamWriter stream = File.CreateText(fileName);
-            SaveAllQueries(stream);
+            SaveQueries(stream);
         }
 
         /// <inheritdoc />

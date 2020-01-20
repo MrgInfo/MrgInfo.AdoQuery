@@ -12,7 +12,7 @@ then
 fi
 
 # logfile
-INIT_LOG=$LOG_DIR/dockerInit.log
+INIT_LOG=$LOG_DIR/dockerInitWithDb.log
 echo `date` >> $INIT_LOG
 
 # check setup path
@@ -43,7 +43,6 @@ echo "" >> $INIT_LOG
 # create database
 if [ ! -f $LOG_DIR/database.log ]; then
     cat $SETUP_DIR/database.sql | sqlplus sys/$DB_PASSWD@//localhost:1521/$DB_SID as sysdba 2>&1 >$LOG_DIR/database.log
-    cat $LOG_DIR/database.log
 fi
 
 # remove passwd param

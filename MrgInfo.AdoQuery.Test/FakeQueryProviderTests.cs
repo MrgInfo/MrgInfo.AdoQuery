@@ -161,7 +161,7 @@ namespace MrgInfo.AdoQuery.Test
                     | where 'xxx' {str:=*}
                     |   and 42 {null:!=}
                     |   and productid > {numb}"));
-                fakeProvider.SaveAllQueries(writer);
+                fakeProvider.SaveQueries(writer);
                 fakeProvider.Clear();
                 watch.Stop();
                 xml = writer.ToString();

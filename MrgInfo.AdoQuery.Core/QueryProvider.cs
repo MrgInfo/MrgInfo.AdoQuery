@@ -96,13 +96,13 @@ namespace MrgInfo.AdoQuery.Core
                 : null;
 
         /// <summary>
-        ///     TODO Törli a behúzást a | karakterig minden sorban.
+        ///     Removes trailing whitespace before | character.
         /// </summary>
         /// <param name="query">
-        ///     TODO Az SQL lekérdezés.
+        ///     Query to format.
         /// </param>
         /// <returns>
-        ///     TODO Az átformázott lekérdezés.
+        ///     Formatted query.
         /// </returns>
         protected static string RemoveTrailing(string? query)
         {
@@ -123,20 +123,19 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     TODO Objektum típuskényszerítése, amennyiben lehetséges.
+        ///     Universal cast / convert function.
         /// </summary>
         /// <typeparam name="TResult">
-        ///     TODO A kényszerített típus.
+        ///     The required type.
         /// </typeparam>
         /// <param name="value">
-        ///     TODO Az objektum.
+        ///     The value to cast or convert.
         /// </param>
         /// <returns>
-        ///     TODO Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
-        ///     típus alapértelmezett értéke.
+        ///     <paramref name="value"/> converted to <typeparamref name="TResult"/> type or default if <c>null</c>.
         /// </returns>
         /// <exception cref="InvalidCastException">
-        ///     TODO Ha nem lehetséges az adott erős típuskényszerítés.
+        ///     Converting <paramref name="value"/> to <typeparamref name="TResult"/> is not possible.
         /// </exception>
         [SuppressMessage("ReSharper", "InvertIf")]
         [return: MaybeNull]

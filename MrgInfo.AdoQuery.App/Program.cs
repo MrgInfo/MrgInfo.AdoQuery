@@ -110,7 +110,7 @@ namespace MrgInfo.AdoQuery.App
         static void PlayFakeOnDb(FakeQueryProvider fake, DbQueryProvider db)
         {
             const string fileName = "queries.xml";
-            fake.SaveAllQueries(fileName);
+            fake.SaveQueries(fileName);
             QueriesCollection? queries = QueriesCollection.Load(fileName);
             Query.IdMapper = i => i;
             foreach (Query query in queries)

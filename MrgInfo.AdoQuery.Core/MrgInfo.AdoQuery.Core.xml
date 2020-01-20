@@ -323,6 +323,28 @@
         <member name="T:MrgInfo.AdoQuery.Core.QueriesCollection">
             <inheritdoc />
         </member>
+        <member name="M:MrgInfo.AdoQuery.Core.QueriesCollection.Load(System.String)">
+            <summary>
+                Load query collection from <c>XML</c> file.
+            </summary>
+            <param name="fileName">
+                File name.
+            </param>
+            <returns>
+                Query collection.
+            </returns>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.QueriesCollection.Load(System.IO.StreamReader)">
+            <summary>
+                Load query collection from <c>XML</c> file.
+            </summary>
+            <param name="reader">
+                File stream.
+            </param>
+            <returns>
+                Query collection.
+            </returns>
+        </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueriesCollection.#ctor">
             <inheritdoc />
         </member>
