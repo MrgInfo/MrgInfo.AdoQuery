@@ -206,33 +206,33 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.RegisterQuery(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
-                Lekérdezés hamisítás regisztrációja.
+                TODO Lekérdezés hamisítás regisztrációja.
             </summary>
             <param name="id">
-                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+                TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
             </param>
             <param name="sql">
-                Az <c>SQL</c> lekérdezés.
+                TODO Az <c>SQL</c> lekérdezés.
             </param>
             <param name="args">
-                Az <c>SQL</c> lekérdezés paraméterei.
+                TODO Az <c>SQL</c> lekérdezés paraméterei.
             </param>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
-                A hamisított eredmény kikeresése.
+                TODO A hamisított eredmény kikeresése.
             </summary>
             <param name="id">
-                Az <c>SQL</c> lekérdezés egyedi azonosítója.
+                TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
             </param>
             <param name="query">
-                Az <c>SQL</c> lekérdezés.
+                TODO Az <c>SQL</c> lekérdezés.
             </param>
             <param name="args">
-                Az <c>SQL</c> lekérdezés paraméterei.
+                TODO Az <c>SQL</c> lekérdezés paraméterei.
             </param>
             <returns>
-                A hamisított adatok sor-oszlop indexeléssel.
+                TODO A hamisított adatok sor-oszlop indexeléssel.
             </returns>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
@@ -255,24 +255,24 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveAllQueries(System.IO.TextWriter)">
             <summary>
-                Összegyűjtött lekérdezése mentése.
+                TODO Összegyűjtött lekérdezése mentése.
             </summary>
             <param name="writer">
-                A kiírt adatfolyam.
+                TODO A kiírt adatfolyam.
             </param>
             <exception cref="T:System.ArgumentNullException">
-                A <paramref name="writer"/> értéke <c>null</c>.
+                TODO A <paramref name="writer"/> értéke <c>null</c>.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveAllQueries(System.String)">
             <summary>
-                Összegyűjtött lekérdezése mentése.
+                TODO Összegyűjtött lekérdezése mentése.
             </summary>
             <param name="fileName">
-                A fájl neve.
+                TODO A fájl neve.
             </param>
             <exception cref="T:System.ArgumentNullException">
-                A <paramref name="fileName"/> értéke <c>null</c>.
+                TODO A <paramref name="fileName"/> értéke <c>null</c>.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.ToString">
@@ -342,61 +342,98 @@
         </member>
         <member name="P:MrgInfo.AdoQuery.Core.Query.Id">
             <summary>
-                Lekérdezés egyedi azonosítója.
+                Unique identifier.
             </summary>
         </member>
         <member name="P:MrgInfo.AdoQuery.Core.Query.Caller">
             <summary>
-                Lekérdezést futtató metódus.
+                Caller method.
             </summary>
         </member>
         <member name="P:MrgInfo.AdoQuery.Core.Query.Command">
             <summary>
-                Az <c>SQL</c> lekérdezés.
+                The query command.
             </summary>
         </member>
         <member name="P:MrgInfo.AdoQuery.Core.Query.Parameters">
             <summary>
-                Lekérdezés paraméterei.
+                Query parameters.
             </summary>
         </member>
         <member name="P:MrgInfo.AdoQuery.Core.Query.QueryParameters">
             <summary>
-                Lekérdezési paraméterek sorosítása.
+                Serializing query parameters.
             </summary>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="value"/> has <c>null</c> value.
+            </exception>
             <exception cref="T:System.FormatException">
-                Hibás formátum.
+                Invalid format.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.Query.Run(MrgInfo.AdoQuery.Core.DbQueryProvider)">
             <summary>
-                Lekérdezés futtatása.
+                Run query.
             </summary>
             <param name="provider">
-                A lekérdezést végrehajtó szolgáltatás.
+                Query provider.
             </param>
             <exception cref="T:System.ArgumentNullException">
-                <paramref name="provider"/> értéke <c>null</c>.
+                The <paramref name="provider"/> argument has <c>null</c> value.
             </exception>
             <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
-                Futás során keletkezett hiba.
+                Error occured during executing the query.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Query.RunAsync(MrgInfo.AdoQuery.Core.DbQueryProvider,System.Threading.CancellationToken)">
+            <summary>
+                Run query asynchronously.
+            </summary>
+            <param name="provider">
+                Query provider.
+            </param>
+            <param name="token">
+                The cancellation token that will be checked for stop reading.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="provider"/> argument has <c>null</c> value.
+            </exception>
+            <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+                Error occured during executing the query.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.Query.RunCount(MrgInfo.AdoQuery.Core.DbQueryProvider)">
             <summary>
-                Lekérdezés futtatása és rekordok megszámlálása.
+                Run query and count records.
             </summary>
             <param name="provider">
-                A lekérdezést végrehajtó szolgáltatás.
+                Query provider.
             </param>
             <returns>
-                Rekordok száma.
+                Record count.
             </returns>
             <exception cref="T:System.ArgumentNullException">
-                <paramref name="provider"/> értéke <c>null</c>.
+                The <paramref name="provider"/> argument has <c>null</c> value.
             </exception>
             <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
-                Futás során keletkezett hiba.
+                Error occured during executing the query.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Query.RunCountAsync(MrgInfo.AdoQuery.Core.DbQueryProvider,System.Threading.CancellationToken)">
+            <summary>
+                Run query asynchronously.
+            </summary>
+            <param name="provider">
+                Query provider.
+            </param>
+            <param name="token">
+                The cancellation token that will be checked for stop reading.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="provider"/> argument has <c>null</c> value.
+            </exception>
+            <exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
+                Error occured during executing the query.
             </exception>
         </member>
         <member name="T:MrgInfo.AdoQuery.Core.QueryDbException">
@@ -463,31 +500,31 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.RemoveTrailing(System.String)">
             <summary>
-                Törli a behúzást a | karakterig minden sorban.
+                TODO Törli a behúzást a | karakterig minden sorban.
             </summary>
             <param name="query">
-                Az SQL lekérdezés.
+                TODO Az SQL lekérdezés.
             </param>
             <returns>
-                Az átformázott lekérdezés.
+                TODO Az átformázott lekérdezés.
             </returns>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Cast``1(System.Object)">
             <summary>
-                Objektum típuskényszerítése, amennyiben lehetséges.
+                TODO Objektum típuskényszerítése, amennyiben lehetséges.
             </summary>
             <typeparam name="TResult">
-                A kényszerített típus.
+                TODO A kényszerített típus.
             </typeparam>
             <param name="value">
-                Az objektum.
+                TODO Az objektum.
             </param>
             <returns>
-                Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
+                TODO Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
                 típus alapértelmezett értéke.
             </returns>
             <exception cref="T:System.InvalidCastException">
-                Ha nem lehetséges az adott erős típuskényszerítés.
+                TODO Ha nem lehetséges az adott erős típuskényszerítés.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
@@ -495,7 +532,7 @@
                 Run query synchronously.
             </summary>
             <param name="id">
-                The unique indentifier of query.
+                The unique identifier of query.
             </param>
             <param name="query">
                 The query command.
@@ -1662,7 +1699,7 @@
                 Run query asynchronously.
             </summary>
             <param name="id">
-                The unique indentifier of query.
+                The unique identifier of query.
             </param>
             <param name="query">
                 The query command.
@@ -2654,13 +2691,13 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Read``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object})">
             <summary>
-                Run query syncronously with scalar result.
+                Run query synchronously with scalar result.
             </summary>
             <typeparam name="TResult">
                 Type of result.
             </typeparam>
             <param name="id">
-                The unique indentifier of query.
+                The unique identifier of query.
             </param>
             <param name="query">
                 The query command.
@@ -2674,7 +2711,7 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Read``1(System.FormattableString)">
             <summary>
-                Run query syncronously with scalar result.
+                Run query synchronously with scalar result.
             </summary>
             <typeparam name="TResult">
                 Type of result.
@@ -2724,13 +2761,13 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
             <summary>
-                Run query asyncronously with scalar result.
+                Run query asynchronously with scalar result.
             </summary>
             <typeparam name="TResult">
                 Type of result.
             </typeparam>
             <param name="id">
-                The unique indentifier of query.
+                The unique identifier of query.
             </param>
             <param name="query">
                 The query command.
@@ -2747,7 +2784,7 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.ReadAsync``1(System.FormattableString,System.Threading.CancellationToken)">
             <summary>
-                Run query asyncronously with scalar result.
+                Run query asynchronously with scalar result.
             </summary>
             <typeparam name="TResult">
                 Type of result.

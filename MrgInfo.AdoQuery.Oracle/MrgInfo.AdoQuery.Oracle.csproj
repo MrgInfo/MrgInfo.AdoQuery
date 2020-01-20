@@ -17,6 +17,7 @@
     <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <DocumentationFile>MrgInfo.AdoQuery.Oracle.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

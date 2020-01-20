@@ -16,6 +16,7 @@
     <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <DocumentationFile>MrgInfo.AdoQuery.Sql.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

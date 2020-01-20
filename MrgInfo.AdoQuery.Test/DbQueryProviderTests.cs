@@ -12,13 +12,13 @@ using Xunit.Abstractions;
 namespace MrgInfo.AdoQuery.Test
 {
     /// <summary>
-    ///     Adatbázis lekérdezéséket futtató szolgáltatás tesztesetek.
+    ///     TODO Adatbázis lekérdezéséket futtató szolgáltatás tesztesetek.
     /// </summary>
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     public sealed class DbQueryProviderTests
     {
         /// <summary>
-        ///     Adatbázis-kiszolgálók.
+        ///     TODO Adatbázis-kiszolgálók.
         /// </summary>
         /// <returns>
         ///     Adatbázis elérés lista.
@@ -37,19 +37,19 @@ namespace MrgInfo.AdoQuery.Test
         ITestOutputHelper Output { get; }
 
         /// <summary>
-        ///     Konstruktor.
+        ///     TODO Konstruktor.
         /// </summary>
         /// <param name="output">
-        ///     Kimenetkezelő.
+        ///     TODO Kimenetkezelő.
         /// </param>
         public DbQueryProviderTests(ITestOutputHelper output) =>
             Output = output ?? throw new ArgumentNullException(nameof(output));
 
         /// <summary>
-        ///     Adatbázis elérések tesztelése.
+        ///     TODO Adatbázis elérések tesztelése.
         /// </summary>
         /// <param name="provider">
-        ///     Query provider.
+        ///     TODO Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
         public void TestConnection(QueryProvider provider)
@@ -71,10 +71,10 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     A projekcióból kimaradó oszlopok alapértelmezett értékkel töltődnek.
+        ///     TODO A projekcióból kimaradó oszlopok alapértelmezett értékkel töltődnek.
         /// </summary>
         /// <param name="provider">
-        ///     Query provider.
+        ///     TODO Query provider.
         /// </param>
         [SuppressMessage("ReSharper", "UseDeconstructionOnParameter")]
         [Theory, MemberData(nameof(Vendors))]
@@ -105,10 +105,10 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Adatbázis <c>NULL</c> tesztelése.
+        ///     TODO Adatbázis <c>NULL</c> tesztelése.
         /// </summary>
         /// <param name="provider">
-        ///     Query provider.
+        ///     TODO Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
         public void TestNull(QueryProvider provider)

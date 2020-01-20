@@ -16,29 +16,21 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
     <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
+    <DocumentationFile>MrgInfo.AdoQuery.Core.xml</DocumentationFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\MrgInfo.AdoQuery\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>D:\MrgInfo.AdoQuery\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="MrgInfo.AdoQuery.Core.xml" />
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

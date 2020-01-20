@@ -19,10 +19,10 @@ namespace MrgInfo.AdoQuery.Test
         ITestOutputHelper Output { get; }
 
         /// <summary>
-        ///     Konstruktor.
+        ///     TODO Konstruktor.
         /// </summary>
         /// <param name="output">
-        ///     Kimenetkezelő.
+        ///     TODO Kimenetkezelő.
         /// </param>
         public FakeQueryProviderTests(ITestOutputHelper output) =>
             Output = output ?? throw new ArgumentNullException(nameof(output));
@@ -39,7 +39,7 @@ namespace MrgInfo.AdoQuery.Test
         };
 
         /// <summary>
-        ///     Hamisítás tesztelése egyedi <see cref="Guid"/> azonosítóval.
+        ///     TODO Hamisítás tesztelése egyedi <see cref="Guid"/> azonosítóval.
         /// </summary>
         [Fact]
         public void TestFakeWithGuid()
@@ -74,7 +74,7 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Hamisítás tesztelése egyedi <see cref="int"/> azonosítóval.
+        ///     TODO Hamisítás tesztelése egyedi <see cref="int"/> azonosítóval.
         /// </summary>
         [Fact]
         public void TestFakeWithInt()
@@ -108,7 +108,7 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Hamisítás tesztelése reguláris kifejezéssel.
+        ///     TODO Hamisítás tesztelése reguláris kifejezéssel.
         /// </summary>
         [Fact]
         public void TestFakeWithRegex()
@@ -141,7 +141,7 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Lekérdezés sorosítás tesztelése.
+        ///     TODO Lekérdezés sorosítás tesztelése.
         /// </summary>
         [Fact]
         public void TestFakeSerialize()
