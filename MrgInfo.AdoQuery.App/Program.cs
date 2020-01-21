@@ -128,7 +128,7 @@ namespace MrgInfo.AdoQuery.App
             CursorVisible = false;
             RowCollection.DefaultSettings.Border.Enabled = true;
             var microsoft = new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
-            var oracle = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;");
+            var oracle = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCLCDB.localdomain)));User Id=adoquery;Password=adoquery;");
             FakeQueryProvider fake = CreateFake();
             await RunAsync(microsoft).ConfigureAwait(false);
             await RunAsync(oracle).ConfigureAwait(false);

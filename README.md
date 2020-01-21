@@ -7,8 +7,7 @@ Run safe and cosine ADO .NET SQL queries.
 This is how you should write ADO queries with data parameters.
 
 ```csharp
-const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-using DbConnection connection = new SqlConnection(connectionString);
+using DbConnection connection = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
 connection.Open();
 using DbCommand command = connection.CreateCommand();
 command.CommandText = @"
@@ -29,10 +28,8 @@ while (reader.Read())
 And this is how you always wanted:
 
 ```csharp
-const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-const string prefix = "A";
-
-var provider = new SqlQueryProvider(connectionString);
+var provider = new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
+var prefix = "A";
 var resultSet = provider.Query<(int, string)>($@"
     |  select ProductId,
     |         Name
@@ -52,8 +49,8 @@ foreach ((int productId, string name) in resultSet)
 Fetching data from SQL server is generally I/O bound, asynchronous reading has a value here.
 
 ```csharp
-var prefix = "A";
 var provider = new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
+var prefix = "A";
 var resultSet = provider.QueryAsync<(int, string)>($@"
     |  select ProductId,
     |         Name

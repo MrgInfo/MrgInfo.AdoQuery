@@ -47,7 +47,7 @@ namespace MrgInfo.AdoQuery.App
                 |  select ProductId,
                 |         Name
                 |    from Product
-                |   where Code like {prefix:=*}
+                |   where Code {prefix:=*}
                 |order by ProductId");
             foreach ((int productId, string name) in resultSet)
             {
@@ -91,7 +91,7 @@ namespace MrgInfo.AdoQuery.App
                 |  select ProductId,
                 |         Name
                 |    from Product
-                |   where Code like {prefix:=*}
+                |   where Code {prefix:=*}
                 |order by ProductId", cancellationToken);
             await foreach ((int productId, string name) in resultSet.WithCancellation(cancellationToken))
             {

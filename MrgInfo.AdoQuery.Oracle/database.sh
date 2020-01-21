@@ -12,7 +12,7 @@ then
 fi
 
 # logfile
-INIT_LOG=$LOG_DIR/dockerInitWithDb.log
+INIT_LOG=$LOG_DIR/dockerInit.log
 echo `date` >> $INIT_LOG
 
 # check setup path
@@ -40,17 +40,19 @@ fi
 
 echo "" >> $INIT_LOG
 
-# create database
-if [ ! -f $LOG_DIR/database.log ]; then
-    cat $SETUP_DIR/database.sql | sqlplus sys/$DB_PASSWD@//localhost:1521/$DB_SID as sysdba 2>&1 >$LOG_DIR/database.log
-fi
-
 # remove passwd param
 unset DB_PASSWD
 
 # basic parameters
 BASH_RC=/home/oracle/.bashrc
 source ${BASH_RC}
+
+if [ ! -f $LOG_DIR/database.log ]
+then
+    echo "Create Database"
+    echo "Create Database" >> $INIT_LOG
+    echo "exit;" | sqlplus / as sysdba @$SETUP_DIR/database.sql 2>&1 >$LOG_DIR/database.log
+fi
 
 # Define SIGTERM-handler for graceful shutdown
 term_handler() {

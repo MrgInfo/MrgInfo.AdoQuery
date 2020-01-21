@@ -253,26 +253,26 @@
                 No real async.
             </remarks>
         </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveAllQueries(System.IO.TextWriter)">
+        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.IO.TextWriter)">
             <summary>
                 TODO Összegyűjtött lekérdezése mentése.
             </summary>
             <param name="writer">
-                TODO A kiírt adatfolyam.
+                File stream.
             </param>
             <exception cref="T:System.ArgumentNullException">
-                TODO A <paramref name="writer"/> értéke <c>null</c>.
+                The <paramref name="writer" /> argument has <c>null</c> value.
             </exception>
         </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveAllQueries(System.String)">
+        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.String)">
             <summary>
-                TODO Összegyűjtött lekérdezése mentése.
+                Save registered queries.
             </summary>
             <param name="fileName">
-                TODO A fájl neve.
+                Export file's name.
             </param>
             <exception cref="T:System.ArgumentNullException">
-                TODO A <paramref name="fileName"/> értéke <c>null</c>.
+                The <paramref name="fileName" /> argument has <c>null</c> value.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.ToString">
@@ -328,7 +328,7 @@
                 Load query collection from <c>XML</c> file.
             </summary>
             <param name="fileName">
-                File name.
+                Import file's name.
             </param>
             <returns>
                 Query collection.
@@ -522,31 +522,30 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.RemoveTrailing(System.String)">
             <summary>
-                TODO Törli a behúzást a | karakterig minden sorban.
+                Removes trailing whitespace before | character.
             </summary>
             <param name="query">
-                TODO Az SQL lekérdezés.
+                Query to format.
             </param>
             <returns>
-                TODO Az átformázott lekérdezés.
+                Formatted query.
             </returns>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Cast``1(System.Object)">
             <summary>
-                TODO Objektum típuskényszerítése, amennyiben lehetséges.
+                Universal cast / convert function.
             </summary>
             <typeparam name="TResult">
-                TODO A kényszerített típus.
+                The required type.
             </typeparam>
             <param name="value">
-                TODO Az objektum.
+                The value to cast or convert.
             </param>
             <returns>
-                TODO Az új típusú objektum, ha <paramref name="value"/> null referenciák, akkor a
-                típus alapértelmezett értéke.
+                <paramref name="value"/> converted to <typeparamref name="TResult"/> type or default if <c>null</c>.
             </returns>
             <exception cref="T:System.InvalidCastException">
-                TODO Ha nem lehetséges az adott erős típuskényszerítés.
+                Converting <paramref name="value"/> to <typeparamref name="TResult"/> is not possible.
             </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
