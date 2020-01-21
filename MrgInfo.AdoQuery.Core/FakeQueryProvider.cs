@@ -41,20 +41,25 @@ namespace MrgInfo.AdoQuery.Core
         ConcurrentStack<Query> Queries { get; } = new ConcurrentStack<Query>();
 
         /// <summary>
-        ///     TODO Lekérdezés hamisítás regisztrációja.
+        ///     Used for collection queries in order to test them on a particular database for
+        ///     syntax and performance.
         /// </summary>
         /// <param name="id">
-        ///     TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
+        ///     The unique identifier of query.
         /// </param>
-        /// <param name="sql">
-        ///     TODO Az <c>SQL</c> lekérdezés.
+        /// <param name="query">
+        ///     The query command.
         /// </param>
-        /// <param name="args">
-        ///     TODO Az <c>SQL</c> lekérdezés paraméterei.
+        /// <param name="parameters">
+        ///      Query parameters.
         /// </param>
-        protected void RegisterQuery(string? id, string sql, IEnumerable<object?>? args)
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="query"/> argument has <c>null</c> value.
+        /// </exception>
+
+        protected void RegisterQuery(string? id, string query, IEnumerable<object?>? parameters)
         {
-            if (sql == null) throw new ArgumentNullException(nameof(sql));
+            if (query == null) throw new ArgumentNullException(nameof(query));
 
             string @namespace = typeof(QueryProvider).Namespace ?? "@";
             var i = 2;
@@ -69,32 +74,32 @@ namespace MrgInfo.AdoQuery.Core
             {
                 Id = id,
                 Caller = $"{method.DeclaringType?.FullName}.{method.Name}",
-                Command = $"\n{RemoveTrailing(sql)}\n"
+                Command = $"\n{RemoveTrailing(query)}\n"
             };
-            if (args != null)
+            if (parameters != null)
             {
-                sqlQuery.Parameters.AddRange(args);
+                sqlQuery.Parameters.AddRange(parameters);
             }
             Queries.Push(sqlQuery);
             Print(sqlQuery);
         }
 
         /// <summary>
-        ///     TODO A hamisított eredmény kikeresése.
+        ///     Load fake data.
         /// </summary>
         /// <param name="id">
-        ///     TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
+        ///     The unique identifier of query.
         /// </param>
         /// <param name="query">
-        ///     TODO Az <c>SQL</c> lekérdezés.
+        ///     The query command.
         /// </param>
-        /// <param name="args">
-        ///     TODO Az <c>SQL</c> lekérdezés paraméterei.
+        /// <param name="parameters">
+        ///     Query parameters.
         /// </param>
         /// <returns>
-        ///     TODO A hamisított adatok sor-oszlop indexeléssel.
+        ///     Fake data with [row][column] indexing.
         /// </returns>
-        protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args);
+        protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? parameters);
 
         /// <inheritdoc />
         protected internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
@@ -109,7 +114,7 @@ namespace MrgInfo.AdoQuery.Core
 
         /// <inheritdoc />
         /// <remarks>
-        ///     No real async.
+        ///     Not really async!
         /// </remarks>
         protected internal override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
@@ -132,13 +137,13 @@ namespace MrgInfo.AdoQuery.Core
 
         /// <inheritdoc />
         /// <remarks>
-        ///     No real async.
+        ///     Not really async!
         /// </remarks>
         protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default) =>
             await Task.FromResult(Read<TResult>(id, query, args)).ConfigureAwait(false);
 
         /// <summary>
-        ///     TODO Összegyűjtött lekérdezése mentése.
+        ///     Export collected queries to <c>XML</c> file.
         /// </summary>
         /// <param name="writer">
         ///     File stream.
@@ -174,7 +179,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Save registered queries.
+        ///     Export collected queries to <c>XML</c> file.
         /// </summary>
         /// <param name="fileName">
         ///     Export file's name.

@@ -19,13 +19,12 @@ namespace MrgInfo.AdoQuery.Test
         ITestOutputHelper Output { get; }
 
         /// <summary>
-        ///     TODO Konstruktor.
+        ///     Initializes a new instance of <see cref="FakeQueryProviderTests"/>.
         /// </summary>
         /// <param name="output">
-        ///     TODO Kimenetkezelő.
+        ///     Output.
         /// </param>
-        public FakeQueryProviderTests(ITestOutputHelper output) =>
-            Output = output ?? throw new ArgumentNullException(nameof(output));
+        public FakeQueryProviderTests(ITestOutputHelper output) => Output = output;
 
         static IList<IReadOnlyList<object?>> Product { get; } = new IReadOnlyList<object?>[]
         {

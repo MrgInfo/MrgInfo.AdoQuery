@@ -206,33 +206,37 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.RegisterQuery(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
-                TODO Lekérdezés hamisítás regisztrációja.
+                Used for collection queries in order to test them on a particular database for
+                syntax and performance.
             </summary>
             <param name="id">
-                TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
+                The unique identifier of query.
             </param>
-            <param name="sql">
-                TODO Az <c>SQL</c> lekérdezés.
+            <param name="query">
+                The query command.
             </param>
-            <param name="args">
-                TODO Az <c>SQL</c> lekérdezés paraméterei.
+            <param name="parameters">
+                 Query parameters.
             </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="query"/> argument has <c>null</c> value.
+            </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
-                TODO A hamisított eredmény kikeresése.
+                Load fake data.
             </summary>
             <param name="id">
-                TODO Az <c>SQL</c> lekérdezés egyedi azonosítója.
+                The unique identifier of query.
             </param>
             <param name="query">
-                TODO Az <c>SQL</c> lekérdezés.
+                The query command.
             </param>
-            <param name="args">
-                TODO Az <c>SQL</c> lekérdezés paraméterei.
+            <param name="parameters">
+                Query parameters.
             </param>
             <returns>
-                TODO A hamisított adatok sor-oszlop indexeléssel.
+                Fake data with [row][column] indexing.
             </returns>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
@@ -241,7 +245,7 @@
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.QueryAsync(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
             <remarks>
-                No real async.
+                Not really async!
             </remarks>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.Read``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object})">
@@ -250,12 +254,12 @@
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
             <inheritdoc />
             <remarks>
-                No real async.
+                Not really async!
             </remarks>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.IO.TextWriter)">
             <summary>
-                TODO Összegyűjtött lekérdezése mentése.
+                Export collected queries to <c>XML</c> file.
             </summary>
             <param name="writer">
                 File stream.
@@ -266,7 +270,7 @@
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.String)">
             <summary>
-                Save registered queries.
+                Export collected queries to <c>XML</c> file.
             </summary>
             <param name="fileName">
                 Export file's name.
@@ -318,6 +322,36 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 The <paramref name="query" /> or <paramref name="memberName" /> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.Parameter">
+            <inheritdoc />
+            <summary>
+                Query parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Parameter.Name">
+            <summary>
+                Name of parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Parameter.Value">
+            <summary>
+                Value of parameter.
+            </summary>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.Parameter.Present">
+            <summary>
+                Present in the query command?
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Parameter.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.Parameter.ToString(System.String,System.IFormatProvider)">
+            <inheritdoc />
+            <exception cref="T:System.FormatException">
+                Invalid format!
             </exception>
         </member>
         <member name="T:MrgInfo.AdoQuery.Core.QueriesCollection">
@@ -489,36 +523,6 @@
             <summary>
                 Run SQL queries.
             </summary>
-        </member>
-        <member name="T:MrgInfo.AdoQuery.Core.QueryProvider.Parameter">
-            <inheritdoc />
-            <summary>
-                Query parameter.
-            </summary>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.QueryProvider.Parameter.Name">
-            <summary>
-                Name of parameter.
-            </summary>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.QueryProvider.Parameter.Value">
-            <summary>
-                Value of parameter.
-            </summary>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.QueryProvider.Parameter.Present">
-            <summary>
-                Present in query?
-            </summary>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Parameter.ToString">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.Parameter.ToString(System.String,System.IFormatProvider)">
-            <inheritdoc />
-            <exception cref="T:System.FormatException">
-                Invalid format!
-            </exception>
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.QueryProvider.RemoveTrailing(System.String)">
             <summary>
@@ -1751,7 +1755,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -1802,7 +1806,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -1856,7 +1860,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -1913,7 +1917,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -1973,7 +1977,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2036,7 +2040,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2111,7 +2115,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2189,7 +2193,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2270,7 +2274,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2354,7 +2358,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2441,7 +2445,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2531,7 +2535,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>
@@ -2624,7 +2628,7 @@
     </param><returns>
       Result set.
     </returns><exception cref="T:System.ArgumentNullException">
-      Parameter <paramref name="query" /> is <c>null</c>.
+      The <paramref name="query" /> argument has <c>null</c> value.
     </exception><exception cref="T:MrgInfo.AdoQuery.Core.QueryDbException">
       Error occured during executing the query.
     </exception>

@@ -18,36 +18,35 @@ namespace MrgInfo.AdoQuery.Test
     public sealed class DbQueryProviderTests
     {
         /// <summary>
-        ///     TODO Adatbázis-kiszolgálók.
+        ///     SQL providers for test.
         /// </summary>
         /// <returns>
-        ///     Adatbázis elérés lista.
+        ///     List of providers.
         /// </returns>
         public static IEnumerable<object[]> Vendors
         {
             get
             {
-                yield return new object[] { new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;") };
-                yield return new object[] { new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;") };
+                yield return new object[] { new SqlQueryProvider("Data Source=localhost,1433;User Id=AdoQuery;Password=AdoQuery;") };
+                yield return new object[] { new OracleQueryProvider("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;") };
             }
         }
 
         ITestOutputHelper Output { get; }
 
         /// <summary>
-        ///     TODO Konstruktor.
+        ///     Initializes a new instance of <see cref="DbQueryProviderTests"/>.
         /// </summary>
         /// <param name="output">
-        ///     TODO Kimenetkezelő.
+        ///     Output.
         /// </param>
-        public DbQueryProviderTests(ITestOutputHelper output) =>
-            Output = output ?? throw new ArgumentNullException(nameof(output));
+        public DbQueryProviderTests(ITestOutputHelper output) => Output = output;
 
         /// <summary>
         ///     TODO Adatbázis elérések tesztelése.
         /// </summary>
         /// <param name="provider">
-        ///     TODO Query provider.
+        ///     Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
         public void TestConnection(QueryProvider provider)
@@ -72,7 +71,7 @@ namespace MrgInfo.AdoQuery.Test
         ///     TODO A projekcióból kimaradó oszlopok alapértelmezett értékkel töltődnek.
         /// </summary>
         /// <param name="provider">
-        ///     TODO Query provider.
+        ///     Query provider.
         /// </param>
         [SuppressMessage("ReSharper", "UseDeconstructionOnParameter")]
         [Theory, MemberData(nameof(Vendors))]
@@ -106,7 +105,7 @@ namespace MrgInfo.AdoQuery.Test
         ///     TODO Adatbázis <c>NULL</c> tesztelése.
         /// </summary>
         /// <param name="provider">
-        ///     TODO Query provider.
+        ///     Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
         public void TestNull(QueryProvider provider)

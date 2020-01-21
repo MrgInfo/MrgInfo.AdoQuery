@@ -16,10 +16,10 @@ namespace MrgInfo.AdoQuery.Core
         ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>>();
 
         /// <inheritdoc />
-        protected override IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? args)
+        protected override IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? parameters)
         {
             object[] formatParameters =
-                args
+                parameters
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
                 ?? Array.Empty<object>();

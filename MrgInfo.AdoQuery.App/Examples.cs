@@ -58,7 +58,7 @@ namespace MrgInfo.AdoQuery.App
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
         static async Task AdoExampleAsync(CancellationToken cancellationToken = default)
         {
-            await using DbConnection connection = new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
+            await using DbConnection connection = new OracleConnection("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;");
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
             await using var command = connection.CreateCommand();
             command.CommandText = @"
@@ -67,7 +67,6 @@ namespace MrgInfo.AdoQuery.App
                   from Product
                  where Code like :Prefix
               order by ProductId";
-            
             command.Parameters.Add(new OracleParameter("Prefix", OracleDbType.Varchar2, 100) { Value = "A%" });
             await using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
@@ -86,7 +85,12 @@ namespace MrgInfo.AdoQuery.App
         static async Task ExampleAsync(CancellationToken cancellationToken = default)
         {
             var prefix = "A";
-            var provider = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
+            var provider = new OracleQueryProvider(new OracleConnectionStringBuilder
+            {
+                DataSource = "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)))",
+                UserID = "adoquery",
+                Password = "adoquery"
+            });
             var resultSet = provider.QueryAsync<int, string>($@"
                 |  select ProductId,
                 |         Name
