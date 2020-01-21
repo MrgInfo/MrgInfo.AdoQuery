@@ -5,18 +5,17 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Groma István</Authors>
-    <Company>GMRG-Infó Bt.</Company>
+    <Company>MRG-Infó Bt.</Company>
     <Product>MrgInfo.AdoQuery</Product>
     <Description>Run safe and effective ADO .NET SQL queries on Oracle Database.</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
     <PackageTags>Oracle Database</PackageTags>
     <Copyright>MRG-Info © 2020</Copyright>
-    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <DocumentationFile>MrgInfo.AdoQuery.Oracle.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -33,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="MrgInfo.AdoQuery.Oracle.xml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

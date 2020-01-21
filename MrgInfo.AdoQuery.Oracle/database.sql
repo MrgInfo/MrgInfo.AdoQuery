@@ -1,21 +1,11 @@
+set serveroutput on size 1000000;
+set echo on;
+set time on;
+
 alter session set "_ORACLE_SCRIPT"=true;
 
-/*
-create tablespace adoquery_tabspace 
-    datafile 'adoquery_tabspace.dat' 
-    size 10M autoextend on;
-
-create temporary tablespace adoquery_tabspace_temp 
-    tempfile 'adoquery_tabspace_temp.dat' 
-    size 5M autoextend on;
-
-    default tablespace adoquery_tabspace
-    temporary tablespace adoquery_tabspace_temp;
-
-*/
-
 create user adoquery identified by adoquery;
---create user "OPS$RCINET\WAVEZONE" identified externally;
+--create user "OPS$DOMAIN\USER" identified externally;
 
 grant connect to adoquery;
 grant resource to adoquery;
@@ -37,3 +27,5 @@ insert into adoquery.product values(50, 'PQ456', 'Hitachi HandyCam', 1050);
 insert into adoquery.product values(60, 'PQ789', 'GM Saturn', 2250.99);
 insert into adoquery.product values(70, 'PQ945', null, 150.15);
 commit;
+
+exit;

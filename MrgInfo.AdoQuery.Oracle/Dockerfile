@@ -1,6 +1,6 @@
-﻿FROM container-registry.oracle.com/database/enterprise:12.2.0.1
-#USER oracle
-WORKDIR /home/oracle/setup
-COPY --chown=oracle:oinstall database.sh database.sql ./
-RUN chmod +x database.sh
-CMD /home/oracle/setup/database.sh
+﻿FROM store/oracle/database-enterprise:12.2.0.1
+ENV DB_PASSWD=P@ssword3...
+RUN mkdir /home/oracle/dba
+COPY --chown=oracle:oinstall database.sh database.sql /home/oracle/dba/
+RUN chmod +x /home/oracle/dba/database.sh
+CMD /home/oracle/dba/database.sh & /home/oracle/setup/dockerInit.sh

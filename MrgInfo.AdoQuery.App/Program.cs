@@ -127,14 +127,13 @@ namespace MrgInfo.AdoQuery.App
             BufferWidth = WindowWidth = WindowWidthMax - 6;
             CursorVisible = false;
             RowCollection.DefaultSettings.Border.Enabled = true;
-            var microsoft = new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;");
-            var oracle = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCLCDB.localdomain)));User Id=adoquery;Password=adoquery;");
+            var microsoft = new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
+            var oracle = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
             FakeQueryProvider fake = CreateFake();
             await RunAsync(microsoft).ConfigureAwait(false);
             await RunAsync(oracle).ConfigureAwait(false);
             await RunAsync(fake).ConfigureAwait(false);
             PlayFakeOnDb(fake, microsoft);
-            WriteHl("Program finished.");
         }
     }
 }

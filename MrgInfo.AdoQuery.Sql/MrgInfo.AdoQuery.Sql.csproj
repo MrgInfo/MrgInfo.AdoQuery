@@ -13,9 +13,9 @@
     <RepositoryUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery.git</RepositoryUrl>
     <PackageTags>Microsoft SQL Server</PackageTags>
     <Copyright>MRG-Info © 2020</Copyright>
-    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <PackageProjectUrl>https://github.com/MrgInfo/MrgInfo.AdoQuery</PackageProjectUrl>
     <DocumentationFile>MrgInfo.AdoQuery.Sql.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="MrgInfo.AdoQuery.Sql.xml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

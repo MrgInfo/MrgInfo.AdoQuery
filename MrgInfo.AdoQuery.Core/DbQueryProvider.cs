@@ -48,7 +48,7 @@ namespace MrgInfo.AdoQuery.Core
         ///  <exception cref="ArgumentOutOfRangeException">
         ///     The <paramref name="index" /> is invalid.
         /// </exception>
-        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
         protected static string GetParameterNumber(int index)
         {
             if (index < 0 || 98 < index) throw new ArgumentOutOfRangeException(nameof(index), index, "0-98");
@@ -169,7 +169,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <inheritdoc />
-        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters")]
         protected internal override async IAsyncEnumerable<object?[]> QueryAsync(string? id, string? query, IReadOnlyList<object?>? parameters, int columns, [EnumeratorCancellation] CancellationToken token = default)
         {
             if (columns <= 0) throw new ArgumentOutOfRangeException(nameof(columns), columns, "> 0!");

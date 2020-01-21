@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using MrgInfo.AdoQuery.Oracle;
 using MrgInfo.AdoQuery.Sql;
+using Oracle.ManagedDataAccess.Client;
 
 namespace MrgInfo.AdoQuery.App
 {
@@ -17,8 +19,7 @@ namespace MrgInfo.AdoQuery.App
     {
         static void AdoExample()
         {
-            const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-            using DbConnection connection = new SqlConnection(connectionString);
+            using DbConnection connection = new SqlConnection("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
             connection.Open();
             using DbCommand command = connection.CreateCommand();
             command.CommandText = @"
@@ -37,12 +38,11 @@ namespace MrgInfo.AdoQuery.App
         }
 
         [SuppressMessage("ReSharper", "SuggestVarOrType_Elsewhere")]
+        [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
         static void Example()
         {
-            const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-            const string prefix = "A";
-
-            var provider = new SqlQueryProvider(connectionString);
+            var prefix = "A";
+            var provider = new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
             var resultSet = provider.Query<(int, string)>($@"
                 |  select ProductId,
                 |         Name
@@ -55,11 +55,11 @@ namespace MrgInfo.AdoQuery.App
             }
         }
 
+        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
         static async Task AdoExampleAsync(CancellationToken cancellationToken = default)
         {
-            const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-            await using DbConnection connection = new SqlConnection(connectionString);
-            await connection.OpenAsync(cancellationToken);
+            await using DbConnection connection = new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
             await using DbCommand command = connection.CreateCommand();
             command.CommandText = @"
                 select ProductId,
@@ -68,25 +68,24 @@ namespace MrgInfo.AdoQuery.App
                  where Code like @Prefix
               order by ProductId";
             command.Parameters.Add(new SqlParameter("Prefix", SqlDbType.NVarChar, 100) { Value = "A%" });
-            await using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
-            while (await reader.ReadAsync(cancellationToken))
+            await using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 (int productId, string name) = (
-                    await reader.GetFieldValueAsync<int>(0, cancellationToken),
-                    await reader.IsDBNullAsync(1, cancellationToken)
+                    await reader.GetFieldValueAsync<int>(0, cancellationToken).ConfigureAwait(false),
+                    await reader.IsDBNullAsync(1, cancellationToken).ConfigureAwait(false)
                         ? ""
-                        : await reader.GetFieldValueAsync<string>(1, cancellationToken));
+                        : await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false));
                 Trace.WriteLine($"ProductId = {productId}, Name = {name}");
             }
         }
 
         [SuppressMessage("ReSharper", "SuggestVarOrType_Elsewhere")]
+        [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
         static async Task ExampleAsync(CancellationToken cancellationToken = default)
         {
-            const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;";
-            const string prefix = "A";
-
-            var provider = new SqlQueryProvider(connectionString);
+            var prefix = "A";
+            var provider = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
             var resultSet = provider.QueryAsync<(int, string)>($@"
                 |  select ProductId,
                 |         Name
@@ -105,8 +104,8 @@ namespace MrgInfo.AdoQuery.App
         {
             AdoExample();
             Example();
-            await AdoExampleAsync();
-            await ExampleAsync();
+            await AdoExampleAsync().ConfigureAwait(false);
+            await ExampleAsync().ConfigureAwait(false);
         }
     }
 }

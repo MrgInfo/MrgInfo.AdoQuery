@@ -27,10 +27,8 @@ namespace MrgInfo.AdoQuery.Test
         {
             get
             {
-                yield return new object[] { new SqlQueryProvider("Data Source=(localdb)\\MSSQLLocalDB;User Id=AdoQuery;Password=AdoQuery;") };
-                // yield return new object[] { new SqlQueryProvider("Data Source=.;Integrated Security=True;Initial Catalog=AdoQuery;") };
-                yield return new object[] { new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=corpolis.rcinet.local)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=corpolis.rcinet.local)));User Id=adoquery;Password=adoquery;") };
-                // yield return new object[] { new OracleDatabaseSettings("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ORCL)));User Id=/;Password=;Integrated Security=True") };
+                yield return new object[] { new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;") };
+                yield return new object[] { new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;") };
             }
         }
 

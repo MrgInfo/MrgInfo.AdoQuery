@@ -3,7 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Exe</OutputType>
+    <!--
     <StartupObject>MrgInfo.AdoQuery.App.Program</StartupObject>
+    -->
+    <StartupObject>MrgInfo.AdoQuery.App.Examples</StartupObject>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Groma István</Authors>
@@ -19,6 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
     <PackageReference Include="PerrysNetConsole" Version="2.1.0" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Core\MrgInfo.AdoQuery.Core.csproj" />
     <ProjectReference Include="..\MrgInfo.AdoQuery.Oracle\MrgInfo.AdoQuery.Oracle.csproj" />
