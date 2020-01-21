@@ -43,7 +43,7 @@ namespace MrgInfo.AdoQuery.App
         {
             var prefix = "A";
             var provider = new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
-            var resultSet = provider.Query<(int, string)>($@"
+            var resultSet = provider.Query<int, string>($@"
                 |  select ProductId,
                 |         Name
                 |    from Product
@@ -60,19 +60,20 @@ namespace MrgInfo.AdoQuery.App
         {
             await using DbConnection connection = new OracleConnection("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-            await using DbCommand command = connection.CreateCommand();
+            await using var command = connection.CreateCommand();
             command.CommandText = @"
                 select ProductId,
                        Name
                   from Product
-                 where Code like @Prefix
+                 where Code like :Prefix
               order by ProductId";
-            command.Parameters.Add(new SqlParameter("Prefix", SqlDbType.NVarChar, 100) { Value = "A%" });
+            
+            command.Parameters.Add(new OracleParameter("Prefix", OracleDbType.Varchar2, 100) { Value = "A%" });
             await using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 (int productId, string name) = (
-                    await reader.GetFieldValueAsync<int>(0, cancellationToken).ConfigureAwait(false),
+                    (int)await reader.GetFieldValueAsync<decimal>(0, cancellationToken).ConfigureAwait(false),
                     await reader.IsDBNullAsync(1, cancellationToken).ConfigureAwait(false)
                         ? ""
                         : await reader.GetFieldValueAsync<string>(1, cancellationToken).ConfigureAwait(false));
@@ -86,7 +87,7 @@ namespace MrgInfo.AdoQuery.App
         {
             var prefix = "A";
             var provider = new OracleQueryProvider("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)));User Id=adoquery;Password=adoquery;");
-            var resultSet = provider.QueryAsync<(int, string)>($@"
+            var resultSet = provider.QueryAsync<int, string>($@"
                 |  select ProductId,
                 |         Name
                 |    from Product

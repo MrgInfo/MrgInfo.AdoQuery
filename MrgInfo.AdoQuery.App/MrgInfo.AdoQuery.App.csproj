@@ -5,8 +5,9 @@
     <OutputType>Exe</OutputType>
     <!--
     <StartupObject>MrgInfo.AdoQuery.App.Program</StartupObject>
-    -->
     <StartupObject>MrgInfo.AdoQuery.App.Examples</StartupObject>
+    -->
+    <StartupObject>MrgInfo.AdoQuery.App.Program</StartupObject>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Groma István</Authors>

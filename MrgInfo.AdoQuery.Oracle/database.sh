@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOOL_DIR=$ORACLE_HOME/bin
+BASH_RC=$HOME/.bashrc
 DBA_DIR=$HOME/dba
 LOG=$DBA_DIR/database.log
 
@@ -14,11 +14,9 @@ if [ ! -f $LOG ]; then
             break
         fi
     done
+    source $BASH_RC
     for f in $(find $DBA_DIR -name *.sql); do
         echo "Running script $f." >>$LOG
-        BASH_RC=/home/oracle/.bashrc
-        source $BASH_RC
-        #$TOOL_DIR/
         sqlplus -L / as sysdba @$f 2>&1 >>$LOG
     done
 fi
