@@ -44,5 +44,5 @@ steps:
   inputs:
     command: 'push'
     nuGetFeedType: 'external'
-    publishFeedCredentials: 'NuGet (MrgInfo)'
+    publishFeedCredentials: 'NuGet'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
