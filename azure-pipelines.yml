@@ -40,7 +40,7 @@ steps:
     minorVersion: '$(minor)'
     patchVersion: '$(patch)'
 - task: NuGetCommand@2
-  displayName: 'Push to nuGet.org'
+  displayName: 'Push to nuget.org'
   inputs:
     command: 'push'
     nuGetFeedType: 'external'
