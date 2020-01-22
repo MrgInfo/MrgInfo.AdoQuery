@@ -32,6 +32,7 @@ stages:
       inputs:
         command: buildAndPush
         containerRegistry: AzureContainers
+        repository: ado-query
         Dockerfile: '**/Dockerfile'
         tags: $(Build.BuildId)
   
