@@ -28,11 +28,23 @@ stages:
         command: login
         containerRegistry: DockerHub
     - task: Docker@2
-      displayName: Build images
+      displayName: Build Oracle images
       inputs:
         command: buildAndPush
         containerRegistry: AzureContainers
-        repository: ado-query
-        Dockerfile: '**/Dockerfile'
-        tags: $(Build.BuildId)
+        repository: ado-query/ora
+        Dockerfile: '**/MrgInfo.AdoQuery.Oracle/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+    - task: Docker@2
+      displayName: Build SQL images
+      inputs:
+        command: buildAndPush
+        containerRegistry: AzureContainers
+        repository: ado-query/sql
+        Dockerfile: '**/MrgInfo.AdoQuery.Oracle/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
   
