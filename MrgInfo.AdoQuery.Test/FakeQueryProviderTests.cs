@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,11 @@ using Xunit.Abstractions;
 
 namespace MrgInfo.AdoQuery.Test
 {
+    /// <summary>
+    ///     Tests for <see cref="FakeQueryProvider"/> descendants.
+    /// </summary>
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
+    [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
     public sealed class FakeQueryProviderTests
     {
         ITestOutputHelper Output { get; }
@@ -38,76 +41,69 @@ namespace MrgInfo.AdoQuery.Test
         };
 
         /// <summary>
-        ///     TODO Hamisítás tesztelése egyedi <see cref="Guid"/> azonosítóval.
+        ///     Fake queries mapped by global <see cref="Guid"/> identifier.
         /// </summary>
         [Fact]
         public void TestFakeWithGuid()
         {
-            Guid query1 = Guid.NewGuid(), query2 = Guid.NewGuid();
+            var query1 = new Guid("74F04AEB-6C26-4967-A046-800DD6F85BC5");
+            var query2 = new Guid("D5CCA8F0-CC55-4215-9952-5A5471200C02");
             var provider = new ByIdFakeQueryProvider
             {
                 [$"{query1}"] = Product,
                 [$"{query2}"] = Product,
             };
-
-            var watch = Stopwatch.StartNew();
-
+            
             (int id0, string code0) = provider
                 .Query<int, string>(query1.IdFor($@"
                     |select productid,
                     |       code
                     |  from product"))
                 .First();
-            (int id1, string code1) = provider
-                .Query<int, string>(query2.IdFor($"select productid, code from product"))
-                .Last();
-
-            watch.Stop();
-
             Assert.Equal(Product[0][0], id0);
             Assert.Equal(Product[0][1], code0);
+            
+            (int id1, string code1) = provider
+                .Query<int, string>(query2.IdFor(
+                    $"select productid, code from product"))
+                .Last();
             Assert.Equal(Product[^1][0], id1);
             Assert.Equal(Product[^1][1], code1);
-
-            Output.WriteLine($"{watch.Elapsed:g}");
         }
 
         /// <summary>
-        ///     TODO Hamisítás tesztelése egyedi <see cref="int"/> azonosítóval.
+        ///     Fake queries mapped by local <see cref="int"/> identifier.
         /// </summary>
         [Fact]
         public void TestFakeWithInt()
         {
+            var query1 = 42;
+            var query2 = 1492;
             var provider = new ByIdFakeQueryProvider
             {
-                [nameof(TestFakeWithInt), "1"] = Product,
-                [nameof(TestFakeWithInt), "2"] = Product,
+                [nameof(TestFakeWithInt), $"{query1}"] = Product,
+                [nameof(TestFakeWithInt), $"{query2}"] = Product,
             };
-
-            var watch = Stopwatch.StartNew();
-
+            
             (int id0, string code0) = provider
-                .Query<int, string>(1.LocalIdFor($@"
+                .Query<int, string>(query1.LocalIdFor($@"
                     |select productid,
                     |       code
                     |  from product"))
                 .First();
-            (int id1, string code1) = provider
-                .Query<int, string>(2.LocalIdFor($"select productid, code from product"))
-                .Last();
-
-            watch.Stop();
-
             Assert.Equal(Product[0][0], id0);
             Assert.Equal(Product[0][1], code0);
+
+            (int id1, string code1) = provider
+                .Query<int, string>(query2.LocalIdFor(
+                    $"select productid, code from product"))
+                .Last();
             Assert.Equal(Product[^1][0], id1);
             Assert.Equal(Product[^1][1], code1);
-
-            Output.WriteLine($"{watch.Elapsed:g}");
         }
 
         /// <summary>
-        ///     TODO Hamisítás tesztelése reguláris kifejezéssel.
+        ///     Fake queries mapped by regular expressions.
         /// </summary>
         [Fact]
         public void TestFakeWithRegex()
@@ -117,43 +113,35 @@ namespace MrgInfo.AdoQuery.Test
                 ["productid.+code.+product"] = Product
             };
 
-            var watch = Stopwatch.StartNew();
-
             (int id0, string code0) = provider
                 .Query<int, string>($@"
                     |select productid,
                     |       code
                     |  from product")
                 .First();
-            (int id1, string code1) = provider
-                .Query<int, string>($"select productid, code from product")
-                .Last();
-
-            watch.Stop();
-
             Assert.Equal(Product[0][0], id0);
             Assert.Equal(Product[0][1], code0);
+
+            (int id1, string code1) = provider
+                .Query<int, string>(
+                    $"select productid, code from product")
+                .Last();
             Assert.Equal(Product[^1][0], id1);
             Assert.Equal(Product[^1][1], code1);
-
-            Output.WriteLine($"{watch.Elapsed:g}");
         }
 
         /// <summary>
-        ///     TODO Lekérdezés sorosítás tesztelése.
+        ///     Serializing fake queries.
         /// </summary>
         [Fact]
         public void TestFakeSerialize()
         {
-            const int numb = 100000;
-            const string str = "x";
-
+            var numb = 100000;
+            var str = "x";
             var fakeProvider = new ByPatternFakeQueryProvider();
-            var watch = new Stopwatch();
             string xml;
             using (var writer = new StringWriter())
             {
-                watch.Start();
                 fakeProvider.Read<DateTime?>(1.IdFor($@"
                     |select productid
                     |  from product
@@ -162,25 +150,19 @@ namespace MrgInfo.AdoQuery.Test
                     |   and productid > {numb}"));
                 fakeProvider.SaveQueries(writer);
                 fakeProvider.Clear();
-                watch.Stop();
                 xml = writer.ToString();
             }
-
             Assert.NotNull(xml);
             Assert.NotStrictEqual("", xml);
-
             Output.WriteLine(xml);
 
             using var stream = new MemoryStream(Encoding.Unicode.GetBytes(xml));
             using var reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
             var serializer = new DataContractSerializer(typeof(QueriesCollection));
             var queries = serializer.ReadObject(reader, false) as QueriesCollection;
-
             Assert.NotNull(queries);
             Assert.NotEmpty(queries);
             Assert.NotNull(queries![0]);
-
-            Output.WriteLine($"{watch.Elapsed:g}");
         }
     }
 }
