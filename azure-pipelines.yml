@@ -7,38 +7,48 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-resources:
-  containers:
-  - container: ora
-    image: mrginfocontainerregistry.azurecr.io/ado-query/ora:latest
-    endpoint: AzureContainers
-  - container: sql
-    image: mrginfocontainerregistry.azurecr.io/ado-query/sql:latest
-    endpoint: AzureContainers
-
 variables:
-  buildConfiguration: 'Release'
   major: '1'
   minor: '0'
   patch: '0'
 
+resources:
+  containers:
+  - container: ora
+    connection: AzureContainers
+    image: mrginfocontainerregistry.azurecr.io/ado-query/ora
+    ports:
+        - "1521:1521"
+  - container: sql
+    connection: AzureContainers
+    image: mrginfocontainerregistry.azurecr.io/ado-query/sql:latest
+    ports:
+        - "1433:1433"
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+services:
+  ora: ora
+  sql: sql
+
 steps:
+- task: Delay@1
+  displayName: 'Wait for services'
+  inputs:
+    delayForMinutes: 5
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
   inputs:
     command: 'test'
     projects: '**/*.Test.csproj'
-    arguments: '--filter DisplayName~FakeSqlProviderTests'
+    #arguments: '--filter DisplayName~FakeSqlProviderTests'
 - task: PublishTestResults@2
   displayName: 'Publish test results'
   inputs:
     testResultsFormat: 'XUnit'
     testResultsFiles: '**/*.trx'
     mergeTestResults: true
-    buildConfiguration: '$(buildConfiguration)'
 - task: DotNetCoreCLI@2
   displayName: 'Create package'
   inputs:
