@@ -10,6 +10,15 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+resources:
+  containers:
+  - container: ora
+    image: mrginfocontainerregistry.azurecr.io/ado-query/ora:latest
+    endpoint: AzureContainers
+  - container: sql
+    image: mrginfocontainerregistry.azurecr.io/ado-query/sql:latest
+    endpoint: AzureContainers
+
 variables:
   buildConfiguration: 'Release'
   major: '1'
