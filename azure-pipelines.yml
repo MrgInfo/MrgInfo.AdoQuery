@@ -1,8 +1,6 @@
-# ASP.NET Core
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 resources:
   containers:
@@ -17,24 +15,24 @@ resources:
     ports:
     - '1433:1433'
 
+trigger:
+- master
+
 variables:
   major: 1
   minor: 0
   patch: 0
 
-trigger:
-- master
-
 pool:
   vmImage: 'ubuntu-latest'
 
 services:
-  ora: ora
+  #ora: ora
   sql: sql
 
 steps:
-- script: Start-Sleep -Seconds (5*60)
-  displayName: 'Wait for services'
+#- pwsh: Start-Sleep -Seconds (5*60)
+#  displayName: 'Wait for services'
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
   inputs:
