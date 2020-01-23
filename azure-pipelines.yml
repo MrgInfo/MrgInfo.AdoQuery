@@ -22,6 +22,7 @@ variables:
   major: 1
   minor: 0
   patch: 0
+  'dotnet system net http usesocketshttphandler': 0
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -31,8 +32,10 @@ services:
   sql: sql
 
 steps:
-#- pwsh: Start-Sleep -Seconds (5*60)
-#  displayName: 'Wait for services'
+- powershell: |
+    Write-Host $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER
+    Start-Sleep -Seconds (2*60)
+  displayName: 'Wait for services'
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
   inputs:

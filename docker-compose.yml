@@ -3,6 +3,7 @@ services:
     # cd ./MrgInfo.AdoQuery.Oracle
     # docker build -t ora:latest .
     # docker run -p 1521:1521 --name ora ora:latest
+    # docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" ora
     # docker exec ora cat /home/oracle/dba/database.log
     # docker rm -f ora
     oracle:
