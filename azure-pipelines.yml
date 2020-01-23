@@ -18,12 +18,12 @@ resources:
     connection: AzureContainers
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
     ports:
-        - "1521:1521"
+    - '1521:1521'
   - container: sql
     connection: AzureContainers
-    image: mrginfocontainerregistry.azurecr.io/ado-query/sql:latest
+    image: mrginfocontainerregistry.azurecr.io/ado-query/sql
     ports:
-        - "1433:1433"
+    - '1433:1433'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -36,7 +36,7 @@ steps:
 - task: Delay@1
   displayName: 'Wait for services'
   inputs:
-    delayForMinutes: 5
+    delayForMinutes: '6'
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
   inputs:
