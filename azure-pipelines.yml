@@ -28,13 +28,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 services:
-  #ora: ora
+  ora: ora
   sql: sql
 
 steps:
 - powershell: |
     Write-Host $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER
-    Start-Sleep -Seconds (2*60)
+    Start-Sleep -Seconds (5*60)
   displayName: 'Wait for services'
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
