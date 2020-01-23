@@ -7,20 +7,20 @@
 resources:
   containers:
   - container: ora
-    connection: AzureContainers
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
+    endpoint: AzureContainers
     ports:
     - '1521:1521'
   - container: sql
-    connection: AzureContainers
     image: mrginfocontainerregistry.azurecr.io/ado-query/sql
+    endpoint: AzureContainers
     ports:
     - '1433:1433'
 
 variables:
-  major: '1'
-  minor: '0'
-  patch: '0'
+  major: 1
+  minor: 0
+  patch: 0
 
 trigger:
 - master
