@@ -2,14 +2,11 @@
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
-#trigger:
+trigger: none
 #- master
 
-resources:
-- repo: self
-
 pool:
-    vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
 - task: Docker@2

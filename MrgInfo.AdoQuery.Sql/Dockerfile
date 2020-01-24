@@ -3,5 +3,4 @@ ENV ACCEPT_EULA=Y SA_PASSWORD=P@ssword3...
 RUN mkdir /dba
 COPY database.sh database.sql /dba/
 RUN chmod +x /dba/database.sh
-#HEALTHCHECK NONE
 CMD /dba/database.sh & /opt/mssql/bin/sqlservr

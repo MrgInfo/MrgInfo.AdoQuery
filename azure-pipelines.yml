@@ -24,43 +24,33 @@ variables:
   major: 1
   minor: 0
   patch: 0
-  'dotnet system net http usesocketshttphandler': 0
+  #'dotnet system net http usesocketshttphandler': 0
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 services:
   ora: ora
   sql: sql
 
 steps:
-- powershell: |
-    Write-Host $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER
-    Start-Sleep -Seconds (5*60)
-  displayName: 'Wait for services'
+- powershell: Write-Host "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER"
 - task: DotNetCoreCLI@2
-  displayName: 'Run unit tests'
+  displayName: Run unit tests
   inputs:
-    command: 'test'
+    command: test
     projects: '**/*.Test.csproj'
-    #arguments: '--filter DisplayName~FakeSqlProviderTests'
-- task: PublishTestResults@2
-  displayName: 'Publish test results'
-  inputs:
-    testResultsFormat: 'XUnit'
-    testResultsFiles: '**/*.trx'
-    mergeTestResults: true
 - task: DotNetCoreCLI@2
-  displayName: 'Create package'
+  displayName: Create package
   inputs:
-    command: 'pack'
+    command: pack
     packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj'
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '$(major)'
     minorVersion: '$(minor)'
     patchVersion: '$(patch)'
 - task: NuGetCommand@2
-  displayName: 'Push to nuget.org'
+  displayName: Push to nuget.org
   inputs:
     command: 'push'
     nuGetFeedType: 'external'
