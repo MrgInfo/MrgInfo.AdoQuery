@@ -7,11 +7,13 @@ resources:
   - container: ora
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
     endpoint: AzureContainers
+    options: --health-start-period=5m 
     ports:
     - '1521:1521'
   - container: sql
     image: mrginfocontainerregistry.azurecr.io/ado-query/sql
     endpoint: AzureContainers
+    options: --health-start-period=5m
     ports:
     - '1433:1433'
 

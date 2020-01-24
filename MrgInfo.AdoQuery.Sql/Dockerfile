@@ -1,8 +1,7 @@
 ﻿FROM microsoft/mssql-server-linux:2017-latest
-ENV ACCEPT_EULA=Y
-ENV SA_PASSWORD=P@ssword3...
+ENV ACCEPT_EULA=Y SA_PASSWORD=P@ssword3...
 RUN mkdir /dba
 COPY database.sh database.sql /dba/
 RUN chmod +x /dba/database.sh
-HEALTHCHECK NONE
+#HEALTHCHECK NONE
 CMD /dba/database.sh & /opt/mssql/bin/sqlservr
