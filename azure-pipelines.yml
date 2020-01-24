@@ -1,7 +1,5 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
-
 name: $(Date:yyyyMMdd)$(Rev:.r)
-
 resources:
   containers:
   - container: ora
@@ -16,44 +14,36 @@ resources:
     options: --health-start-period=5m
     ports:
     - '1433:1433'
-
+variables:
+  packageVersion: 1.0.0
 trigger:
 - master
-
-variables:
-  major: 1
-  minor: 0
-  patch: 0
-
-#'dotnet system net http usesocketshttphandler': 0
-
-pool:
-  vmImage: ubuntu-latest
-
-services:
-  ora: ora
-  sql: sql
-
-steps:
-#- powershell: Write-Host "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER"
-- task: DotNetCoreCLI@2
-  displayName: Run unit tests
-  inputs:
-    command: test
-    projects: '**/*.Test.csproj'
-- task: DotNetCoreCLI@2
-  displayName: Create package
-  inputs:
-    command: pack
-    packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj'
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '$(major)'
-    minorVersion: '$(minor)'
-    patchVersion: '$(patch)'
-- task: NuGetCommand@2
-  displayName: Push to nuget.org
-  inputs:
-    command: 'push'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'NuGet'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+jobs:
+- job: packages
+  displayName: Build and test packages
+  #dependsOn: images
+  pool:
+    vmImage: ubuntu-latest
+  services:
+    ora: ora
+    sql: sql
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: Run unit tests
+    inputs:
+      command: test
+      projects: **/MrgInfo.AdoQuery.Test.csproj
+  - task: DotNetCoreCLI@2
+    displayName: Create package
+    inputs:
+      command: pack
+      packagesToPack: **/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj
+      versioningScheme: byEnvVar
+      versionEnvVar: packageVersion
+  - task: NuGetCommand@2
+    displayName: Push to nuget.org
+    inputs:
+      command: push
+      packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+      nuGetFeedType: external
+      publishFeedCredentials: NuGet
