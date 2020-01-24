@@ -24,7 +24,8 @@ variables:
   major: 1
   minor: 0
   patch: 0
-  #'dotnet system net http usesocketshttphandler': 0
+
+#'dotnet system net http usesocketshttphandler': 0
 
 pool:
   vmImage: ubuntu-latest
@@ -34,7 +35,7 @@ services:
   sql: sql
 
 steps:
-- powershell: Write-Host "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER"
+#- powershell: Write-Host "DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER: $env:DOTNET_SYSTEM_NET_HTTP_USESOCKETSHTTPHANDLER"
 - task: DotNetCoreCLI@2
   displayName: Run unit tests
   inputs:
