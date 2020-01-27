@@ -32,18 +32,18 @@ jobs:
     displayName: Run unit tests
     inputs:
       command: test
-      projects: **/MrgInfo.AdoQuery.Test.csproj
+      projects: '**/MrgInfo.AdoQuery.Test.csproj'
   - task: DotNetCoreCLI@2
     displayName: Create package
     inputs:
       command: pack
-      packagesToPack: **/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj
+      packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj'
       versioningScheme: byEnvVar
       versionEnvVar: packageVersion
   - task: NuGetCommand@2
     displayName: Push to nuget.org
     inputs:
       command: push
-      packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: external
       publishFeedCredentials: NuGet
