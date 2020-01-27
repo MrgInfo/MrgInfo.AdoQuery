@@ -30,4 +30,8 @@
     <ProjectReference Include="..\MrgInfo.AdoQuery.Sql\MrgInfo.AdoQuery.Sql.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

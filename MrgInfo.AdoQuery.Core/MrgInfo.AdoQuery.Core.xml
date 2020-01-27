@@ -147,6 +147,33 @@
                 Run SQL queries on database.
             </summary>
         </member>
+        <member name="P:MrgInfo.AdoQuery.Core.DbQueryProvider.ConnectionString">
+            <summary>
+                Database connection string.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of <see cref="T:MrgInfo.AdoQuery.Core.DbQueryProvider"/>.
+            </summary>
+            <param name="connectionString">
+                Connection string.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="connectionString"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.#ctor(System.Data.Common.DbConnectionStringBuilder)">
+            <summary>
+                Initializes a new instance of <see cref="T:MrgInfo.AdoQuery.Core.DbQueryProvider"/>.
+            </summary>
+            <param name="builder">
+                Builder for connection string.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="builder"/> argument has <c>null</c> value.
+            </exception>
+        </member>
         <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.GetParameterNumber(System.Int32)">
             <summary>
                 Format parameter indexing.
@@ -196,6 +223,15 @@
             <inheritdoc />
         </member>
         <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.Deserialize(Xunit.Abstractions.IXunitSerializationInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.Serialize(Xunit.Abstractions.IXunitSerializationInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.ToString">
             <inheritdoc />
         </member>
         <member name="T:MrgInfo.AdoQuery.Core.FakeQueryProvider">

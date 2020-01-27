@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using MrgInfo.AdoQuery.Core;
 using Oracle.ManagedDataAccess.Client;
 
@@ -11,19 +12,20 @@ namespace MrgInfo.AdoQuery.Oracle
     /// </summary>
     public sealed class OracleQueryProvider: DbQueryProvider
     {
-        string ConnectionString { get; }
-
         /// <summary>
         ///     Initializes a new instance of <see cref="OracleQueryProvider"/>.
         /// </summary>
-        /// <param name="connectionString">
-        ///     Connection string.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        ///     The <paramref name="connectionString"/> argument has <c>null</c> value.
-        /// </exception>
-        public OracleQueryProvider(string connectionString) =>
-            ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        public OracleQueryProvider()
+            : base("")
+        { }
+
+        /// <inheritdoc />
+        /// <summary>
+        ///     Initializes a new instance of <see cref="OracleQueryProvider"/>.
+        /// </summary>
+        public OracleQueryProvider(string connectionString)
+            : base(connectionString)
+        { }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="OracleQueryProvider"/>.
@@ -34,8 +36,9 @@ namespace MrgInfo.AdoQuery.Oracle
         /// <exception cref="ArgumentNullException">
         ///     The <paramref name="builder"/> argument has <c>null</c> value.
         /// </exception>
+        [SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
         public OracleQueryProvider(OracleConnectionStringBuilder builder)
-            : this((builder ?? throw new ArgumentNullException(nameof(builder))).ToString())
+            : base(builder)
         { }
 
         /// <inheritdoc />
@@ -43,8 +46,5 @@ namespace MrgInfo.AdoQuery.Oracle
 
         /// <inheritdoc />
         protected override string CreateParameterName(int index) => $":parameter_{GetParameterNumber(index)}";
-
-        /// <inheritdoc />
-        public override string ToString() => ConnectionString;
     }
 }

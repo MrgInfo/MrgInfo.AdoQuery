@@ -14,7 +14,7 @@ namespace MrgInfo.AdoQuery.Test
     /// </summary>
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
-    public sealed class DbQueryProviderTests
+    public sealed class DbQueryProviderTests 
     {
         /// <summary>
         ///     SQL providers for test.
@@ -22,13 +22,10 @@ namespace MrgInfo.AdoQuery.Test
         /// <returns>
         ///     List of providers.
         /// </returns>
-        public static IEnumerable<object[]> Vendors
+        public static IEnumerable<object[]> Vendors()
         {
-            get
-            {
-                yield return new object[] { new SqlQueryProvider("Data Source=localhost,1433;User Id=AdoQuery;Password=AdoQuery;") };
-                yield return new object[] { new OracleQueryProvider("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;") };
-            }
+            yield return new object[] { new SqlQueryProvider("Data Source=localhost,1433;User Id=AdoQuery;Password=AdoQuery;") };
+            yield return new object[] { new OracleQueryProvider("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;") };
         }
 
         /// <summary>

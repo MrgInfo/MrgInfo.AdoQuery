@@ -10,13 +10,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
     ///     Run SQL queries on database.
     /// </summary>
-    public abstract class DbQueryProvider: QueryProvider
+    public abstract class DbQueryProvider: QueryProvider, IXunitSerializable
     {
         static TraceSource TraceSource { get; } = new TraceSource(nameof(DbQueryProvider), SourceLevels.Information);
 
@@ -36,6 +37,35 @@ namespace MrgInfo.AdoQuery.Core
             TraceSource.TraceInformation(text.ToString());
         }
 
+        /// <summary>
+        ///     Database connection string.
+        /// </summary>
+        protected string ConnectionString { get; private set; }
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="DbQueryProvider"/>.
+        /// </summary>
+        /// <param name="connectionString">
+        ///     Connection string.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="connectionString"/> argument has <c>null</c> value.
+        /// </exception>
+        protected DbQueryProvider(string connectionString) =>
+            ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="DbQueryProvider"/>.
+        /// </summary>
+        /// <param name="builder">
+        ///     Builder for connection string.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     The <paramref name="builder"/> argument has <c>null</c> value.
+        /// </exception>
+        protected DbQueryProvider(DbConnectionStringBuilder builder) =>
+            ConnectionString = builder?.ToString() ?? throw new ArgumentNullException(nameof(builder));
+        
         /// <summary>
         ///     Format parameter indexing.
         /// </summary>
@@ -213,5 +243,14 @@ namespace MrgInfo.AdoQuery.Core
             if (result is null || result is DBNull) return default!;
             return (TResult)Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
         }
+
+        /// <inheritdoc />
+        public void Deserialize(IXunitSerializationInfo info) => ConnectionString = info?.GetValue<string>(nameof(ConnectionString)) ?? "";
+
+        /// <inheritdoc />
+        public void Serialize(IXunitSerializationInfo info) => info?.AddValue(nameof(ConnectionString), ConnectionString, typeof(string));
+
+        /// <inheritdoc />
+        public override string ToString() => ConnectionString;
     }
 }
