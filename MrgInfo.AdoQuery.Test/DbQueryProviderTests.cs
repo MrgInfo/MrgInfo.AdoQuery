@@ -24,8 +24,16 @@ namespace MrgInfo.AdoQuery.Test
         /// </returns>
         public static IEnumerable<object[]> Vendors()
         {
-            yield return new object[] { new SqlQueryProvider("Data Source=localhost,1433;User Id=AdoQuery;Password=AdoQuery;") };
-            yield return new object[] { new OracleQueryProvider("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;") };
+            yield return new object[] { new SqlQueryProvider(string.Join(';',
+                "Data Source=localhost,1433",
+                "User Id=AdoQuery",
+                "Password=AdoQuery",
+                "Encrypt=true",
+                "TrustServerCertificate=true")) };
+            yield return new object[] { new OracleQueryProvider(string.Join(';',
+                "Data Source=localhost:1521/ORCLCDB.localdomain",
+                "User Id=adoquery",
+                "Password=adoquery")) };
         }
 
         /// <summary>
