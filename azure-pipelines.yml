@@ -64,7 +64,7 @@ jobs:
 
 - job: packages
   displayName: Build and test NuGet packages
-  dependsOn: images
+  #dependsOn: images
   pool:
     vmImage: ubuntu-latest
   services:
