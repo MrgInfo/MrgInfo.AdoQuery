@@ -1,5 +1,12 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+
+parameters:
+- name: buildImages
+  type: boolean
+  default: false
+
 name: $(Date:yyyyMMdd)$(Rev:.r)
+
 resources:
   containers:
   - container: ora
@@ -14,14 +21,54 @@ resources:
     options: --health-start-period=5m
     ports:
     - '1433:1433'
+
 variables:
   packageVersion: 1.0.0
+
 trigger:
 - master
+
 jobs:
+- job: images
+  displayName: Build Docker images
+  condition: and(always(), eq('${{ parameters.buildImages }}', true))
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - task: Docker@2
+    displayName: Login to ACR
+    inputs:
+      command: login
+      containerRegistry: AzureContainers
+  - task: Docker@2
+    displayName: Login to Docker Hub
+    inputs:
+      command: login
+      containerRegistry: DockerHub
+  - task: Docker@2
+    displayName: Build Oracle images
+    inputs:
+      command: buildAndPush
+      containerRegistry: AzureContainers
+      repository: ado-query/ora
+      Dockerfile: '**/MrgInfo.AdoQuery.Oracle/Dockerfile'
+      tags: |
+          $(Build.BuildId)
+          latest
+  - task: Docker@2
+    displayName: Build SQL images
+    inputs:
+      command: buildAndPush
+      containerRegistry: AzureContainers
+      repository: ado-query/sql
+      Dockerfile: '**/MrgInfo.AdoQuery.Oracle/Dockerfile'
+      tags: |
+          $(Build.BuildId)
+          latest
+
 - job: packages
-  displayName: Build and test packages
-  #dependsOn: images
+  displayName: Build and test NuGet packages
+  dependsOn: images
   pool:
     vmImage: ubuntu-latest
   services:
@@ -30,6 +77,8 @@ jobs:
   steps:
   - pwsh: Start-Sleep -s (5*60)
     displayName: Wait for database servers to boot
+  - script: 'sqlcmd -S localhost,1433 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"'
+    displayName: Connect to SQL Server.
   - task: DotNetCoreCLI@2
     displayName: Run unit tests
     inputs:
