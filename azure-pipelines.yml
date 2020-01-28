@@ -77,10 +77,12 @@ jobs:
   - pwsh: Start-Sleep -s (5*60)
     displayName: Wait for database servers to boot
     enabled: false
-  - script: 'sqlcmd -S 127.0.0.1 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"'
-    displayName: Connect to SQL Server.
+  - script: sqlcmd -S 127.0.0.1 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
+    displayName: Connect to SQL Server
+    continueOnError: true
+    enabled: true
   - task: UseDotNet@2
-    displayName: 'Install .NET Core SDK'
+    displayName: Install .NET Core SDK
     inputs:
       version: 3.0.x
       performMultiLevelLookup: true
