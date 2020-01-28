@@ -28,6 +28,8 @@ jobs:
     ora: ora
     sql: sql
   steps:
+  - pwsh: Start-Sleep -s (2*60)
+    displayName: Wait for database servers to boot
   - task: DotNetCoreCLI@2
     displayName: Run unit tests
     inputs:
