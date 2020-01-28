@@ -1,12 +1,5 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
-parameters:
-- name: buildImages
-  type: boolean
-  default: false
-
-name: $(Date:yyyyMMdd)$(Rev:.r)
-
 resources:
   containers:
   - container: ora
@@ -24,6 +17,9 @@ resources:
 
 variables:
   packageVersion: 1.0.0
+  buildImages: false
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
 - master
@@ -31,7 +27,7 @@ trigger:
 jobs:
 - job: images
   displayName: Build Docker images
-  condition: and(always(), eq('${{ parameters.buildImages }}', true))
+  condition: 'and(always(), eq(variables.buildImages, true))'
   pool:
     vmImage: ubuntu-latest
   steps:
