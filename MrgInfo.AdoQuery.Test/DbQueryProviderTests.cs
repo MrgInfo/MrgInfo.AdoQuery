@@ -36,10 +36,10 @@ namespace MrgInfo.AdoQuery.Test
                     TrustServerCertificate = true,
                     ConnectRetryCount = 3,
                     ConnectRetryInterval = 30,
-                    ApplicationIntent = ApplicationIntent.ReadOnly,
+                    ConnectTimeout = 120,
                     MultipleActiveResultSets = true,
-                    Enlist = true,
-                    ConnectTimeout = 120
+                    //ApplicationIntent = ApplicationIntent.ReadOnly,
+                    //Enlist = true,
                 })
             };
             yield return new object[] 
