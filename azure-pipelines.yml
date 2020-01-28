@@ -64,15 +64,19 @@ jobs:
 
 - job: packages
   displayName: Build and test NuGet packages
-  #dependsOn: images
+  dependsOn: images
+  condition: always()
   pool:
-    vmImage: ubuntu-latest
+    vmImage: ubuntu-16.04
+  workspace:
+    clean: all
   services:
     ora: ora
     sql: sql
   steps:
   - pwsh: Start-Sleep -s (5*60)
     displayName: Wait for database servers to boot
+    enabled: false
   - script: 'sqlcmd -S 127.0.0.1 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"'
     displayName: Connect to SQL Server.
   - task: UseDotNet@2
