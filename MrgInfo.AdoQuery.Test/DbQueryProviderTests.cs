@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MrgInfo.AdoQuery.Core;
@@ -24,16 +25,30 @@ namespace MrgInfo.AdoQuery.Test
         /// </returns>
         public static IEnumerable<object[]> Vendors()
         {
-            yield return new object[] { new SqlQueryProvider(string.Join(';',
-                "Data Source=localhost,1433",
-                "User Id=AdoQuery",
-                "Password=AdoQuery",
-                "Encrypt=true",
-                "TrustServerCertificate=true")) };
-            yield return new object[] { new OracleQueryProvider(string.Join(';',
-                "Data Source=localhost:1521/ORCLCDB.localdomain",
-                "User Id=adoquery",
-                "Password=adoquery")) };
+            yield return new object[]
+            {
+                new SqlQueryProvider(new SqlConnectionStringBuilder
+                {
+                    DataSource = "localhost,1433",
+                    UserID = "AdoQuery",
+                    Password = "AdoQuery",
+                    Encrypt = true,
+                    TrustServerCertificate = true,
+                    ConnectRetryCount = 3,
+                    ConnectRetryInterval = 30,
+                    ApplicationIntent = ApplicationIntent.ReadOnly,
+                    MultipleActiveResultSets = true,
+                    Enlist = true,
+                    ConnectTimeout = 120
+                })
+            };
+            yield return new object[] 
+            { 
+                new OracleQueryProvider(string.Join(';',
+                    "Data Source=localhost:1521/ORCLCDB.localdomain",
+                    "User Id=adoquery",
+                    "Password=adoquery"))
+            };
         }
 
         /// <summary>
