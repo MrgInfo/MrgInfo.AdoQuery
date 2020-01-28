@@ -5,18 +5,18 @@ resources:
   - container: ora
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
     endpoint: AzureContainers
-    options: --health-start-period=5m 
+    options: --health-start-period=5m --memory=3G
     ports:
     - '1521:1521'
   - container: sql
     image: mrginfocontainerregistry.azurecr.io/ado-query/sql
     endpoint: AzureContainers
-    options: --health-start-period=5m
+    options: --health-start-period=5m --memory=3G
     ports:
     - '1433:1433'
 
 variables:
-  packageVersion: 1.0.0
+  packageVersion: 1.1.0
   buildImages: false
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
@@ -73,8 +73,13 @@ jobs:
   steps:
   - pwsh: Start-Sleep -s (5*60)
     displayName: Wait for database servers to boot
-  - script: 'sqlcmd -S localhost,1433 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"'
+  - script: 'sqlcmd -S 127.0.0.1 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"'
     displayName: Connect to SQL Server.
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    inputs:
+      version: 3.0.x
+      performMultiLevelLookup: true
   - task: DotNetCoreCLI@2
     displayName: Run unit tests
     inputs:
