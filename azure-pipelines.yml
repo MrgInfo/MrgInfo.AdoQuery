@@ -67,7 +67,7 @@ jobs:
   dependsOn: images
   condition: always()
   pool:
-    vmImage: windows-latest
+    vmImage: ubuntu-latest
   workspace:
     clean: all
   services:
@@ -77,6 +77,9 @@ jobs:
   - pwsh: Start-Sleep -s (5*60)
     displayName: Wait for database servers to boot
     enabled: false
+  - script: nc -zv localhost 1433
+    displayName: Connect to 1433 on TCP
+    enabled: true
   - script: sqlcmd -S localhost -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
     displayName: Connect to SQL Server
     enabled: true
