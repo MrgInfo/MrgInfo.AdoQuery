@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using MrgInfo.AdoQuery.Core;
 using MrgInfo.AdoQuery.Oracle;
 using MrgInfo.AdoQuery.Sql;
@@ -58,7 +59,7 @@ namespace MrgInfo.AdoQuery.Test
         ///     Query provider.
         /// </param>
         [Theory, MemberData(nameof(Vendors))]
-        public void TestConnection(QueryProvider provider)
+        public void TestRead(QueryProvider provider)
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
@@ -66,6 +67,25 @@ namespace MrgInfo.AdoQuery.Test
                 |select count(*)
                 |  from product
                 | where unitprice > {500}"));
+            Assert.Equal(3, cnt);
+        }
+
+        /// <summary>
+        ///     Run simple query.
+        /// </summary>
+        /// <param name="provider">
+        ///     Query provider.
+        /// </param>
+        [Theory, MemberData(nameof(Vendors))]
+        public async Task TestReadAsync(QueryProvider provider)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+
+            int cnt = await provider.ReadAsync<int>(1.IdFor($@"
+                |select count(*)
+                |  from product
+                | where unitprice > {500}"))
+                .ConfigureAwait(false);
             Assert.Equal(3, cnt);
         }
 
@@ -117,6 +137,35 @@ namespace MrgInfo.AdoQuery.Test
                     | where name is null
                     |   and code {code:=*}")
                 .ToArray();
+            Assert.All(resultSet, row =>
+            {
+                (int? productId, string name) = row;
+                Assert.NotNull(productId);
+                Assert.Null(name);
+            });
+        }
+
+        /// <summary>
+        ///     Test for NULLs.
+        /// </summary>
+        /// <param name="provider">
+        ///     Query provider.
+        /// </param>
+        [Theory, MemberData(nameof(Vendors))]
+        public async Task TestNullAsync(QueryProvider provider)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+
+            var code = "PG";
+            (int? ProductId, string Name)[] resultSet =
+                await provider.QueryAsync<int?, string>($@"
+                    |select productid,
+                    |       name
+                    |  from product
+                    | where name is null
+                    |   and code {code:=*}")
+                    .ToArrayAsync()
+                    .ConfigureAwait(false);
             Assert.All(resultSet, row =>
             {
                 (int? productId, string name) = row;
