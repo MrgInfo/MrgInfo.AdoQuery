@@ -17,7 +17,7 @@ resources:
 
 variables:
   packageVersion: 1.1.0
-  buildImages: false
+  buildImages: true
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
@@ -74,15 +74,10 @@ jobs:
     ora: ora
     sql: sql
   steps:
-  - pwsh: Start-Sleep -s (5*60)
-    displayName: Wait for database servers to boot
-    enabled: false
   - script: nc -zv localhost 1433
     displayName: Connect to 1433 on TCP
-    enabled: true
-  - script: sqlcmd -S localhost -l 5000 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
+  - script: sqlcmd -S localhost -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
     displayName: Connect to SQL Server
-    enabled: true
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
     inputs:
