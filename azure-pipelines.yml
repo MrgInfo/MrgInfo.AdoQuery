@@ -74,9 +74,11 @@ jobs:
     ora: ora
     sql: sql
   steps:
+  - script: sleep 3m
+    displayName: Wait 3 minutes
   - script: nc -zv localhost 1433
     displayName: Connect to 1433 on TCP
-  - script: sqlcmd -S localhost -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
+  - script: sqlcmd -S localhost,1433 -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
     displayName: Connect to SQL Server
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
