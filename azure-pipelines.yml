@@ -5,13 +5,13 @@ resources:
   - container: ora
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
     endpoint: AzureContainers
-    options: --health-start-period=5m --memory=4G
+    #options: --memory=4G
     ports:
     - '1521:1521'
   - container: sql
     image: mrginfocontainerregistry.azurecr.io/ado-query/sql
     endpoint: AzureContainers
-    options: --health-start-period=5m --memory=4G
+    #options: --memory=4G
     ports:
     - '1433:1433'
 
@@ -74,10 +74,6 @@ jobs:
     ora: ora
     sql: sql
   steps:
-  - script: sleep 3m
-    displayName: Wait 3 minutes
-  - script: nc -zv localhost 1433
-    displayName: Connect to 1433 on TCP
   - script: sqlcmd -S localhost,1433 -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
     displayName: Connect to SQL Server
   - task: UseDotNet@2

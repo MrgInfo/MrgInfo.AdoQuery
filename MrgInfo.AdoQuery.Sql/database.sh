@@ -12,7 +12,7 @@ if [ ! -f $LOG ]; then
     sleep 1m
     for file in $(find $DBA_DIR -name *.sql); do
         echo "Running script $file." >>$LOG
-        $TOOL_DIR/sqlcmd -S localhost -U SA -P $SA_PASSWORD -d master -l 120 -i $file 2>&1 >>$LOG
+        $TOOL_DIR/sqlcmd -S localhost -U sa -P $SA_PASSWORD -d master -l 120 -i $file 2>&1 >>$LOG
     done
     cat $LOG
 fi
