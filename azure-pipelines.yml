@@ -57,7 +57,7 @@ jobs:
       command: buildAndPush
       containerRegistry: AzureContainers
       repository: ado-query/sql
-      Dockerfile: '**/MrgInfo.AdoQuery.Oracle/Dockerfile'
+      Dockerfile: '**/MrgInfo.AdoQuery.Sql/Dockerfile'
       tags: |
           $(Build.BuildId)
           latest
@@ -74,7 +74,7 @@ jobs:
     ora: ora
     sql: sql
   steps:
-  - script: sqlcmd -S localhost,1433 -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
+  - script: sqlcmd -S localhost -l 60 -U AdoQuery -P AdoQuery -Q "SELECT * FROM Product"
     displayName: Connect to SQL Server
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
