@@ -14,10 +14,13 @@ resources:
     - '1433:1433'
 
 variables:
-  packageVersion: 1.1.0
-  buildImages: false
+  major: 1
+  minor: 2
+  patch: $[counter(variables['minor'], 0)]
+  packageVersion: $(major).$(minor).$(patch)
+  buildImages: true
 
-name: $(Date:yyyyMMdd)$(Rev:.r)
+name: $(Build.DefinitionName)-$(Date:yyyyMMdd)-$(Rev:rr)
 
 trigger:
 - master
