@@ -3,8 +3,10 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MrgInfo.AdoQuery.Core;
 using MrgInfo.AdoQuery.Oracle;
 using MrgInfo.AdoQuery.Sql;
 using Oracle.ManagedDataAccess.Client;
@@ -53,6 +55,30 @@ namespace MrgInfo.AdoQuery.App
             {
                 Trace.WriteLine($"ProductId = {productId}, Name = {name}");
             }
+        }
+
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        static void FakeExample()
+        {
+            var provider = new ByPatternFakeQueryProvider
+            {
+                ["ProductId.+Code.+Product"] = new[]
+                {
+                    new object[] { 10, "AB123", "Leather Sofa", 1000.0 },
+                    new object[] { 20, "AB456", "Baby Chair", 200.25 },
+                    new object[] { 30, "AB789", "Sport Shoes", 250.60 },
+                    new object[] { 40, "PQ123", "Sony Digital Camera", 399 },
+                    new object[] { 50, "PQ456", "Hitachi HandyCam", 1050.0 },
+                    new object[] { 60, "PQ789", "GM Saturn", 2250.99 },
+                }
+            };
+            (int productId, string code) = provider
+                .Query<int, string>($@"
+                    |select ProductId,
+                    |       Code
+                    |  from Product")
+                .First();
+            Trace.WriteLine($"ProductId = {productId}, Code = {code}");
         }
 
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
@@ -109,6 +135,7 @@ namespace MrgInfo.AdoQuery.App
         {
             AdoExample();
             Example();
+            FakeExample();
             await AdoExampleAsync().ConfigureAwait(false);
             await ExampleAsync().ConfigureAwait(false);
         }

@@ -100,3 +100,25 @@ format string for dealing with scenarios when *NULL* and real data both can occu
 | `$"{data:*=*}"` | Match containing in string.   |
 
 ## Faking queries
+
+```csharp
+var provider = new ByPatternFakeQueryProvider
+{
+    ["ProductId.+Code.+Product"] = new[]
+    {
+        new object[] { 10, "AB123", "Leather Sofa", 1000.0 },
+        new object[] { 20, "AB456", "Baby Chair", 200.25 },
+        new object[] { 30, "AB789", "Sport Shoes", 250.60 },
+        new object[] { 40, "PQ123", "Sony Digital Camera", 399 },
+        new object[] { 50, "PQ456", "Hitachi HandyCam", 1050.0 },
+        new object[] { 60, "PQ789", "GM Saturn", 2250.99 },
+    }
+};
+(int productId, string code) = provider
+    .Query<int, string>($@"
+        |select ProductId,
+        |       Code
+        |  from Product")
+    .First();
+Trace.WriteLine($"ProductId = {productId}, Code = {code}");
+```

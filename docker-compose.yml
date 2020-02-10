@@ -9,16 +9,19 @@ services:
     oracle:
         build: ./MrgInfo.AdoQuery.Oracle
         image: ora:latest
+        container_name: ora
         ports:
             - "1521:1521"
 
     # cd ./MrgInfo.AdoQuery.Sql
     # docker build -t sql:latest .
     # docker run -p 1433:1433 --name sql sql:latest
-    # docker exec sql cat /dba/database.log
+    # docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" sql
+    # docker exec sql cat /root/dba/database.log
     # docker rm -f sql
     sql:
         build: ./MrgInfo.AdoQuery.Sql
         image: sql:latest
+        container_name: sql
         ports:
             - "1433:1433"

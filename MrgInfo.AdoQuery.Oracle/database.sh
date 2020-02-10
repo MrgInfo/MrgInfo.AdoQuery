@@ -4,6 +4,9 @@ BASH_RC=$HOME/.bashrc
 DBA_DIR=$HOME/dba
 LOG=$DBA_DIR/database.log
 
+/home/oracle/setup/dockerInit.sh &
+PID=$!
+
 if [ ! -f $LOG ]; then
     echo "Waiting for Oracle Database..." >$LOG
     while true; do
@@ -15,8 +18,10 @@ if [ ! -f $LOG ]; then
         fi
     done
     source $BASH_RC
-    for f in $(find $DBA_DIR -name *.sql); do
-        echo "Running script $f." >>$LOG
-        sqlplus -L / as sysdba @$f 2>&1 >>$LOG
+    for file in $(find $DBA_DIR -name *.sql); do
+        echo "Running script $file." >>$LOG
+        sqlplus -L / as sysdba @$file 2>&1 >>$LOG
     done
 fi
+
+wait $PID
