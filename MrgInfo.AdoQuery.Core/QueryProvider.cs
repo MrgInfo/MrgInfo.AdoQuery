@@ -17,8 +17,6 @@ namespace MrgInfo.AdoQuery.Core
     /// </summary>
     public abstract class QueryProvider
     {
-        
-
         static string? FindId(FormattableString? formattableString) =>
             formattableString is FormattableStringWithId withInt
                 ? withInt.Id
@@ -733,6 +731,7 @@ namespace MrgInfo.AdoQuery.Core
         [return: MaybeNull]
         protected internal abstract TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters);
 
+        [return: MaybeNull]
         TResult SafeRead<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
             try
@@ -761,6 +760,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Error occured during executing the query.
         /// </exception>
         /// <include file='Documentation.xml' path='docs/format/*'/>
+        [return: MaybeNull]
         public TResult Read<TResult>(FormattableString query) =>
             SafeRead<TResult>(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments());
 

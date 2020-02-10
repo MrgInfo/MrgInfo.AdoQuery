@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -127,6 +128,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <inheritdoc />
+        [return: MaybeNull]
         protected internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
             IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
@@ -139,8 +141,13 @@ namespace MrgInfo.AdoQuery.Core
         /// <remarks>
         ///     Not really async!
         /// </remarks>
-        protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default) =>
-            await Task.FromResult(Read<TResult>(id, query, args)).ConfigureAwait(false);
+        protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default)
+        {
+            var fake = Read<TResult>(id, query, args);
+            return fake is null
+                ? default
+                : await Task.FromResult(fake).ConfigureAwait(false);
+        }
 
         /// <summary>
         ///     Export collected queries to <c>XML</c> file.
