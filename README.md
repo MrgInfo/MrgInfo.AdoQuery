@@ -4,7 +4,7 @@ Run safe and cosine ADO .NET SQL queries with this package.
 
 ## Installation
 
-For Oracle Dababase:
+For Oracle Database:
 
 ```powershell
 PM> Install-Package MrgInfo.AdoQuery.Oracle
@@ -18,7 +18,7 @@ PM> Install-Package MrgInfo.AdoQuery.Sql
 
 ## Background
 
-This is how you should write ADO queries filtered by input data:
+This is how you should write ADO queries filtered by arbitrary input data:
 
 ```csharp
 using DbConnection connection = new SqlConnection("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
@@ -39,7 +39,7 @@ while (reader.Read())
 }
 ```
 
-And this is how you always wanted:
+And this is how you always dreamed:
 
 ```csharp
 var prefix = "A";
@@ -56,11 +56,11 @@ foreach ((int productId, string name) in resultSet)
 }
 ```
 
-Separating SQL command from sensible input data is a good idea becaused of both **security** (SQL injection) and **performance** (better execution planning) reasons.
+Separating the SQL command from sensible input data is a good idea because of both **security** (SQL injection) and **performance** (better execution planning) reasons.
 
-The ```QueryProvider``` uses string interpolation for addig user data for a particular query and administers **parameterized** SQL commands under the hood.
+The ```QueryProvider``` uses string interpolation for adding user data for a particular query and administers **parameterized** SQL commands under the hood.
 
-The result set can easally be enumerated and the projection part of the query simply tranforms to named tuples. The requeted types of tuple elements can be specified by generic type parameters of the query methods.
+The result set can easily be enumerated and the projection part of the query simply transforms to named tuples. The requested types of tuple elements can be specified by generic type parameters of the query methods.
 
 ## Can run ```async``` too
 
@@ -70,7 +70,7 @@ Fetching data from SQL server is generally I/O bound asynchronous reading has a 
 var prefix = "A";
 var provider = new OracleQueryProvider(new OracleConnectionStringBuilder
 {
-    DataSource = "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)))",
+    DataSource = "Data Source=localhost:1521/ORCLCDB.localdomain",
     UserID = "adoquery",
     Password = "adoquery"
 });
@@ -88,11 +88,11 @@ await foreach ((int productId, string name) in resultSet.WithCancellation(cancel
 
 ## Format strings
 
-When applying string interpolation one can use format strings. `QueryProvider` has some spetial
+When applying string interpolation one can use format strings. `QueryProvider` has some special
 format string for dealing with scenarios when *NULL* and real data both can occur.
 
-| Format           | Definition                    |
-|------------------|-------------------------------|
+| Format          | Definition                    |
+|-----------------|-------------------------------|
 | `$"{data:==}"`  | Equals (works for NULLs).     |
 | `$"{data:!=}"`  | Not equals (works for NULLs). |
 | `$"{data:=*}"`  | Match start of string.        |
@@ -100,4 +100,3 @@ format string for dealing with scenarios when *NULL* and real data both can occu
 | `$"{data:*=*}"` | Match containing in string.   |
 
 ## Faking queries
-
