@@ -74,13 +74,13 @@ jobs:
     ora: ora
     sql: sql
   steps:
-  - pwsh: Start-Sleep -s (6*60)
+  - pwsh: |
+      Start-Sleep -s (6*60)
     displayName: Wait for database servers to boot
   - bash: |
-        docker exec ora cat /home/oracle/dba/database.log
-        docker exec sql cat /root/dba/database.log
+      docker exec ora cat /home/oracle/dba/database.log
+      docker exec sql cat /root/dba/database.log
     displayName: Test docker containers
-    ignoreLASTEXITCODE: true
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
     inputs:
