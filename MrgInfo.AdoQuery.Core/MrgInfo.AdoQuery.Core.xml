@@ -4,144 +4,6 @@
         <name>MrgInfo.AdoQuery.Core</name>
     </assembly>
     <members>
-        <member name="T:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider">
-            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.FakeQueryProvider" />
-            <summary>
-                Fake data provider by unique identifier.
-            </summary>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.Register``1(``0,System.Collections.Generic.IReadOnlyList{System.Object}[])">
-            <summary>
-                Register fake data for a query.
-            </summary>
-            <param name="id">
-                Unique identifier of the query.
-            </param>
-            <param name="data">
-                Fake result set.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="data"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.Register``1(System.String,``0,System.Collections.Generic.IReadOnlyList{System.Object}[])">
-            <summary>
-                Register fake data for a given query.
-            </summary>
-            <param name="member">
-                Caller context of the query.
-            </param>
-            <param name="id">
-                Unique identifier of the query.
-            </param>
-            <param name="data">
-                Fake result set.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="member"/> or <paramref name="data"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.Item(System.String)">
-            <summary>
-                Register fake data for a given query.
-            </summary>
-            <param name="id">
-                Unique identifier of the query.
-            </param>
-            <value>
-                Fake result set.
-            </value>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="id"/> or <paramref name="value"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.Item(System.String,System.String)">
-            <summary>
-                Register fake data for a given query.
-            </summary>
-            <param name="member">
-                Caller context of the query.
-            </param>
-            <param name="id">
-                Unique identifier of the query.
-            </param>
-            <value>
-                Fake result set.
-            </value>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="member"/> or <paramref name="id"/> or <paramref name="value"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByIdFakeQueryProvider.Clear">
-            <summary>
-                Clear registered data.
-            </summary>
-        </member>
-        <member name="T:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider">
-            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.FakeQueryProvider" />
-            <summary>
-                Fake data provider by regular expression query matching.
-            </summary>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider.Register(System.Text.RegularExpressions.Regex,System.Collections.Generic.IReadOnlyList{System.Object}[])">
-            <summary>
-                Register fake data for a query.
-            </summary>
-            <param name="pattern">
-                Regular expression for selecting query.
-            </param>
-            <param name="data">
-                Fake result set.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider.Register(System.String,System.Collections.Generic.IReadOnlyList{System.Object}[])">
-            <summary>
-                Register fake data for a query.
-            </summary>
-            <param name="pattern">
-                Regular expression for selecting query.
-            </param>
-            <param name="data">
-                Fake result set.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-                A regular expression parsing error occurred.
-            </exception>
-        </member>
-        <member name="P:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider.Item(System.String)">
-            <summary>
-                Register fake data for a given query.
-            </summary>
-            <param name="pattern">
-                Unique identifier of the query.
-            </param>
-            <value>
-                Fake result set.
-            </value>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="pattern"/> or <paramref name="value"/> argument has <c>null</c> value.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-                A regular expression parsing error occurred.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.ByPatternFakeQueryProvider.Clear">
-            <summary>
-                Clear registered data.
-            </summary>
-        </member>
         <member name="T:MrgInfo.AdoQuery.Core.DbQueryProvider">
             <summary>
                 Run SQL queries on database.
@@ -225,97 +87,7 @@
         <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.Deserialize(Xunit.Abstractions.IXunitSerializationInfo)">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.Serialize(Xunit.Abstractions.IXunitSerializationInfo)">
-            <inheritdoc />
-        </member>
         <member name="M:MrgInfo.AdoQuery.Core.DbQueryProvider.ToString">
-            <inheritdoc />
-        </member>
-        <member name="T:MrgInfo.AdoQuery.Core.FakeQueryProvider">
-            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.QueryProvider" />
-            <summary>
-                Fake data query provider.
-            </summary>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.RegisterQuery(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
-            <summary>
-                Used for collection queries in order to test them on a particular database for
-                syntax and performance.
-            </summary>
-            <param name="id">
-                The unique identifier of query.
-            </param>
-            <param name="query">
-                The query command.
-            </param>
-            <param name="parameters">
-                 Query parameters.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="query"/> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.FindFakeData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
-            <summary>
-                Load fake data.
-            </summary>
-            <param name="id">
-                The unique identifier of query.
-            </param>
-            <param name="query">
-                The query command.
-            </param>
-            <param name="parameters">
-                Query parameters.
-            </param>
-            <returns>
-                Fake data with [row][column] indexing.
-            </returns>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.QueryAsync(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32,System.Threading.CancellationToken)">
-            <inheritdoc />
-            <remarks>
-                Not really async!
-            </remarks>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.Read``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object})">
-            <inheritdoc />
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
-            <inheritdoc />
-            <remarks>
-                Not really async!
-            </remarks>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.IO.TextWriter)">
-            <summary>
-                Export collected queries to <c>XML</c> file.
-            </summary>
-            <param name="writer">
-                File stream.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="writer" /> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.SaveQueries(System.String)">
-            <summary>
-                Export collected queries to <c>XML</c> file.
-            </summary>
-            <param name="fileName">
-                Export file's name.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                The <paramref name="fileName" /> argument has <c>null</c> value.
-            </exception>
-        </member>
-        <member name="M:MrgInfo.AdoQuery.Core.FakeQueryProvider.ToString">
             <inheritdoc />
         </member>
         <member name="T:MrgInfo.AdoQuery.Core.FormattableStringExtensions">
@@ -359,6 +131,228 @@
             <exception cref="T:System.ArgumentNullException">
                 The <paramref name="query" /> or <paramref name="memberName" /> argument has <c>null</c> value.
             </exception>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.MockByIdQueryProvider">
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.MockQueryProvider" />
+            <summary>
+                Mocked data provider by unique identifier.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.FindMockedData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.Register``1(``0,System.Collections.Generic.IReadOnlyList{System.Object}[])">
+            <summary>
+                Register mocked data for a query.
+            </summary>
+            <param name="id">
+                Unique identifier of the query.
+            </param>
+            <param name="data">
+                Fake result set.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="data"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.Register``1(System.String,``0,System.Collections.Generic.IReadOnlyList{System.Object}[])">
+            <summary>
+                Register mocked data for a given query.
+            </summary>
+            <param name="member">
+                Caller context of the query.
+            </param>
+            <param name="id">
+                Unique identifier of the query.
+            </param>
+            <param name="data">
+                Fake result set.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="member"/> or <paramref name="data"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.Item(System.String)">
+            <summary>
+                Register mocked data for a given query.
+            </summary>
+            <param name="id">
+                Unique identifier of the query.
+            </param>
+            <value>
+                Fake result set.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="id"/> or <paramref name="value"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.Item(System.String,System.String)">
+            <summary>
+                Register mocked data for a given query.
+            </summary>
+            <param name="member">
+                Caller context of the query.
+            </param>
+            <param name="id">
+                Unique identifier of the query.
+            </param>
+            <value>
+                Fake result set.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="member"/> or <paramref name="id"/> or <paramref name="value"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByIdQueryProvider.Clear">
+            <summary>
+                Clear registered data.
+            </summary>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider">
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.MockQueryProvider" />
+            <summary>
+                Mocked data provider by regular expression query matching.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider.FindMockedData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider.Register(System.Text.RegularExpressions.Regex,System.Collections.Generic.IReadOnlyList{System.Object}[])">
+            <summary>
+                Register mocked data for a query.
+            </summary>
+            <param name="pattern">
+                Regular expression for selecting query.
+            </param>
+            <param name="data">
+                Fake result set.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider.Register(System.String,System.Collections.Generic.IReadOnlyList{System.Object}[])">
+            <summary>
+                Register mocked data for a query.
+            </summary>
+            <param name="pattern">
+                Regular expression for selecting query.
+            </param>
+            <param name="data">
+                Fake result set.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="pattern"/> or <paramref name="data"/> argument has <c>null</c> value.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                A regular expression parsing error occurred.
+            </exception>
+        </member>
+        <member name="P:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider.Item(System.String)">
+            <summary>
+                Register mocked data for a given query.
+            </summary>
+            <param name="pattern">
+                Unique identifier of the query.
+            </param>
+            <value>
+                Fake result set.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="pattern"/> or <paramref name="value"/> argument has <c>null</c> value.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                A regular expression parsing error occurred.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockByPatternQueryProvider.Clear">
+            <summary>
+                Clear registered data.
+            </summary>
+        </member>
+        <member name="T:MrgInfo.AdoQuery.Core.MockQueryProvider">
+            <inheritdoc cref="T:MrgInfo.AdoQuery.Core.QueryProvider" />
+            <summary>
+                Mocked data query provider.
+            </summary>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.RegisterQuery(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+                Used for collection queries in order to test them on a particular database for
+                syntax and performance.
+            </summary>
+            <param name="id">
+                The unique identifier of query.
+            </param>
+            <param name="query">
+                The query command.
+            </param>
+            <param name="parameters">
+                 Query parameters.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="query"/> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.FindMockedData(System.String,System.String,System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+                Load mocked data.
+            </summary>
+            <param name="id">
+                The unique identifier of query.
+            </param>
+            <param name="query">
+                The query command.
+            </param>
+            <param name="parameters">
+                Query parameters.
+            </param>
+            <returns>
+                Fake data with [row][column] indexing.
+            </returns>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.Query(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.QueryAsync(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+            <remarks>
+                Not really async!
+            </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.Read``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object})">
+            <inheritdoc />
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.ReadAsync``1(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.Object},System.Threading.CancellationToken)">
+            <inheritdoc />
+            <remarks>
+                Not really async!
+            </remarks>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.SaveQueries(System.IO.TextWriter)">
+            <summary>
+                Export collected queries to <c>XML</c> file.
+            </summary>
+            <param name="writer">
+                File stream.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="writer" /> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.SaveQueries(System.String)">
+            <summary>
+                Export collected queries to <c>XML</c> file.
+            </summary>
+            <param name="fileName">
+                Export file's name.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                The <paramref name="fileName" /> argument has <c>null</c> value.
+            </exception>
+        </member>
+        <member name="M:MrgInfo.AdoQuery.Core.MockQueryProvider.ToString">
+            <inheritdoc />
         </member>
         <member name="T:MrgInfo.AdoQuery.Core.Parameter">
             <inheritdoc />

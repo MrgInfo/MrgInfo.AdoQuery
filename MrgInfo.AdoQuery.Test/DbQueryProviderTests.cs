@@ -59,7 +59,7 @@ namespace MrgInfo.AdoQuery.Test
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var cnt = provider.Read<int>(1.IdFor($@"
+            int cnt = provider.Read<int>(1.IdFor($@"
                 |select count(*)
                 |  from product
                 | where unitprice > {500}"));
@@ -96,7 +96,7 @@ namespace MrgInfo.AdoQuery.Test
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var price = 500;
+            const int price = 500;
             (int ProductId, string Code, int? Nullable, double Float)[] resultSet =
                 provider.Query<int, string, int?, double>($@"
                     |  select productid,
@@ -124,7 +124,7 @@ namespace MrgInfo.AdoQuery.Test
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var code = "PG";
+            const string code = "PG";
             (int? ProductId, string Name)[] resultSet =
                 provider.Query<int?, string>($@"
                     |select productid,
@@ -152,7 +152,7 @@ namespace MrgInfo.AdoQuery.Test
         {
             if (provider == null) throw new ArgumentNullException(nameof(provider));
 
-            var code = "PG";
+            const string code = "PG";
             (int? ProductId, string Name)[] resultSet =
                 await provider.QueryAsync<int?, string>($@"
                     |select productid,

@@ -25,11 +25,11 @@ using DbConnection connection = new SqlConnection("Data Source=localhost;User Id
 connection.Open();
 using DbCommand command = connection.CreateCommand();
 command.CommandText = @"
-    select ProductId,
-            Name
-        from Product
+       select ProductId,
+              Name
+         from Product
         where Code like @Prefix
-    order by ProductId";
+     order by ProductId";
 command.Parameters.Add(new SqlParameter("Prefix", SqlDbType.NVarChar, 100) { Value = "A%" });
 using DbDataReader reader = command.ExecuteReader();
 while (reader.Read())
@@ -99,10 +99,15 @@ format string for dealing with scenarios when *NULL* and real data both can occu
 | `$"{data:*=}"`  | Match end of string.          |
 | `$"{data:*=*}"` | Match containing in string.   |
 
-## Faking queries
+## Mock data tables
+
+Mock objects are simulated objects that mimic the behavior of real objects. It is possible to mock data table (more precisely complete query result sets) in order to
+test business logic without an actual database server.
+
+The ```MockByPatternQueryProvider``` can be used to provide mocked results to quires matching a given regular expression:
 
 ```csharp
-var provider = new ByPatternFakeQueryProvider
+var provider = new MockByPatternQueryProvider
 {
     ["ProductId.+Code.+Product"] = new[]
     {
@@ -121,4 +126,10 @@ var provider = new ByPatternFakeQueryProvider
         |  from Product")
     .First();
 Trace.WriteLine($"ProductId = {productId}, Code = {code}");
+```
+
+The ```MockIdFakeQueryProvider``` is useful for mocking quires embedded into the code with a unique identifier:
+
+```csharp
+var provider = new MockIdFakeQueryProvider();
 ```

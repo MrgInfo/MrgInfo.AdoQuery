@@ -7,16 +7,16 @@ using static System.Text.RegularExpressions.RegexOptions;
 
 namespace MrgInfo.AdoQuery.Core
 {
-    /// <inheritdoc cref="FakeQueryProvider" />
+    /// <inheritdoc cref="MockQueryProvider" />
     /// <summary>
-    ///     Fake data provider by regular expression query matching.
+    ///     Mocked data provider by regular expression query matching.
     /// </summary>
-    public sealed class ByPatternFakeQueryProvider: FakeQueryProvider
+    public sealed class MockByPatternQueryProvider: MockQueryProvider
     {
         ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>> ByRegexData { get; } = new ConcurrentDictionary<Regex, IList<IReadOnlyList<object?>>>();
 
         /// <inheritdoc />
-        protected override IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? parameters)
+        protected override IList<IReadOnlyList<object?>> FindMockedData(string? id, string? query, IEnumerable<object?>? parameters)
         {
             object[] formatParameters =
                 parameters
@@ -34,7 +34,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Register fake data for a query.
+        ///     Register mocked data for a query.
         /// </summary>
         /// <param name="pattern">
         ///     Regular expression for selecting query.
@@ -51,7 +51,7 @@ namespace MrgInfo.AdoQuery.Core
                 data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Register fake data for a query.
+        ///     Register mocked data for a query.
         /// </summary>
         /// <param name="pattern">
         ///     Regular expression for selecting query.
@@ -71,7 +71,7 @@ namespace MrgInfo.AdoQuery.Core
                 data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Register fake data for a given query.
+        ///     Register mocked data for a given query.
         /// </summary>
         /// <param name="pattern">
         ///     Unique identifier of the query.

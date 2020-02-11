@@ -18,11 +18,11 @@ namespace MrgInfo.AdoQuery.Core
 {
     /// <inheritdoc cref="QueryProvider" />
     /// <summary>
-    ///     Fake data query provider.
+    ///     Mocked data query provider.
     /// </summary>
-    public abstract class FakeQueryProvider: QueryProvider
+    public abstract class MockQueryProvider: QueryProvider
     {
-        static TraceSource TraceSource { get; } = new TraceSource(nameof(FakeQueryProvider), Information);
+        static TraceSource TraceSource { get; } = new TraceSource(nameof(MockQueryProvider), Information);
 
         static void Print(Query query)
         {
@@ -63,7 +63,7 @@ namespace MrgInfo.AdoQuery.Core
             if (query == null) throw new ArgumentNullException(nameof(query));
 
             string @namespace = typeof(QueryProvider).Namespace ?? "@";
-            var i = 2;
+            int i = 2;
             MethodBase? method;
             do
             {
@@ -86,7 +86,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Load fake data.
+        ///     Load mocked data.
         /// </summary>
         /// <param name="id">
         ///     The unique identifier of query.
@@ -100,14 +100,14 @@ namespace MrgInfo.AdoQuery.Core
         /// <returns>
         ///     Fake data with [row][column] indexing.
         /// </returns>
-        protected abstract IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? parameters);
+        protected abstract IList<IReadOnlyList<object?>> FindMockedData(string? id, string? query, IEnumerable<object?>? parameters);
 
         /// <inheritdoc />
         protected internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
-            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
-            if (fakeData == null) yield break;
-            foreach (IReadOnlyList<object?> row in fakeData)
+            IList<IReadOnlyList<object?>>? mockedData = FindMockedData(id, query, parameters);
+            if (mockedData == null) yield break;
+            foreach (IReadOnlyList<object?> row in mockedData)
             {
                 yield return row.ToArray();
             }
@@ -131,9 +131,9 @@ namespace MrgInfo.AdoQuery.Core
         [return: MaybeNull]
         protected internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
-            IList<IReadOnlyList<object?>>? fakeData = FindFakeData(id, query, parameters);
-            return fakeData != null && fakeData.Count > 0 && fakeData[0]?.Count > 0
-                ? Cast<TResult>(fakeData[0][0])
+            IList<IReadOnlyList<object?>>? mockedData = FindMockedData(id, query, parameters);
+            return mockedData != null && mockedData.Count > 0 && mockedData[0]?.Count > 0
+                ? Cast<TResult>(mockedData[0][0])
                 : default;
         }
 
@@ -143,10 +143,10 @@ namespace MrgInfo.AdoQuery.Core
         /// </remarks>
         protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default)
         {
-            var fake = Read<TResult>(id, query, args);
-            return fake is null
+            TResult mockedData = Read<TResult>(id, query, args);
+            return mockedData is null
                 ? default
-                : await Task.FromResult(fake).ConfigureAwait(false);
+                : await Task.FromResult(mockedData).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -204,6 +204,6 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <inheritdoc />
-        public override string ToString() => "Fake database";
+        public override string ToString() => "Mocked database";
     }
 }

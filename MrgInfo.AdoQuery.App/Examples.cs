@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace MrgInfo.AdoQuery.App
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     static class Examples
     {
-        static void AdoExample()
+        public static void AdoExample()
         {
             using DbConnection connection = new SqlConnection("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
             connection.Open();
@@ -41,9 +42,9 @@ namespace MrgInfo.AdoQuery.App
 
         [SuppressMessage("ReSharper", "SuggestVarOrType_Elsewhere")]
         [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
-        static void Example()
+        public static void Example()
         {
-            var prefix = "A";
+            const string prefix = "A";
             var provider = new SqlQueryProvider("Data Source=localhost;User Id=AdoQuery;Password=AdoQuery;");
             var resultSet = provider.Query<int, string>($@"
                 |  select ProductId,
@@ -58,18 +59,18 @@ namespace MrgInfo.AdoQuery.App
         }
 
         [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
-        static void FakeExample()
+        public static void MockPatternExample()
         {
-            var provider = new ByPatternFakeQueryProvider
+            var provider = new MockByPatternQueryProvider
             {
                 ["ProductId.+Code.+Product"] = new[]
                 {
-                    new object[] { 10, "AB123", "Leather Sofa", 1000.0 },
-                    new object[] { 20, "AB456", "Baby Chair", 200.25 },
-                    new object[] { 30, "AB789", "Sport Shoes", 250.60 },
-                    new object[] { 40, "PQ123", "Sony Digital Camera", 399 },
-                    new object[] { 50, "PQ456", "Hitachi HandyCam", 1050.0 },
-                    new object[] { 60, "PQ789", "GM Saturn", 2250.99 },
+                    new object?[] { 10, "AB123", "Leather Sofa", 1000.0 },
+                    new object?[] { 20, "AB456", "Baby Chair", 200.25 },
+                    new object?[] { 30, "AB789", "Sport Shoes", 250.60 },
+                    new object?[] { 40, "PQ123", "Sony Digital Camera", 399 },
+                    new object?[] { 50, "PQ456", "Hitachi HandyCam", 1050.0 },
+                    new object?[] { 60, "PQ789", "GM Saturn", 2250.99 },
                 }
             };
             (int productId, string code) = provider
@@ -81,8 +82,32 @@ namespace MrgInfo.AdoQuery.App
             Trace.WriteLine($"ProductId = {productId}, Code = {code}");
         }
 
+        [SuppressMessage("ReSharper", "CoVariantArrayConversion")]
+        public static void MockIdExample()
+        {
+            var provider = new MockByIdQueryProvider
+            {
+                ["42"] = new[]
+                {
+                    new object?[] { 10, "AB123", "Leather Sofa", 1000.0 },
+                    new object?[] { 20, "AB456", "Baby Chair", 200.25 },
+                    new object?[] { 30, "AB789", "Sport Shoes", 250.60 },
+                    new object?[] { 40, "PQ123", "Sony Digital Camera", 399 },
+                    new object?[] { 50, "PQ456", "Hitachi HandyCam", 1050.0 },
+                    new object?[] { 60, "PQ789", "GM Saturn", 2250.99 },
+                }
+            };
+            (int productId, string code) = provider
+                .Query<int, string>(42.IdFor($@"
+                    |select ProductId,
+                    |       Code
+                    |  from Product"))
+                .First();
+            Trace.WriteLine($"ProductId = {productId}, Code = {code}");
+        }
+
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope")]
-        static async Task AdoExampleAsync(CancellationToken cancellationToken = default)
+        public static async Task AdoExampleAsync(CancellationToken cancellationToken = default)
         {
             await using DbConnection connection = new OracleConnection("Data Source=localhost:1521/ORCLCDB.localdomain;User Id=adoquery;Password=adoquery;");
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -108,16 +133,16 @@ namespace MrgInfo.AdoQuery.App
 
         [SuppressMessage("ReSharper", "SuggestVarOrType_Elsewhere")]
         [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
-        static async Task ExampleAsync(CancellationToken cancellationToken = default)
+        public static async Task ExampleAsync(CancellationToken cancellationToken = default)
         {
-            var prefix = "A";
+            const string prefix = "A";
             var provider = new OracleQueryProvider(new OracleConnectionStringBuilder
             {
                 DataSource = "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SID=ORCLCDB)))",
                 UserID = "adoquery",
                 Password = "adoquery"
             });
-            var resultSet = provider.QueryAsync<int, string>($@"
+            IAsyncEnumerable<(int Column1, string Column2)> resultSet = provider.QueryAsync<int, string>($@"
                 |  select ProductId,
                 |         Name
                 |    from Product
@@ -127,17 +152,6 @@ namespace MrgInfo.AdoQuery.App
             {
                 Trace.WriteLine($"ProductId = {productId}, Name = {name}");
             }
-        }
-
-        [SuppressMessage("Style", "IDE1006:Naming Styles")]
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        static async Task Main()
-        {
-            AdoExample();
-            Example();
-            FakeExample();
-            await AdoExampleAsync().ConfigureAwait(false);
-            await ExampleAsync().ConfigureAwait(false);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace MrgInfo.AdoQuery.Core
             get
             {
                 var result = new QueryParameter[Parameters.Count];
-                var i = 0;
+                int i = 0;
                 foreach (object? par in Parameters)
                 {
                     result[i++] = par == null
@@ -217,7 +217,7 @@ namespace MrgInfo.AdoQuery.Core
             object?[] args = MapIds(Parameters.ToArray());
             try
             {
-                var i = 0;
+                int i = 0;
                 await foreach (object?[] _ in provider.QueryAsync(Id, Command ?? "", args, 1, token))
                 {
                     ++i;

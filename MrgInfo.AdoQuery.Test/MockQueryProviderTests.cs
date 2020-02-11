@@ -13,21 +13,21 @@ using Xunit.Abstractions;
 namespace MrgInfo.AdoQuery.Test
 {
     /// <summary>
-    ///     Tests for <see cref="FakeQueryProvider"/> descendants.
+    ///     Tests for <see cref="MockQueryProvider"/> descendants.
     /// </summary>
     [SuppressMessage("ReSharper", "InterpolatedStringExpressionIsNotIFormattable")]
     [SuppressMessage("ReSharper", "ConvertToConstant.Local")]
-    public sealed class FakeQueryProviderTests
+    public sealed class MockQueryProviderTests
     {
         ITestOutputHelper Output { get; }
 
         /// <summary>
-        ///     Initializes a new instance of <see cref="FakeQueryProviderTests"/>.
+        ///     Initializes a new instance of <see cref="MockQueryProviderTests"/>.
         /// </summary>
         /// <param name="output">
         ///     Output.
         /// </param>
-        public FakeQueryProviderTests(ITestOutputHelper output) => Output = output;
+        public MockQueryProviderTests(ITestOutputHelper output) => Output = output;
 
         static IList<IReadOnlyList<object?>> Product { get; } = new IReadOnlyList<object?>[]
         {
@@ -41,14 +41,14 @@ namespace MrgInfo.AdoQuery.Test
         };
 
         /// <summary>
-        ///     Fake queries mapped by global <see cref="Guid"/> identifier.
+        ///     Mocked queries mapped by global <see cref="Guid"/> identifier.
         /// </summary>
         [Fact]
         public void TestFakeWithGuid()
         {
             var query1 = new Guid("74F04AEB-6C26-4967-A046-800DD6F85BC5");
             var query2 = new Guid("D5CCA8F0-CC55-4215-9952-5A5471200C02");
-            var provider = new ByIdFakeQueryProvider
+            var provider = new MockByIdQueryProvider
             {
                 [$"{query1}"] = Product,
                 [$"{query2}"] = Product,
@@ -72,14 +72,14 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Fake queries mapped by local <see cref="int"/> identifier.
+        ///     Mocked queries mapped by local <see cref="int"/> identifier.
         /// </summary>
         [Fact]
         public void TestFakeWithInt()
         {
-            var query1 = 42;
-            var query2 = 1492;
-            var provider = new ByIdFakeQueryProvider
+            const int query1 = 42;
+            const int query2 = 1492;
+            var provider = new MockByIdQueryProvider
             {
                 [nameof(TestFakeWithInt), $"{query1}"] = Product,
                 [nameof(TestFakeWithInt), $"{query2}"] = Product,
@@ -103,12 +103,12 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Fake queries mapped by regular expressions.
+        ///     Mocked queries mapped by regular expressions.
         /// </summary>
         [Fact]
         public void TestFakeWithRegex()
         {
-            var provider = new ByPatternFakeQueryProvider
+            var provider = new MockByPatternQueryProvider
             {
                 ["productid.+code.+product"] = Product
             };
@@ -131,31 +131,27 @@ namespace MrgInfo.AdoQuery.Test
         }
 
         /// <summary>
-        ///     Serializing fake queries.
+        ///     Serializing queries.
         /// </summary>
         [Fact]
-        public void TestFakeSerialize()
+        public void TestMockSerialize()
         {
-            var numb = 100000;
-            var str = "x";
-            var fakeProvider = new ByPatternFakeQueryProvider();
-            string xml;
-            using (var writer = new StringWriter())
-            {
-                fakeProvider.Read<DateTime?>(1.IdFor($@"
-                    |select productid
-                    |  from product
-                    | where 'xxx' {str:=*}
-                    |   and 42 {null:!=}
-                    |   and productid > {numb}"));
-                fakeProvider.SaveQueries(writer);
-                fakeProvider.Clear();
-                xml = writer.ToString();
-            }
+            const int numb = 100000;
+            const string str = "x";
+            var mockByPatternQueryProvider = new MockByPatternQueryProvider();
+            using var writer = new StringWriter();
+            mockByPatternQueryProvider.Read<DateTime?>(1.IdFor($@"
+                |select productid
+                |  from product
+                | where 'xxx' {str:=*}
+                |   and 42 {null:!=}
+                |   and productid > {numb}"));
+            mockByPatternQueryProvider.SaveQueries(writer);
+            mockByPatternQueryProvider.Clear();
+            string xml = writer.ToString();
             Assert.NotNull(xml);
             Assert.NotStrictEqual("", xml);
             Output.WriteLine(xml);
-
             using var stream = new MemoryStream(Encoding.Unicode.GetBytes(xml));
             using var reader = XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
             var serializer = new DataContractSerializer(typeof(QueriesCollection));

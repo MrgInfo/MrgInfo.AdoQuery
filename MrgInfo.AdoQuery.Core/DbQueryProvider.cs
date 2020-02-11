@@ -10,14 +10,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Xunit.Abstractions;
 
 namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
     ///     Run SQL queries on database.
     /// </summary>
-    public abstract class DbQueryProvider: QueryProvider, IXunitSerializable
+    public abstract class DbQueryProvider: QueryProvider
     {
         static TraceSource TraceSource { get; } = new TraceSource(nameof(DbQueryProvider), SourceLevels.Information);
 
@@ -92,7 +91,7 @@ namespace MrgInfo.AdoQuery.Core
             try
             {
                 var placeholders = new object[parameters.Count];
-                for (var i = 0; i < parameters.Count; ++i)
+                for (int i = 0; i < parameters.Count; ++i)
                 {
                     var item = new Parameter
                     {
@@ -243,12 +242,6 @@ namespace MrgInfo.AdoQuery.Core
             if (result is null || result is DBNull) return default!;
             return (TResult)Convert.ChangeType(result, typeof(TResult), CultureInfo.InvariantCulture);
         }
-
-        /// <inheritdoc />
-        public void Deserialize(IXunitSerializationInfo info) => ConnectionString = info?.GetValue<string>(nameof(ConnectionString)) ?? "";
-
-        /// <inheritdoc />
-        public void Serialize(IXunitSerializationInfo info) => info?.AddValue(nameof(ConnectionString), ConnectionString, typeof(string));
 
         /// <inheritdoc />
         public override string ToString() => ConnectionString;

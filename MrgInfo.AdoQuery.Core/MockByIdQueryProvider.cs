@@ -5,16 +5,16 @@ using System.Linq;
 
 namespace MrgInfo.AdoQuery.Core
 {
-    /// <inheritdoc cref="FakeQueryProvider" />
+    /// <inheritdoc cref="MockQueryProvider" />
     /// <summary>
-    ///     Fake data provider by unique identifier.
+    ///     Mocked data provider by unique identifier.
     /// </summary>
-    public sealed class ByIdFakeQueryProvider: FakeQueryProvider
+    public sealed class MockByIdQueryProvider: MockQueryProvider
     {
         ConcurrentDictionary<string, IList<IReadOnlyList<object?>>> ByIdData { get; } = new ConcurrentDictionary<string, IList<IReadOnlyList<object?>>>();
 
         /// <inheritdoc />
-        protected override IList<IReadOnlyList<object?>> FindFakeData(string? id, string? query, IEnumerable<object?>? parameters)
+        protected override IList<IReadOnlyList<object?>> FindMockedData(string? id, string? query, IEnumerable<object?>? parameters)
         {
             object[] formatParameters =
                 parameters
@@ -32,7 +32,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Register fake data for a query.
+        ///     Register mocked data for a query.
         /// </summary>
         /// <param name="id">
         ///     Unique identifier of the query.
@@ -47,7 +47,7 @@ namespace MrgInfo.AdoQuery.Core
             ByIdData.TryAdd($"{id}", data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Register fake data for a given query.
+        ///     Register mocked data for a given query.
         /// </summary>
         /// <param name="member">
         ///     Caller context of the query.
@@ -65,7 +65,7 @@ namespace MrgInfo.AdoQuery.Core
             ByIdData.TryAdd($"{member ?? throw new ArgumentNullException(nameof(member))}/{id}", data ?? throw new ArgumentNullException(nameof(data)));
 
         /// <summary>
-        ///     Register fake data for a given query.
+        ///     Register mocked data for a given query.
         /// </summary>
         /// <param name="id">
         ///     Unique identifier of the query.
@@ -84,7 +84,7 @@ namespace MrgInfo.AdoQuery.Core
         }
 
         /// <summary>
-        ///     Register fake data for a given query.
+        ///     Register mocked data for a given query.
         /// </summary>
         /// <param name="member">
         ///     Caller context of the query.
