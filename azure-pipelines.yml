@@ -5,11 +5,13 @@ resources:
   - container: ora
     image: mrginfocontainerregistry.azurecr.io/ado-query/ora
     endpoint: AzureContainers
+    options: --name ora
     ports:
     - '1521:1521'
   - container: sql
     image: mrginfocontainerregistry.azurecr.io/ado-query/sql
     endpoint: AzureContainers
+    options: --name sql
     ports:
     - '1433:1433'
 
