@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 # XML documentation
-MrgInfo.AdoQuery.*.xml
+**/MrgInfo.AdoQuery.*.xml

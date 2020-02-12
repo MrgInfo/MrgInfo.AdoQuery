@@ -152,7 +152,10 @@ var provider = new MockByIdQueryProvider
 Trace.WriteLine($"ProductId = {productId}, Code = {code}");
 ```
 
-## Author
+## About the author
 
+![Groma István](https://www.gravatar.com/avatar/4bfd9bd9604131cd5c3eb25670d74475)
 Groma István Ph.D.
 MRG-Infó Bt.
+
+A life long software developer.

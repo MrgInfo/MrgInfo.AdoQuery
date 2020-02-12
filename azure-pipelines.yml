@@ -1,20 +1,5 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
-resources:
-  containers:
-  - container: ora
-    image: mrginfocontainerregistry.azurecr.io/ado-query/ora
-    endpoint: AzureContainers
-    options: --name ora
-    ports:
-    - '1521:1521'
-  - container: sql
-    image: mrginfocontainerregistry.azurecr.io/ado-query/sql
-    endpoint: AzureContainers
-    options: --name sql
-    ports:
-    - '1433:1433'
-
 variables:
   major: 1
   minor: 2
@@ -24,10 +9,28 @@ variables:
 
 name: $(Build.DefinitionName)-$(Date:yyyyMMdd)-$(Rev:rr)
 
+resources:
+  containers:
+
+  - container: ora
+    image: mrginfocontainerregistry.azurecr.io/ado-query/ora
+    endpoint: AzureContainers
+    options: --name ora
+    ports:
+    - '1521:1521'
+
+  - container: sql
+    image: mrginfocontainerregistry.azurecr.io/ado-query/sql
+    endpoint: AzureContainers
+    options: --name sql
+    ports:
+    - '1433:1433'
+
 trigger:
 - master
 
 jobs:
+
 - job: images
   displayName: Build Docker images
   condition: 'and(always(), eq(variables.buildImages, true))'
@@ -64,6 +67,7 @@ jobs:
       tags: |
           $(Build.BuildId)
           latest
+
 - job: packages
   displayName: Build and test NuGet packages
   dependsOn: images
@@ -76,13 +80,11 @@ jobs:
     ora: ora
     sql: sql
   steps:
-  - pwsh: |
-      Start-Sleep -s (6*60)
-    displayName: Wait for database servers to boot
   - bash: |
+      sleep 10m
       docker exec ora cat /home/oracle/dba/database.log
       docker exec sql cat /root/dba/database.log
-    displayName: Test docker containers
+    displayName: Wait for database servers to boot
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
     inputs:
@@ -92,8 +94,7 @@ jobs:
     displayName: Run unit tests
     inputs:
       command: test
-      projects: '**/MrgInfo.AdoQuery.Test.csproj'
-      verbosityPack: detailed
+      projects: '**/*.Test.csproj'
     env:
       COREHOST_TRACE: 0
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -102,11 +103,10 @@ jobs:
     displayName: Create package
     inputs:
       command: pack
-      packagesToPack: '**/MrgInfo.AdoQuery.Core.csproj;**/MrgInfo.AdoQuery.Sql.csproj;**/MrgInfo.AdoQuery.Oracle.csproj'
+      packagesToPack: '**/*.csproj;!**/*.Test.csproj;!**/*.App.csproj'
       versioningScheme: byEnvVar
       includesymbols: true
       versionEnvVar: packageVersion
-      verbosityPack: detailed
   - task: NuGetCommand@2
     displayName: Push to nuget.org
     inputs:

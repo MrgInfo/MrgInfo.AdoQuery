@@ -248,7 +248,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <include file='Documentation.xml' path='docs/columns/*[9]' />
         /// <include file='Documentation.xml' path='docs/columns/*[10]' />
         /// <include file='Documentation.xml' path='docs/format/*' />
-        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 olumn8, T9 Column9, T10 Column10)>
+        public IEnumerable<(T1 Column1, T2 Column2, T3 Column3, T4 Column4, T5 Column5, T6 Column6, T7 Column7, T8 Column8, T9 Column9, T10 Column10)>
         Query<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(FormattableString? query) =>
             from v in SafeQuery(FindId(query ?? throw new ArgumentNullException(nameof(query))), query.Format, query.GetArguments(), 10)
             select (Cast<T1>(v[0]), Cast<T2>(v[1]), Cast<T3>(v[2]), Cast<T4>(v[3]), Cast<T5>(v[4]), Cast<T6>(v[5]), Cast<T7>(v[6]), Cast<T8>(v[7]), Cast<T9>(v[8]), Cast<T10>(v[9]));
@@ -757,7 +757,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Scalar value.
         /// </returns>
         /// <exception cref="QueryDbException">
-        ///     Error occured during executing the query.
+        ///     Error occurred during executing the query.
         /// </exception>
         /// <include file='Documentation.xml' path='docs/format/*'/>
         [return: MaybeNull]
@@ -815,7 +815,7 @@ namespace MrgInfo.AdoQuery.Core
         ///     Scalar value.
         /// </returns>
         /// <exception cref="QueryDbException">
-        ///     Error occured during executing the query.
+        ///     Error occurred during executing the query.
         /// </exception>
         /// <include file='Documentation.xml' path='docs/format/*'/>
         public Task<TResult> ReadAsync<TResult>(FormattableString query, CancellationToken token = default) =>
