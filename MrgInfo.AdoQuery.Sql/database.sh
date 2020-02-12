@@ -11,15 +11,20 @@ PID=$!
 if [ ! -f $READY ]; then
     echo $(date) >>$LOG
     echo "Waiting for SQL Server..." >>$LOG
-    STATUS=0
-    while [ $STATUS -eq 0 ]; do
+    
+    CNT=0
+    while [ $CNT -eq 0 ]; do
         sleep 20s
-        STATUS=$(pgrep -f sqlservr | wc -l)
+        CNT=$(pgrep -f sqlservr -c)
+        echo "$CNT instances of sqlservr are running." >>$LOG
     done
+    sleep 30s
+    
     for FILE_NAME in $(find $DBA_DIR -name *.sql); do
         echo "Running script $FILE_NAME." >>$LOG
-        $TOOL_DIR/sqlcmd -S localhost -U sa -P $SA_PASSWORD -d master -i $FILE_NAME >>$LOG 2>&1
+        $TOOL_DIR/sqlcmd -S localhost -U sa -P $SA_PASSWORD -d master -i $FILE_NAME -l 60 >>$LOG 2>&1
     done
+    
     echo -n "" >$READY
 fi
 
