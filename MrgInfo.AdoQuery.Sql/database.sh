@@ -14,8 +14,8 @@ if [ ! -f $READY ]; then
     ERR=1
     while [ $ERR -ne 0 ]; do
         echo "Waiting for SQL Server..." >>$LOG
-        sleep 20s
-        $TOOL_DIR/sqlcmd -H localhost -U sa -P $SA_PASSWORD -l 10 \ 
+        sleep 2m
+        $TOOL_DIR/sqlcmd -H localhost -U sa -P $SA_PASSWORD -l 10 \
             -Q "select name from sys.databases where state_desc != 'ONLINE'" \
             | grep -q --no-messages "0 rows affected"
         ERR=$?
