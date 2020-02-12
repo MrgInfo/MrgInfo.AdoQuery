@@ -9,21 +9,25 @@ READY=$DBA_DIR/database.ready
 $HOME/setup/dockerInit.sh &
 PID=$!
 
+sleep 30s
+source $HOME/.bashrc
+
 if [ ! -f $READY ]; then
     STARTTIME=$(date +%s)
-
-    echo $(date) >>$LOG
-    echo "Waiting for Oracle Database..." >>$LOG
-
-    CNT=0
-    while [ $CNT -eq 0 ]; do
+    
+    ERR=1
+    while [ $ERR -ne 0 ]; do
+        echo "Waiting for Oracle Database..." >>$LOG
         sleep 20s
-        CNT=$(pgrep -f tnslsnr -c)
-        echo "$CNT instances of tnslsnr are running." >>$LOG
+        $TOOL_DIR/sqlplus -L <<EOF
+whenever oserror exit 1;
+whenever sqlerror exit sql.sqlcode;
+connect / as sysdba;
+select sysdate from dual;
+exit;
+EOF
+        ERR=$?
     done
-    sleep 30s
-
-    source $HOME/.bashrc
 
     for FILE_NAME in $(find $DBA_DIR -name *.sql); do
         echo "Running script $FILE_NAME." >>$LOG
@@ -31,7 +35,7 @@ if [ ! -f $READY ]; then
     done
 
     ENDTIME=$(date +%s)
-    echo "Database was created in $($ENDTIME - $STARTTIME) seconds." >>$LOG 
+    echo "Database was created in $[$ENDTIME - $STARTTIME] seconds." >>$LOG 
 
     echo -n "" >$READY
 fi

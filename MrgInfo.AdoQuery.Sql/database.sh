@@ -11,24 +11,23 @@ PID=$!
 if [ ! -f $READY ]; then
     STARTTIME=$(date +%s)
 
-    echo $(date) >>$LOG
-    echo "Waiting for SQL Server..." >>$LOG
-    
-    CNT=0
-    while [ $CNT -eq 0 ]; do
+    ERR=1
+    while [ $ERR -ne 0 ]; do
+        echo "Waiting for SQL Server..." >>$LOG
         sleep 20s
-        CNT=$(pgrep -f sqlservr -c)
-        echo "$CNT instances of sqlservr are running." >>$LOG
+        $TOOL_DIR/sqlcmd -H localhost -U sa -P $SA_PASSWORD -l 10 \ 
+            -Q "select name from sys.databases where state_desc != 'ONLINE'" \
+            | grep -q --no-messages "0 rows affected"
+        ERR=$?
     done
-    sleep 30s
-    
+
     for FILE_NAME in $(find $DBA_DIR -name *.sql); do
         echo "Running script $FILE_NAME." >>$LOG
-        $TOOL_DIR/sqlcmd -S localhost -U sa -P $SA_PASSWORD -d master -i $FILE_NAME -l 60 >>$LOG 2>&1
+        $TOOL_DIR/sqlcmd -H localhost -U sa -P $SA_PASSWORD -l 20 -d master -i $FILE_NAME >>$LOG 2>&1
     done
 
     ENDTIME=$(date +%s)
-    echo "Database was created in $($ENDTIME - $STARTTIME) seconds." >>$LOG 
+    echo "Database was created in $[$ENDTIME - $STARTTIME] seconds." >>$LOG
 
     echo -n "" >$READY
 fi
