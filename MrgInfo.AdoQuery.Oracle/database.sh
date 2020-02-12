@@ -21,7 +21,8 @@ whenever oserror exit 1
 whenever sqlerror exit sql.sqlcode
 connect / as sysdba
 
-select sysdate from dual;
+create synonym non for dual;
+select sysdate from non;
 
 exit
 EOF
