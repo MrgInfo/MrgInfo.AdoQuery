@@ -1,11 +1,14 @@
+whenever oserror exit 1;
+whenever sqlerror exit sql.sqlcode;
+
 set serveroutput on size 1000000;
+
 set echo on;
 set time on;
 
 alter session set "_ORACLE_SCRIPT"=true;
 
 create user adoquery identified by adoquery;
---create user "OPS$DOMAIN\USER" identified externally;
 
 grant connect to adoquery;
 grant resource to adoquery;

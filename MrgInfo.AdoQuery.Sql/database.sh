@@ -24,6 +24,9 @@ if [ ! -f $READY ]; then
     for FILE_NAME in $(find $DBA_DIR -name *.sql); do
         echo "Running script $FILE_NAME." >>$LOG
         $TOOL_DIR/sqlcmd -H localhost -U sa -P $SA_PASSWORD -l 20 -d master -i $FILE_NAME >>$LOG 2>&1
+        if [ $? -ne 0 ]; then
+            exit
+        fi
     done
 
     ENDTIME=$(date +%s)

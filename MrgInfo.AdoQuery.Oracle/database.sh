@@ -21,7 +21,7 @@ whenever oserror exit 1
 whenever sqlerror exit sql.sqlcode
 connect / as sysdba
 
-create synonym non for dual;
+create or replace synonym non for dual;
 select sysdate from non;
 
 exit
@@ -32,6 +32,9 @@ EOF
     for FILE_NAME in $(find $DBA_DIR -name *.sql); do
         echo "Running script $FILE_NAME." >>$LOG
         $TOOL_DIR/sqlplus -L / as sysdba @$FILE_NAME >>$LOG 2>&1
+        if [ $? -ne 0 ]; then
+            exit
+        fi
     done
 
     ENDTIME=$(date +%s)
