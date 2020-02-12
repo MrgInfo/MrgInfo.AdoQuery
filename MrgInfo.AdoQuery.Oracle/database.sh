@@ -1,14 +1,17 @@
 #!/bin/bash
 
+
 TOOL_DIR=/u01/app/oracle/product/12.2.0/dbhome_1/bin
 DBA_DIR=$HOME/dba
 LOG=$DBA_DIR/database.log
 READY=$DBA_DIR/database.ready
 
-/home/oracle/setup/dockerInit.sh &
+$HOME/setup/dockerInit.sh &
 PID=$!
 
 if [ ! -f $READY ]; then
+    STARTTIME=$(date +%s)
+
     echo $(date) >>$LOG
     echo "Waiting for Oracle Database..." >>$LOG
 
@@ -26,6 +29,9 @@ if [ ! -f $READY ]; then
         echo "Running script $FILE_NAME." >>$LOG
         $TOOL_DIR/sqlplus -L / as sysdba @$FILE_NAME >>$LOG 2>&1
     done
+
+    ENDTIME=$(date +%s)
+    echo "Database was created in $($ENDTIME - $STARTTIME) seconds." >>$LOG 
 
     echo -n "" >$READY
 fi

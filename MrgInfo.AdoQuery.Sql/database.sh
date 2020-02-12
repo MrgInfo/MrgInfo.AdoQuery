@@ -9,6 +9,8 @@ READY=$DBA_DIR/database.ready
 PID=$!
 
 if [ ! -f $READY ]; then
+    STARTTIME=$(date +%s)
+
     echo $(date) >>$LOG
     echo "Waiting for SQL Server..." >>$LOG
     
@@ -24,7 +26,10 @@ if [ ! -f $READY ]; then
         echo "Running script $FILE_NAME." >>$LOG
         $TOOL_DIR/sqlcmd -S localhost -U sa -P $SA_PASSWORD -d master -i $FILE_NAME -l 60 >>$LOG 2>&1
     done
-    
+
+    ENDTIME=$(date +%s)
+    echo "Database was created in $($ENDTIME - $STARTTIME) seconds." >>$LOG 
+
     echo -n "" >$READY
 fi
 
