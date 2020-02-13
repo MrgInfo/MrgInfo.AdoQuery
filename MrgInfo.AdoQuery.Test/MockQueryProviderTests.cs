@@ -148,7 +148,7 @@ namespace MrgInfo.AdoQuery.Test
                 |   and productid > {numb}"));
             mockByPatternQueryProvider.SaveQueries(writer);
             mockByPatternQueryProvider.Clear();
-            string xml = writer.ToString();
+            var xml = writer.ToString();
             Assert.NotNull(xml);
             Assert.NotStrictEqual("", xml);
             Output.WriteLine(xml);

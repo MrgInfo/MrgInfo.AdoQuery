@@ -39,7 +39,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <summary>
         ///     Database connection string.
         /// </summary>
-        protected string ConnectionString { get; private set; }
+        protected string ConnectionString { get; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="DbQueryProvider"/>.
@@ -91,7 +91,7 @@ namespace MrgInfo.AdoQuery.Core
             try
             {
                 var placeholders = new object[parameters.Count];
-                for (int i = 0; i < parameters.Count; ++i)
+                for (var i = 0; i < parameters.Count; ++i)
                 {
                     var item = new Parameter
                     {

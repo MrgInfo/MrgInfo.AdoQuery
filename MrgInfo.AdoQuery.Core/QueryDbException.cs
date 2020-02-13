@@ -50,7 +50,5 @@ namespace MrgInfo.AdoQuery.Core
         QueryDbException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
-
-
     }
 }

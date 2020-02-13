@@ -105,8 +105,7 @@ namespace MrgInfo.AdoQuery.Core
         /// <inheritdoc />
         protected internal override IEnumerable<object?[]> Query(string? id, string? query, IReadOnlyList<object?>? parameters, int columns)
         {
-            IList<IReadOnlyList<object?>>? mockedData = FindMockedData(id, query, parameters);
-            if (mockedData == null) yield break;
+            IList<IReadOnlyList<object?>> mockedData = FindMockedData(id, query, parameters);
             foreach (IReadOnlyList<object?> row in mockedData)
             {
                 yield return row.ToArray();
@@ -131,8 +130,8 @@ namespace MrgInfo.AdoQuery.Core
         [return: MaybeNull]
         protected internal override TResult Read<TResult>(string? id, string? query, IReadOnlyList<object?>? parameters)
         {
-            IList<IReadOnlyList<object?>>? mockedData = FindMockedData(id, query, parameters);
-            return mockedData != null && mockedData.Count > 0 && mockedData[0]?.Count > 0
+            IList<IReadOnlyList<object?>> mockedData = FindMockedData(id, query, parameters);
+            return mockedData.Count > 0 && mockedData[0]?.Count > 0
                 ? Cast<TResult>(mockedData[0][0])
                 : default;
         }
@@ -144,9 +143,7 @@ namespace MrgInfo.AdoQuery.Core
         protected internal override async Task<TResult> ReadAsync<TResult>(string? id, string? query, IReadOnlyList<object?>? args, CancellationToken token = default)
         {
             TResult mockedData = Read<TResult>(id, query, args);
-            return mockedData is null
-                ? default
-                : await Task.FromResult(mockedData).ConfigureAwait(false);
+            return await Task.FromResult(mockedData).ConfigureAwait(false);
         }
 
         /// <summary>

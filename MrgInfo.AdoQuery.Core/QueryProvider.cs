@@ -74,10 +74,7 @@ namespace MrgInfo.AdoQuery.Core
             {
                 type = Nullable.GetUnderlyingType(type) ?? type;
             }
-            if (value is null || value is DBNull)
-            {
-                return default!;
-            }
+            if (value is null || value is DBNull) return default!;
             if (type == typeof(bool) || type == typeof(bool?))
             {
                 if ("T".Equals(value.ToString(), OrdinalIgnoreCase))

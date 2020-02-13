@@ -23,7 +23,7 @@ namespace MrgInfo.AdoQuery.Core
                 ?.Select((a, i) => (object)new Parameter { Name = $"{{{i}}}", Value = a })
                 .ToArray()
                 ?? Array.Empty<object>();
-            string command = string.Format(null, query ?? "", formatParameters);
+            var command = string.Format(null, query ?? "", formatParameters);
             RegisterQuery(id, command, from Parameter p in formatParameters select p.Value);
             return (
                 from re in ByRegexData

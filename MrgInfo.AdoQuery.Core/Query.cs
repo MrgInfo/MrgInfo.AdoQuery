@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -10,14 +10,14 @@ using static System.Globalization.CultureInfo;
 namespace MrgInfo.AdoQuery.Core
 {
     /// <summary>
-    ///     Egy <c>SQL</c> lekÈrdezÈs futtat·si kˆr¸lmÈnyeit leÌrÛ oszt·ly.
+    ///     Egy <c>SQL</c> lek√©rdez√©s futtat√°si k√∂r√ºlm√©nyeit le√≠r√≥ oszt√°ly.
     /// </summary>
     [DataContract(Name = "Query", Namespace = "")]
     public sealed class Query
     {
         /// <summary>
-        ///     Az deleg·lt segÌtsÈgÈvel hat·rozhatjuk meg, hogyan cserÈlj¸k a fiktÌv
-        ///     adatb·zis azonosÌtÛkat valÛs azonosÌtÛkra.
+        ///     Az deleg√°lt seg√≠ts√©g√©vel hat√°rozhatjuk meg, hogyan cser√©lj√ºk a fikt√≠v
+        ///     adatb√°zis azonos√≠t√≥kat val√≥s azonos√≠t√≥kra.
         /// </summary>
         public static Func<int, int>? IdMapper { get; set; }
 
@@ -79,7 +79,7 @@ namespace MrgInfo.AdoQuery.Core
             get
             {
                 var result = new QueryParameter[Parameters.Count];
-                int i = 0;
+                var i = 0;
                 foreach (object? par in Parameters)
                 {
                     result[i++] = par == null
@@ -217,7 +217,7 @@ namespace MrgInfo.AdoQuery.Core
             object?[] args = MapIds(Parameters.ToArray());
             try
             {
-                int i = 0;
+                var i = 0;
                 await foreach (object?[] _ in provider.QueryAsync(Id, Command ?? "", args, 1, token))
                 {
                     ++i;
