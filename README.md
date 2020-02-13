@@ -1,4 +1,4 @@
-# MrgInfo.AdoQuery
+﻿# MrgInfo.AdoQuery
 
 Run safe and cosine ADO .NET SQL queries with this package.
 
@@ -160,7 +160,7 @@ Status of the last build:
 
 ## About the author
 
-![][avatar]|![][logo]{ width=50% }
+![][avatar]|![][logo]
 :-:|:-:
 Groma István Ph.D.|[MRG-Infó Bt.][home]
 

@@ -1,4 +1,4 @@
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+﻿# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
 
 variables:
   major: 1
@@ -35,6 +35,8 @@ jobs:
   condition: 'and(always(), eq(variables.buildImages, true))'
   pool:
     vmImage: ubuntu-latest
+  workspace:
+    clean: all
   steps:
   - task: Docker@2
     displayName: Login to ACR
@@ -68,7 +70,7 @@ jobs:
           latest
 
 - job: packages
-  displayName: Build and test NuGet packages
+  displayName: Test and publish NuGet packages
   dependsOn: images
   condition: always()
   pool:
@@ -87,7 +89,7 @@ jobs:
   - task: UseDotNet@2
     displayName: Install .NET Core SDK
     inputs:
-      version: 3.0.x
+      version: 3.1.x
       performMultiLevelLookup: true
   - task: DotNetCoreCLI@2
     displayName: Run unit tests
@@ -96,8 +98,8 @@ jobs:
       projects: '**/*.Test.csproj'
       arguments: --nologo
     env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
   - task: DotNetCoreCLI@2
     displayName: Create package
     inputs:
