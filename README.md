@@ -152,10 +152,20 @@ var provider = new MockByIdQueryProvider
 Trace.WriteLine($"ProductId = {productId}, Code = {code}");
 ```
 
+## Build
+
+Status of the last build:
+
+[![Build Status](https://wavezone.visualstudio.com/MrgInfo/_apis/build/status/Deploy%20package?branchName=master)](https://wavezone.visualstudio.com/MrgInfo/_build/latest?definitionId=4&branchName=master)
+
 ## About the author
 
-![Groma István](https://www.gravatar.com/avatar/4bfd9bd9604131cd5c3eb25670d74475)
-Groma István Ph.D.
-MRG-Infó Bt.
+![][avatar]|![][logo]{ width=50% }
+:-:|:-:
+Groma István Ph.D.|[MRG-Infó Bt.][home]
 
-A life long software developer.
+
+
+[home]: http://www.mrginfo.com/angol/index.html
+[logo]: http://www.mrginfo.com/images/mrganim.png "MRG-Infó Bt."
+[avatar]: https://www.gravatar.com/avatar/4bfd9bd9604131cd5c3eb25670d74475 "Groma István Ph.D."
